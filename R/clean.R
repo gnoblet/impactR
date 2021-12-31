@@ -89,7 +89,7 @@ check_cleaning_log <- function(log, .tbl){
   # - check that new value is not the same as the old value
   # - check that new value is not
 
-  return(TRUE)
+  return(NULL)
 }
 
 
