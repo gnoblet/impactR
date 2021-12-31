@@ -1,0 +1,665 @@
+# Since where is not exported from tidyselect's NAMESPACE
+utils::globalVariables("where")
+
+
+#' @title Calculate the duration of a survey
+#'
+#' @param .tbl A tibble
+#' @param start Start column name. Default to start
+#' @param end End column name. Default to end
+#'
+#' @details Note: it is necessary to have 'start' and 'end' columns
+#'
+#' @return A tibble with three new colums, including the duration of survey in minutes
+#'
+#' @export
+svy_duration <- function(.tbl, start = "start", end = "end"){
+
+  duration <- .tbl  |>
+    dplyr::mutate(
+      start = lubridate::ymd_hms(start, truncated = 1),
+      end = lubridate::ymd_hms(end, truncated = 1),
+      survey_duration = round(difftime(end,  start, units = "mins")) |>  as.double()
+    )
+
+  return(duration)
+}
+
+
+#' @title Check in-between surveys time
+#'
+#' @param .tbl A tibble
+#' @param id_enum The enumerator id column
+#' @param start Start column (unquoted)
+#' @param end End column (unquoted)
+#' @details Note: it is necessary to have 'start' and 'end' columns with no NA
+#'
+#' @return A tibble with ... removed
+#'
+#' @export
+svy_diff_time <- function(.tbl, id_enum, start, end){
+  diff_time <- .tbl |>
+    dplyr::arrange(!!rlang::enquo(id_enum), !!rlang::enquo(start)) |>
+    dplyr::group_by(!!rlang::enquo(id_enum)) |>
+    dplyr::mutate(difftime_survey = difftime(!!rlang::enquo(start), dplyr::lag(!!rlang::enquo(end)), units = "mins") |> round() |> as.double())
+    return(diff_time)
+}
+
+
+#' @title Pull uuid from a logical test
+#'
+#' @param .tbl A tibble
+#' @param logical_test A logical test as a character expression
+#' @param id_col Survey id, usually "uuid".
+#'
+#' @return A vector of ids
+#'
+#' @export
+pull_uuid <- function(.tbl, logical_test = "uuid", id_col = "uuid"){
+
+  if(!is.data.frame(.tbl)) abort_bad_argument(".tbl", "be a data.frame", not = .tbl)
+  if_not_in_stop(.tbl, id_col, ".tbl", "id_col")
+
+  if(logical_test == "uuid"){
+    .tbl |> dplyr::pull({{ id_col }})
+  } else {
+    .tbl |>
+      dplyr::filter(!!rlang::parse_expr(logical_test)) |>
+      dplyr::pull({{ id_col }})
+  }
+}
+
+
+
+#' @title Make log
+#'
+#' @param .tbl A tibble of data
+#' @param survey The survey sheet from the Kobo tool
+#' @param id_col Survey id, usually "uuid"
+#' @param cols_to_keep Columns to keep in the log, e.g. c("today", "i_enum_id")
+#' @param id_check A string to identify the check
+#' @param question_name A column of .tbl
+#' @param why A long character string
+#' @param logical_test A character string made of a logical expression
+#' @param new_value Should we suggest a new value?
+#' @param action A character with "check" as default
+#' @param type The type of the question "double" or "character"
+#'
+#' @return A tibble with a log for one question and one logical test
+#'
+#' @family functions to make logs
+#' @seealso [make_log_from_check_list()] for a log based on many logical tests
+#' @seealso [make_log_outlier()] for a log based on outliers
+#' @seealso [make_log_other()] for a log of others
+#' @seealso [make_all_logs()] for all logs: outliers, others, logical tests
+#'
+#' @importFrom rlang .data
+#'
+#' @export
+make_log <- function(
+  .tbl,
+  survey,
+  id_col = "uuid",
+  cols_to_keep,
+  id_check = "empty",
+  question_name,
+  why = "empty",
+  logical_test,
+  new_value,
+  action,
+  type
+){
+
+  name <- label <- NULL
+
+  if_not_in_stop(.tbl, id_col, ".tbl", "id_col")
+  if_not_in_stop(.tbl, question_name, ".tbl", "question_name")
+  if_not_in_stop(.tbl, cols_to_keep, ".tbl", "cols_to_keep")
+
+  # To do:
+  # - add an abort check if type != question_name type or warninf if coerced introduction
+  # - add an abort check if logical_test cannot be evaluated (is this possible and how?)
+  # - add a warning check if new_value's type != question name's
+
+
+  # Get uuid using the logical test
+  pulled_uuid <- .tbl |>
+    pull_uuid(logical_test, id_col)
+  # Join and get the subset of .tbl
+  new_tbl <- pulled_uuid  |>
+    dplyr::left_join(.tbl, by = id_col)
+  # Get label question
+  question_label <- survey |>
+    dplyr::filter(.data$name == question_name) |>
+    dplyr::pull(label)
+  # Create the new_log entry
+  new_log <- tibble::tibble(
+    id_check = id_check,
+    new_tbl |>  dplyr::select(!!!rlang::syms(cols_to_keep), !!rlang::sym(id_col)),
+    question_name = question_name,
+    question_label = dplyr::if_else(question_label == "character(0)" | is.na(question_label), "", question_label),
+    why = why,
+    feedback = "Verified in check list",
+    action = ifelse(is.na(action), "check", action),
+    old_value = new_tbl |>
+      dplyr::pull(!!question_name),
+    new_value = new_value,
+    type = type,
+    other_parent_question = "",
+    other_old_value = "",
+    other_new_value = "",
+    checkdate = paste0("Checked on ", Sys.time())
+  )
+
+  return(new_log)
+
+}
+
+
+#' @title  Check cleaning log against data
+#'
+#' @param check_list A check list (a tibble of a particular format)
+#' @param .tbl Data to clean
+#'
+#' @details Names should be the English version. Please use [impactR::log_names_fr_en] beforehand.
+#'
+#' @family functions to check logs and check lists
+#'
+#' @importFrom rlang .data
+#'
+#' @export
+check_check_list <- function(check_list, .tbl){
+  en_names <- c("id_check", "question_name", "why", "logical_test", "new_value", "action", "type")
+
+  # Check if the column names are the right names
+  if_not_in_stop(check_list, en_names, "check_list")
+
+  # Check if all id_check are there
+  if(rlang::is_na(check_list$id_check)) rlang::abort("There are missing `id_check` values")
+
+  # Check if all question_names are there
+  if(rlang::is_na(check_list$question_name)) rlang::abort("There are missing `question_nametr(` values")
+
+  # Check if types are one of the right ones
+  types <- sum(stringr::str_count(check_list$type, pattern = "character|double"))
+  if(types < nrow(check_list)){
+    abort_bad_argument("type", "be either character or double")
+  }
+
+  # Check if the actions are one of the right ones
+  actions <- sum(stringr::str_count(check_list$action, pattern = "keep|modify|remove|check|duplicate"))
+
+  if(actions < nrow(check_list)){
+    abort_bad_argument("action", "be either 'keep', 'modify', 'remove', 'check' or 'duplicate")
+  }
+
+  # Check if question_name that needs a modification belongs to the rawdata
+  are_cols_in <- !(check_list |> dplyr::pull(.data$question_name) %in% colnames(.tbl))
+
+  if_not_in_stop(.tbl ,
+                 check_list |>
+                   dplyr::filter(.data$action == "modify") |>
+                   dplyr::pull(.data$question_name),
+                 ".tbl",
+                 "question_name")
+
+  return(TRUE)
+}
+
+
+
+#' @title Apply `make_log` to a tibble of check_list (one logical test per row)
+#'
+#' @param .tbl A tibble of data
+#' @param survey The survey sheet of the Kobo tool
+#' @param check_list A tibble of logical test to check for
+#' @param id_col Survey id, usually "uuid"
+#' @param cols_to_keep Columns to keep in the log, e.g. today, enum_id
+#'
+#' @family functions to make logs
+#' @seealso [make_log] for a log based on a logical test
+#' @seealso [make_log_outlier()] for a log based on outliers
+#' @seealso [make_log_other()] for a log of others
+#' @seealso [make_all_logs()] for all logs: outliers, others, logical tests
+#'
+#' @importFrom rlang .data
+#'
+#' @export
+make_log_from_check_list <- function(.tbl, survey, check_list, id_col = "uuid", cols_to_keep) {
+
+  check_check_list(check_list, .tbl)
+
+  new_log <- check_list |>
+    dplyr::select(.data$id_check, .data$question_name, .data$why, .data$logical_test, .data$new_value, .data$action, .data$type) |>
+    dplyr::group_split(.data$id_check) |>
+    purrr::map(~ as.list(.x))|>
+    purrr::map(~ purrr::exec(make_log, !!!(c(.tbl = list(.tbl),
+                                             survey = list(survey),
+                                             id_col = list(id_col),
+                                             cols_to_keep = list(cols_to_keep),
+                                             .x)))) |>
+    purrr::map(~ .x |> dplyr::mutate(question_label = as.character(question_label))) |>
+    dplyr::bind_rows()
+
+  return(new_log)
+}
+
+
+
+
+#' @title Get all other values
+#'
+#' @param .tbl A tibble of data
+#' @param other  A character vector of the start of all other column names. E.g., other = "other_"
+#' @param id_col Survey id, usually "uuid"
+#'
+#' @return A tibble with all "other" answers
+#'
+#' @export
+other_cols <- function(.tbl, other, id_col) {
+
+  id_col_name <- rlang::as_name(rlang::enquo(id_col))
+
+  if_not_in_stop(.tbl, id_col_name, ".tbl", "id_col")
+  if (length(tbl_col_start(.tbl, other)) == 0) {
+    rlang::abort(paste("at least one column in `.tbl` must start with '", other, "'"))
+  }
+
+  other <- .tbl |>
+    dplyr::select({{ id_col }}, dplyr::starts_with(other)) |>
+    # Faire pivoter la table et virer les NA
+    tidyr::pivot_longer(tidyr::starts_with(other),
+                        names_to = "question_name",
+                        values_to = "old_value",
+                        values_drop_na = T) |>
+    dplyr::mutate(other_parent_question = stringr::str_remove(.data$question_name, other))
+
+
+  return(other)
+}
+
+
+
+#' @title Get all other values and parent values
+#'
+#' @param .tbl A tibble of data
+#' @param other_cols A tibble produced by `other_cols`
+#' @param other  A character vector of the start of all other column names. E.g., other = "other_"
+#' @param id_col Unquoted survey id, usually uuid. Need some fix to be used also with quoted names, with the use of `dplyr::group_split`
+#'
+#' @return A tibble with all "other" values and their parent values
+#'
+#' @importFrom rlang .data
+#'
+#' @export
+other_parent_cols <- function(.tbl, other_cols, other, id_col) {
+
+  id_col_name <- rlang::as_name(rlang::enquo(id_col))
+
+  if_not_in_stop(.tbl, id_col_name, ".tbl", "id_col")
+  if (length(tbl_col_start(.tbl, other)) == 0) {
+    rlang::abort(paste("at least one column in `.tbl` must start with '", other, "'"))
+  }
+
+  other_parent <- other_cols |>
+    tibble::add_column(other_old_value = "")
+
+  if(nrow(other_parent) == 0){
+    other_parent <- tibble::tibble()
+  } else{
+    other_parent <- other_parent |>
+      dplyr::group_split({{ id_col }}) |>
+      purrr::map(~ .x |>  tidyr::pivot_wider({{ id_col }},
+                                             names_from = .data$other_parent_question,
+                                             values_from = .data$other_old_value)) |>
+      purrr::map(~ .tbl |>
+                   dplyr::select(any_of(names(.x))) |>
+                   dplyr::semi_join(.x, by = id_col_name)) |>
+      dplyr::bind_rows() |>
+      tidyr::pivot_longer(-{{ id_col }},
+                          names_to = "other_parent_question",
+                          values_to = "other_old_value",
+                          values_drop_na = T)
+  }
+  return(other_parent)
+}
+
+
+
+#' @title Bind other and parent values
+#'
+#' @param .tbl A tibble of data
+#' @param other  A character vector of the start of all other column names. E.g., other = "other_"
+#' @param id_col Survey id, usually uuid (quoted or unquoted)
+#'
+#' @return A tibble with other and parent other questions and values
+#'
+#' @details Made to ease the use of other_cols and other_parent_cols
+#'
+#' @importFrom rlang .data
+#'
+#' @export
+bind_others <- function(.tbl, other, id_col) {
+
+  id_col_name <- rlang::as_name(rlang::enquo(id_col))
+
+  if_not_in_stop(.tbl, id_col_name, ".tbl", "id_col")
+
+  if (length(tbl_col_start(.tbl, other)) == 0) {
+    rlang::abort(paste("at least one column in `.tbl` must start with '", other, "'"))
+  }
+
+  other_df <- other_cols(.tbl, other, {{ id_col }})
+  other_parent_df <- other_parent_cols(.tbl, other_df, other, {{ id_col }})
+
+  bind <- dplyr::left_join(other_df, other_parent_df, by = c(id_col_name, "other_parent_question"))
+
+  return(bind)
+}
+
+
+
+#' @title Get survey label from question name
+#'
+#' @param .tbl A tibble with at least a column made of Kobo survey names
+#' @param survey The survey
+#' @param col_to_join Column character string to join
+#'
+#' @details It is mainly used in the make_log* functions. E.g., after `bind_others`
+#'
+#' @return A tibble with question_label
+#'
+#' @importFrom rlang .data
+#'
+#' @export
+get_survey_label <- function(.tbl, survey, col_to_join) {
+
+  if_not_in_stop(survey, c("name", "label"), "survey")
+  if_not_in_stop(survey, col_to_join, "survey", "col_to_join")
+  if_not_in_stop(.tbl, col_to_join, ".tbl", "col_to_join")
+
+  sub_survey <- survey |>
+    dplyr::select(.data$name, .data$label) |>
+    rename_cols(c("label", "name"), c("question_label", col_to_join))
+
+  labelled_tbl <- dplyr::left_join(.tbl, sub_survey, by = col_to_join)
+
+  return(labelled_tbl)
+}
+
+
+
+#' @title Make "other questions" log
+#'
+#' @param .tbl A tibble of data
+#' @param survey The survey sheet from Kobo
+#' @param other A character vector of the start of all other column names. E.g., other = "other_".
+#' @param id_col Survey id, usually "uuid".
+#' @param cols_to_keep Columns to keep in the log, e.g. uuid, enum_id
+#'
+#' @details It assumes that a parent question and its children "other" are coded as follows
+#'     within the kobo tool : e.g., parent_question, other_parent_question.
+#'
+#' @return A log with all "other_cols".
+#'
+#' @family functions to make logs
+#' @seealso [make_log] for a log based on a logical test
+#' @seealso [make_log_from_check_list()] for a log based on many logical tests
+#' @seealso [make_log_outlier()] for a log based on outliers
+#' @seealso [make_all_logs()] for all logs: outliers, others, logical tests
+#'
+#' @importFrom rlang .data
+#'
+#' @export
+make_log_other <- function(
+  .tbl,
+  survey,
+  other,
+  id_col = "uuid",
+  cols_to_keep
+) {
+
+  if_not_in_stop(.tbl, id_col, ".tbl", "id_col")
+  if_not_in_stop(.tbl, cols_to_keep, ".tbl", "cols_to_keep")
+
+
+  # Get sub data frame will all other values and their question name
+  # Join and get perfect wonderful butterflies
+  new_tbl <- .tbl |>
+    bind_others(other, id_col) |>
+    get_survey_label(survey, "other_parent_question") |>
+    dplyr::left_join(.tbl |>
+                       dplyr::select(!!rlang::sym(id_col), !!!rlang::syms(cols_to_keep)),
+                     by = id_col)
+
+  new_log <- tibble::tibble(
+    id_check = other,
+    new_tbl |>
+      dplyr::select(!!!rlang::syms(cols_to_keep), !!rlang::sym(id_col), .data$question_name),
+    new_tbl |>
+      dplyr::select(.data$question_label),
+    why = "Other answer",
+    feedback = "Fill in",
+    action = "check",
+    new_tbl |>
+      dplyr::select(.data$old_value),
+    new_value = "Fill in if necessary",
+    type = "character",
+    new_tbl |>
+      dplyr::select(.data$other_parent_question, .data$other_old_value),
+    other_new_value = "",
+    checkdate = paste0("Checked on ", Sys.time())
+  )
+  return(new_log)
+}
+
+
+
+#' @title Get numeric colum names
+#'
+#' @param .tbl A tibble
+#' @param survey Default to NULL. The survey sheet from Kobo.
+#'
+#' @return A characater vector of numeric columns names
+#'
+#' @details If the survey sheet is provided, it returns numeric columns from `.tbl` that are coded as decimal or numeric in the `type` column of `survey`. Otherwise, it returns all numeric columns from `.tbl`.
+#'
+#' @importFrom rlang .data
+#'
+#' @export
+numeric_cols <- function(.tbl, survey = NULL) {
+
+  # There is a warning since where is not exported from the tidyselect namespace
+  # Who knows why
+  # Need to be tackled
+  # utils::globalVariables("where")
+
+  # Check type of .tbl
+  if (!is.data.frame(.tbl)) {
+    abort_bad_argument(".tbl", "must be a data.frame", not = .tbl)
+  }
+
+  if (!is.null(survey)){
+    # Check type of survey
+    if (!is.data.frame(survey)) {
+      abort_bad_argument("survey", "must be a data.frame", not = survey)
+    }
+
+    # Check if column type is in survey
+    if_not_in_stop(survey, c("name", "type"), "survey")
+
+    num_cols_survey <- survey |>
+      dplyr::filter(.data$type %in% c("integer", "decimal", "calculate")) |>
+      dplyr::pull(.data$name)
+
+    # Check if there are numeric or decimal types in survey
+    if (length(num_cols_survey) == 0) rlang::abort("no 'calculate', 'integer' or 'decimal' type in `survey`")
+
+    # Check if these columns from survey are in .tbl
+    if_not_in_stop(.tbl, num_cols_survey, ".tbl", "survey")
+
+    .tbl <- .tbl |>
+      dplyr::select(dplyr::all_of(num_cols_survey))
+
+  }
+  num_cols <- .tbl |>
+    dplyr::select(where(is.numeric)) |>
+    colnames()
+
+  return(num_cols)
+}
+
+
+
+#' @title Get outliers outside standard deviations from the mean
+#'
+#' @param .tbl A tibble
+#' @param col A numeric columns
+#' @param times How many standard deviations from the mean?
+#' @param id_col Usually "uuid". Default to row index
+#'
+#' @return A tibble of outliers
+#'
+#' @export
+outliers_sd <- function(.tbl, col, times = 3, id_col = "uuid") {
+
+  if_not_in_stop(.tbl, id_col, ".tbl", "id_col")
+  if_not_in_stop(.tbl, col, ".tbl", "col")
+
+  outliers <- .tbl |>
+    dplyr::select(!!rlang::sym(id_col), !!rlang::sym(col)) |>
+    dplyr::filter(abs(!!rlang::sym(col) - mean(!!rlang::sym(col))) > times * stats::sd(!!rlang::sym(col))) |>
+    tidyr::pivot_longer(!!rlang::sym(col),
+                        names_to = "question_name",
+                        values_to = "old_value")
+
+  return(outliers)
+}
+
+
+
+#' @title Get outliers using interquartile range (better for skewed-distribution)
+#'
+#' @param .tbl A tibble
+#' @param col A numeric columns
+#' @param times How many from the med
+#' @param id_col Usually "uuid". Default to row index
+#'
+#' @return A tibble of outliers
+#'
+#' @export
+outliers_iqr <- function(.tbl, col, times = 1.5, id_col = "uuid") {
+
+  if_not_in_stop(.tbl, id_col, ".tbl", "id_col")
+  if_not_in_stop(.tbl, col, ".tbl", "col")
+
+  pulled_col <- .tbl |> dplyr::pull(!!rlang::sym(col))
+
+  iqr <- stats::IQR(pulled_col, na.rm = T)
+
+  quantiles <- stats::quantile(pulled_col, na.rm = T)
+
+  outliers <- .tbl |>
+    dplyr::select(!!rlang::sym(id_col), !!rlang::sym(col)) |>
+    dplyr::filter(!!rlang::sym(col) < quantiles[2] - times * iqr | !!rlang::sym(col) > quantiles[4] + times * iqr)  |>
+    tidyr::pivot_longer(!!rlang::sym(col),
+                        names_to = "question_name",
+                        values_to = "old_value")
+
+  return(outliers)
+}
+
+
+#' @title Make outlier log
+#'
+#'
+#' @param .tbl A tibble of data
+#' @param survey The survey sheet from Kobo
+#' @param id_col Survey id, usually "uuid".
+#' @param cols_to_keep Columns to keep in the log, e.g. uuid, enum_id
+#'
+#' @return A log with outliers
+#'
+#' @details It uses both interquartile range (1.5 rule) and standard deviation from mean (3 times rule) to look for outliers
+#'
+#' @family functions to make logs
+#' @seealso [make_log] for a log based on a logical test
+#' @seealso [make_log_from_check_list()] for a log based on many logical tests
+#' @seealso [make_log_other()] for a log of others
+#' @seealso [make_all_logs()] for all logs: outliers, others, logical tests
+#'
+#' @importFrom rlang .data
+#'
+#' @export
+make_log_outlier <- function(.tbl, survey, id_col = "uuid", cols_to_keep) {
+
+  if_not_in_stop(.tbl, cols_to_keep, ".tbl", "cols_to_keep")
+
+  num_cols <- numeric_cols(.tbl, survey)
+
+  iqr <- num_cols |> purrr::map(~ outliers_iqr(.tbl, .x, id_col = id_col))
+  sd <- num_cols |> purrr::map(~ outliers_sd(.tbl, .x, id_col = id_col))
+
+  new_tbl <- dplyr::bind_rows(iqr, sd) |>
+    dplyr::distinct() |>
+    dplyr::left_join(survey |> dplyr::select(.data$name, .data$label), by = c("question_name" = "name")) |>
+    dplyr::rename(question_label = .data$label) |>
+    dplyr::left_join(.tbl |> dplyr::select(!!!rlang::syms(cols_to_keep)), by = id_col)
+
+  new_log <- tibble::tibble(
+    id_check = "outlier",
+    new_tbl |>
+      dplyr::select(!!!rlang::syms(cols_to_keep), !!rlang::sym(id_col), .data$question_name),
+    new_tbl |>
+      dplyr::select(.data$question_label),
+    why = "Outlier",
+    feedback = "Fill in",
+    action = "check",
+    new_tbl |>
+      dplyr::select(.data$old_value),
+    new_value = "Fill in if necessary",
+    type = "double",
+    other_parent_question = "",
+    other_new_value = "",
+    checkdate = paste0("Checked on ", Sys.time())
+  )
+
+  return(new_log)
+}
+
+
+
+
+#' @title Make all logs
+#'
+#' @param .tbl A tibble of data
+#' @param survey The survey sheet of the Kobo tool
+#' @param check_list A tibble of logical test to check for
+#' @param other A character vector of the start of all other column names. E.g., other = "other_"
+#' @param id_col Survey id, usually "uuid"
+#' @param cols_to_keep Columns to keep in the log, e.g. today, enum_id
+#'
+#' @return A full log as a tibble
+#'
+#' @family functions to make logs
+#' @seealso [make_log] for a log based on a logical test
+#' @seealso [make_log_from_check_list()] for a log based on many logical tests
+#' @seealso [make_log_outlier()] for a log based on outliers
+#' @seealso [make_log_other()] for a log of others
+#'
+#' @importFrom rlang .data
+#'
+#' @export
+make_all_logs <- function(.tbl, survey, check_list, other, id_col, cols_to_keep) {
+  dplyr::bind_rows(
+    make_log_from_check_list(.tbl, survey, check_list, id_col, cols_to_keep) |>
+      dplyr::mutate(dplyr::across(.fns = as.character)),
+    make_log_other(.tbl, survey, other, id_col, cols_to_keep)  |>
+      dplyr::mutate(dplyr::across(.fns = as.character)),
+    make_log_outlier(.tbl, survey, id_col, cols_to_keep) |>
+      dplyr::mutate(dplyr::across(.fns = as.character))
+  )
+}
+
+
+
