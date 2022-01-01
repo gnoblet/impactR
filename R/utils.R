@@ -385,7 +385,6 @@ tbl_col_end <- function(.tbl, pattern_end){
 #' @return A vector of column names
 #'
 #' @export
-#' @export
 tbl_col_start_end <- function(.tbl, pattern_start, pattern_end){
   cols <- colnames(.tbl)[startsWith(colnames(.tbl), pattern_start) & endsWith(colnames(.tbl), pattern_end)]
 
@@ -402,6 +401,8 @@ tbl_col_start_end <- function(.tbl, pattern_start, pattern_end){
 #' @param ... Grouping columns
 #'
 #' @return A left-joined tibble
+#'
+#' @export
 left_joints <- function(list, ...) {
 
   quoted_cols <- purrr::map_chr(rlang::enquos(...), rlang::as_name)
@@ -426,6 +427,8 @@ left_joints <- function(list, ...) {
 #' @param cols Columns to keep in tibble. Default to "uuid".
 #'
 #' @return A tibble with some columns removed
+#'
+#' @export
 diff_tibbles <- function(tibble_a, tibble_b, cols){
 
   quoted_cols <- purrr::map_chr(rlang::enquos(cols), rlang::as_name)
@@ -452,6 +455,8 @@ diff_tibbles <- function(tibble_a, tibble_b, cols){
 #' @details This function has a tibble and the associated survey sheet as inputs, as well as the beginning of the "other" character string. It returns all columns that exist in the tibble and are either a multiple choice or a parent other question. This allows then to compute these columns with `impactR::count_occ` after parent question may have been recoded.
 #'
 #' @return A character vector of select_multiple questions
+#'
+#' @export
 get_multiple <- function(survey, type = "type"){
 
   select_multiple <- survey |>
@@ -472,6 +477,8 @@ get_multiple <- function(survey, type = "type"){
 #' @details This function has a tibble and the associated survey sheet as inputs, as well as the beginning of the "other" character string. It returns all columns that exist in the tibble and are either a multiple choice or a parent other question. This allows then to compute these columns with `impactR::count_occ` after parent question may have been recoded.
 #'
 #' @return A character vector of other questions
+#'
+#' @export
 get_other_parent <- function(.tbl, other){
 
   other_parent <- tbl_col_start(.tbl, other) |>
@@ -496,6 +503,8 @@ get_other_parent <- function(.tbl, other){
 #' @details This function has a tibble and the associated survey sheet as inputs, as well as the beginning of the "other" character string. It returns all columns that exist in the tibble and are either a multiple choice or a parent other question. This allows then to compute these columns with `impactR::count_occ` after parent question may have been recoded.
 #'
 #' @return A character vector of select_multiple and other questions
+#'
+#' @export
 get_multiple_and_other_parent <- function(.tbl, survey, other, type = "type"){
 
   other_parent <- get_other_parent(.tbl, other)
