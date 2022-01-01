@@ -188,16 +188,20 @@ update_rows_from_list <- function(.tbl, .list, id_col = "uuid"){
 modify_from_log <- function(.tbl, log, id_col, type){
 
   to_modify <- log |>
-    dplyr::filter(.data$action == "modify" & .data$id_check != "other" & .data$type == type) |>
-    dplyr::select(.data$id_check, !!rlang::sym(id_col), .data$question_name, .data$new_value) |>
+    dplyr::filter(.data$action == "modify" & .data$id_check != "other" & .data$type == type)
+  if (nrow(to_modify) > 0) {
+    to_modify <- to_modify |>
+      dplyr::select(.data$id_check, !!rlang::sym(id_col), .data$question_name, .data$new_value) |>
     dplyr::group_split(.data$question_name) |>
     purrr::map(~ .x |>
                  tidyr::pivot_wider(!!rlang::sym(id_col),
                                     names_from = .data$question_name,
                                     values_from = .data$new_value))
+    # Finition
+    .tbl <- .tbl |> update_rows_from_list(to_modify)
+  }
 
-  # Finition
-  .tbl |> update_rows_from_list(to_modify)
+    return(.tbl)
 }
 
 
@@ -217,18 +221,21 @@ modify_from_log <- function(.tbl, log, id_col, type){
 recode_other_from_log <- function(.tbl, log, id_col = "uuid"){
 
   to_recode <- log |>
-    dplyr::filter(.data$action == "modify" & .data$id_check == "other") |>
-    dplyr::select(.data$id_check, !!rlang::sym(id_col), .data$question_name, .data$new_value) |>
-    dplyr::group_split(.data$question_name) |>
-    purrr::map(~ .x |>
-                 dplyr::mutate(new_value = as.character(.data$new_value))) |>
-    purrr::map(~ .x |>
-                 tidyr::pivot_wider(!!rlang::sym(id_col),
-                                    names_from = .data$question_name,
-                                    values_from = .data$new_value))
+    dplyr::filter(.data$action == "modify" & .data$id_check == "other")
 
+  if (nrow(to_recode) > 0) {
+    to_recode <- to_recode |>
+      dplyr::select(.data$id_check, !!rlang::sym(id_col), .data$question_name, .data$new_value) |>
+      dplyr::group_split(.data$question_name) |>
+      purrr::map(~ .x |>
+                   dplyr::mutate(new_value = as.character(.data$new_value))) |>
+      purrr::map(~ .x |>
+                   tidyr::pivot_wider(!!rlang::sym(id_col),
+                                      names_from = .data$question_name,
+                                      values_from = .data$new_value))
 
-  .tbl <- .tbl |> update_rows_from_list(to_recode)
+    .tbl <- .tbl |> update_rows_from_list(to_recode)
+  }
 
   return(.tbl)
 }
@@ -249,16 +256,19 @@ recode_other_from_log <- function(.tbl, log, id_col = "uuid"){
 #' @export
 recode_other_parent_from_log <- function(.tbl, log, id_col = "uuid"){
   to_recode <- log |>
-    dplyr::filter(.data$action == "modify" & .data$id_check == "other") |>
-    dplyr::select(.data$id_check, !!rlang::sym(id_col), .data$question_name, .data$other_parent_question, .data$other_new_value) |>
-    dplyr::group_split(.data$question_name) |>
-    purrr::map(~ .x |>
-                 tidyr::pivot_wider(!!rlang::sym(id_col),
-                                    names_from = .data$other_parent_question,
-                                    values_from = .data$other_new_value)
-    )
+    dplyr::filter(.data$action == "modify" & .data$id_check == "other")
 
-  .tbl <- .tbl |>  update_rows_from_list(to_recode)
+  if (nrow(to_recode) > 0) {
+    to_recode <- to_recode |>
+      dplyr::select(.data$id_check, !!rlang::sym(id_col), .data$question_name, .data$other_parent_question, .data$other_new_value) |>
+      dplyr::group_split(.data$question_name) |>
+      purrr::map(~ .x |>
+                   tidyr::pivot_wider(!!rlang::sym(id_col),
+                                      names_from = .data$other_parent_question,
+                                      values_from = .data$other_new_value)
+      )
+    .tbl <- .tbl |>  update_rows_from_list(to_recode)
+  }
 
   return(.tbl)
 }
