@@ -4,15 +4,7 @@
 \alias{count_occ_all}
 \title{Count all occurences}
 \usage{
-count_occ_all(
-  .tbl,
-  survey,
-  choices,
-  id_col,
-  other,
-  type = "type",
-  return = "updated"
-)
+count_occ_all(.tbl, survey, choices, id_col, type = "type", return = "updated")
 }
 \arguments{
 \item{.tbl}{A tibble}
@@ -22,8 +14,6 @@ count_occ_all(
 \item{choices}{A choices sheet from Kobo}
 
 \item{id_col}{Usually uuid... to count.}
-
-\item{other}{A character vector of the start of all other column names. E.g., other = "other_"}
 
 \item{type}{Unquoted column type in the survey sheet. Default to type.}
 

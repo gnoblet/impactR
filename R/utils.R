@@ -424,7 +424,7 @@ left_joints <- function(list, ...) {
 #'
 #' @param tibble_a A tibble to remove columns from
 #' @param tibble_b A tibble to extract columns names from
-#' @param cols Columns to keep in tibble. Default to "uuid".
+#' @param cols Columns to keep in tibble.
 #'
 #' @return A tibble with some columns removed
 #'
@@ -559,13 +559,14 @@ get_choices <- function(survey, choices, col, conc = T){
 #' @return  A survey tibble, split
 #'
 #' @export
-split_survey <- function(survey, col_to_split, into = c("type", "list_name"), sep = " ", fill = "right", ...){
-
-  if_not_in_stop(survey, col_to_split, "survey", "col_to_split")
-
-  survey <- survey |>
-    tidyr::separate(col_to_split, into = into, sep = sep, fill = fill, ...)
-
+split_survey <- function (survey, col_to_split, into = c("type", "list_name"),
+                          sep = " ", fill = "right", ...)
+{
+  col_to_split_name <- rlang::as_name(rlang::enquo(col_to_split))
+  if_not_in_stop(survey, col_to_split_name, "survey", "col_to_split")
+  survey <- tidyr::separate(survey, {{ col_to_split }}, into = into,
+                            sep = sep, fill = fill, ...)
   return(survey)
 }
+
 

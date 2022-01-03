@@ -11,7 +11,7 @@ diff_tibbles(tibble_a, tibble_b, cols)
 
 \item{tibble_b}{A tibble to extract columns names from}
 
-\item{cols}{Columns to keep in tibble. Default to "uuid".}
+\item{cols}{Columns to keep in tibble.}
 }
 \value{
 A tibble with some columns removed

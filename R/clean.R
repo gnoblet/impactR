@@ -290,6 +290,8 @@ count_occ <- function(.tbl, id_col, col){
   id_col_name <- rlang::as_name(rlang::enquo(id_col))
 
   if_not_in_stop(.tbl, col_name, ".tbl", "col")
+  if_not_in_stop(.tbl, id_col_name, ".tbl", "id_col")
+
 
   agg <- .tbl |>
     dplyr::select({{ id_col}}, {{ col }}) |>
@@ -313,24 +315,46 @@ count_occ <- function(.tbl, id_col, col){
 #' @param survey A survey sheet from Kobo (with column "type" split)
 #' @param choices A choices sheet from Kobo
 #' @param id_col Usually uuid... to count.
-#' @param other  A character vector of the start of all other column names. E.g., other = "other_"
 #' @param type Unquoted column type in the survey sheet. Default to type.
 #' @param return Either "count" (a list of counts of select_multiple) or "updated" (the updated .tbl).
 #'
 #' @return An updated tibble or a list of occurences
 #'
 #' @export
-count_occ_all <- function(.tbl, survey, choices, id_col, other, type = "type", return = "updated"){
+count_occ_all <- function(.tbl, survey, choices, id_col, type = "type", return = "updated"){
 
+  # Initialize -----------------------------
+
+  # Return's choice
   if (!(return %in% c("count", "updated"))) {rlang::abort("`return` must either be 'count' or 'updated'")}
 
-  multiple_cols <- get_multiple(survey, type)
-  multiple_cols_with_choices <- purrr::map(multiple_cols, get_choices, survey = survey, choices = choices, conc = T) |>
-    purrr::flatten_chr() |>
-    janitor::make_clean_names()
+  # Is id_col in .tbl?
+  id_col_name <- rlang::as_name(rlang::enquo(id_col))
+  if_not_in_stop(.tbl, id_col_name, ".tbl", "id_col")
 
-  to_return <- purrr::map(multiple_cols, count_occ, .tbl = .tbl, id_col = {{ id_col }})
 
+  # Prepare objects -----------------------------
+
+  #  Get multiple questions
+  mult_question <- get_multiple(survey, type)
+
+  # Get choices from multiple questions
+  mult_choices<- mult_question |>
+    purrr::set_names() |>
+    purrr::map(get_choices, survey = survey, choices = choices, conc = T) |>
+    purrr::map(~ janitor::make_clean_names(.x))
+
+
+  # Count occurences for each multiple question -----------------------------
+
+  to_return <- mult_question |>
+    purrr::set_names() |>
+    purrr::map(count_occ, .tbl = .tbl, id_col = {{ id_col }}) |>
+    purrr::map2(.y = mult_question, ~ dplyr::left_join(.tbl |> dplyr::select({{ id_col }}, dplyr::all_of(.y)), .x, by = id_col_name)) |>
+    purrr::map(~ janitor::clean_names(.x))
+
+
+  # Simple count return -----------------------------
 
   if (return == "count"){
 
@@ -338,24 +362,57 @@ count_occ_all <- function(.tbl, survey, choices, id_col, other, type = "type", r
 
   } else if (return == "updated") {
 
+
+  # Add missing with zeros and bind all -----------------------------
+
     cols_order <- colnames(.tbl)
 
-    joined <- left_joints(to_return, {{ id_col }})
+    tbl_uuid <- .tbl |> dplyr::select({{ id_col }})
 
-    # Multiple cols from survey in .tbl
-    count_cols <- subvec_in(multiple_cols_with_choices, colnames(.tbl))
+    # Multiple choices being zeros from survey
+    mult_choices_zeros <- mult_choices |>
+      # Create zero row tibble with mult as colnames
+      purrr::map(~
+                   tibble::as_tibble(
+                     sapply(.x, \(x) double())
+                   )
+      ) |>
+      # Add a zero row uuid column
+      purrr::map(~ .x |> tibble::add_column(!!id_col_name := character(0), .before = 1)) |>
+      # Add all uuids --> NA tibbles for all other cols, then mutate to 0 if parent col is not NA
+      purrr::map2(.y = mult_question,
+                  ~ dplyr::left_join(.tbl |> dplyr::select({{ id_col }}, dplyr::all_of(.y)),
+                                     .x,
+                                     by = id_col_name) |>
+                    dplyr::mutate(
+                      dplyr::across(
+                        where(is.double),
+                        function(el) {ifelse(is.na(!!rlang::sym(.y)), el, 0)})
+                    )
+      ) |>
+      purrr::map2(.y = to_return, ~ diff_tibbles(.x, .y, {{ id_col }})) |>
+      left_joints({{ id_col }})
 
-    # In .tbl, not in joind --> needs 0s or NAs
-    count_cols <- subvec_not_in(count_cols, colnames(joined))
+  # Final joints -----------------------------
 
-    updated <- diff_tibbles(.tbl, joined,{{ id_col }}) |>
-      dplyr::left_join(joined, rlang::as_name(rlang::enquo(id_col))) |>
-      dplyr::mutate(dplyr::across(count_cols, function(x) {dplyr::if_else(is.na(x), NA_real_, 0) })) |>
-      dplyr::relocate(colnames(cols_order))
+    joined <- to_return |>
+      left_joints({{ id_col }}) |>
+      dplyr::left_join(mult_choices_zeros, by = id_col_name)
+
+    updated <- .tbl |>
+      diff_tibbles(joined, {{ id_col }}) |>
+      dplyr::left_join(joined, by = id_col_name) |>
+      dplyr::relocate(dplyr::all_of(cols_order))
 
     return(updated)
   }
 }
+
+
+
+
+
+
 
 
 
@@ -366,21 +423,20 @@ count_occ_all <- function(.tbl, survey, choices, id_col, other, type = "type", r
 #' @param survey A survey sheet from Kobo (with column "type" split)
 #' @param choices A choices sheet from Kobo
 #' @param id_col Usually uuid... to count.
-#' @param other  A character vector of the start of all other column names. E.g., other = "other_"
 #'
 #' @details Apply all cleaning functions in the right order, modify character and double variables, recode others and other parents, remove duplicates, remove surveys, recount occurences. It uses default for count_occ_all.
 #'
 #' @return A cleaned tibble
 #'
 #' @export
-clean_all <- function(.tbl, log, survey, choices, id_col, other){
+clean_all <- function(.tbl, log, survey, choices, id_col){
   .tbl <- modify_from_log(.tbl, log, {{ id_col }}, "character")
   .tbl <- modify_from_log(.tbl, log, {{ id_col }}, "double")
   .tbl <- recode_other_from_log(.tbl, log, id_col = rlang::as_name(rlang::enquo(id_col)))
   .tbl <- recode_other_parent_from_log(.tbl, log, id_col = rlang::as_name(rlang::enquo(id_col)))
   .tbl <- remove_duplicate(.tbl, log, id_col = rlang::as_name(rlang::enquo(id_col)))
   .tbl <- remove_from_log(.tbl, log, id_col = rlang::as_name(rlang::enquo(id_col)))
-  .tbl <- count_occ_all(.tbl, survey, choices, {{ id_col }}, other, type = "type", return = "updated")
+  .tbl <- count_occ_all(.tbl, survey, choices, {{ id_col }}, type = "type", return = "updated")
 
   return(.tbl)
 }
