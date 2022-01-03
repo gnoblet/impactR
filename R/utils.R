@@ -424,7 +424,7 @@ left_joints <- function(list, ...) {
 #'
 #' @param tibble_a A tibble to remove columns from
 #' @param tibble_b A tibble to extract columns names from
-#' @param cols Columns to keep in tibble. Default to "uuid".
+#' @param cols Columns to keep in tibble.
 #'
 #' @return A tibble with some columns removed
 #'
