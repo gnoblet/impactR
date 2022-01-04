@@ -135,9 +135,8 @@ remove_duplicate <- function(.tbl, log, id_col = "uuid"){
   to_remove <- log |>
     dplyr::filter(.data$action == "duplicate")
 
-  if(nrow(to_remove) == 0) {warning("There was no duplicate entry in the log.")}
-
-  tbl_to_remove <- .tbl |>
+  if (nrow(to_remove) > 0) {
+    tbl_to_remove <- .tbl |>
     dplyr::filter(id_col_name %in% to_remove |> dplyr::pull( {{ id_col }})) |>
     dplyr::group_by({{ id_col }}) |>
     dplyr::slice_head() |>
@@ -146,6 +145,9 @@ remove_duplicate <- function(.tbl, log, id_col = "uuid"){
   .tbl <- .tbl |>
     dplyr::anti_join(to_remove, by = id_col_name) |>
     dplyr::bind_rows(tbl_to_remove)
+  }
+
+  return(.tbl)
 }
 
 
