@@ -145,8 +145,10 @@ reach_cols <- function(...) {
                     lt_grey_2    = "#818183",
                     grey3        = "#E3E3E3",
                     dk_grey      = "#464647",
-                    two_dots_1   = "gold1",
-                    two_dots_2   = "blue2",
+                    two_dots_1   = "#706441",
+                    two_dots_2   = "#56b4e9",
+                    two_dots_flashy_1 = "gold1",
+                    two_dots_flashy_2 = "blue2",
                     three_dots_1 = "aquamarine2",
                     three_dots_2 = "cornflowerbluer",
                     three_dots_3 = "brown1",
@@ -185,13 +187,14 @@ reach_cols <- function(...) {
 reach_pal <- function(palette = "main", reverse = FALSE, color_ramp_palette = T, ...) {
 
   reach_palettes <- list(
-    `main`       = reach_cols("main_grey", "main_red", "main_lt_grey", "main_beige"),
-    `primary`    = reach_cols("main_grey", "main_red"),
-    `secondary`  = reach_cols("main_lt_grey", "main_beige"),
-    `two_dots`   = reach_cols("two_dots_1", "two_dots_2"),
-    `red_main`   = reach_cols("red_main_1", "red_main_2", "red_main_3", "red_main_4", "red_main_5"),
-    `red_alt`   = reach_cols("red_alt_1", "red_alt_2", "red_alt_3", "red_alt_4", "red_alt_5"),
-    `discrete_6` = reach_cols("dk_grey", "red_main_1", "main_beige", "red_main_2", "lt_grey_2", "red_4")
+    `main`            = reach_cols("main_grey", "main_red", "main_lt_grey", "main_beige"),
+    `primary`         = reach_cols("main_grey", "main_red"),
+    `secondary`       = reach_cols("main_lt_grey", "main_beige"),
+    `two_dots`        = reach_cols("two_dots_1", "two_dots_2"),
+    `two_dots_flashy` = reach_cols("two_dots_flashy_1", "two_dots_flashy_2"),
+    `red_main`        = reach_cols("red_main_1", "red_main_2", "red_main_3", "red_main_4", "red_main_5"),
+    `red_alt`         = reach_cols("red_alt_1", "red_alt_2", "red_alt_3", "red_alt_4", "red_alt_5"),
+    `discrete_6`      = reach_cols("dk_grey", "red_main_1", "main_beige", "red_main_2", "lt_grey_2", "red_4")
   )
 
   pal <- reach_palettes[[palette]]
