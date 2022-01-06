@@ -15,10 +15,10 @@
 #' @export
 rowwise_optimum <- function(.tbl, ...,  optimum = "max", max_name = "pmax", min_name = "pmin", na_rm = T, keep = "all") {
 
-  if_not_in_stop(.tbl, !!!cols, ".tbl", "cols")
-
-  cols <- rlang::enquos(..., names = T)
-  if(!all(is.numeric(cols))) abort_bad_argument("All cols in ...", "be numeric")
+  cols <- rlang::enquos(...)
+  quoted_cols <- purrr::map_chr(cols, rlang::as_name)
+  purrr::map(quoted_cols, ~ if_not_in_stop(.tbl, .x, ".tbl", "..."))
+  purrr::map(quoted_cols, \(.x) {if(!is.numeric(.tbl |> dplyr::pull(dplyr::all_of(.x)))) {abort_bad_argument(.x, "be numeric", .tbl$.x)}})
 
 
   if (optimum == "both") {
