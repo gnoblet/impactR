@@ -1,3 +1,83 @@
+#' @title Calculate cross-frequencies
+#'
+#' @param .tbl A tibble
+#' @param col Variable to pivot to columns
+#' @param row Variable to rows
+#' @param group_col Variable to group_by. Default to NULL
+#'
+#' @return A cross-table of frequencies
+#'
+#' @export
+cross_freq <- function(.tbl, row, col, group_col = NULL) {
+  count <- .tbl |>
+    dplyr::group_by({{ row }}, {{ col }}, {{ group_col }}) |>
+    dplyr::summarize(n = dplyr::n(), .groups = "drop_last") |>
+    dplyr::mutate(freq = n / sum(n), .keep = "unused") |>
+    tidyr::pivot_wider(names_from = {{col}}, values_from = "freq") |>
+    dplyr::ungroup()
+
+  return(freq)
+}
+
+
+#' @title Calculate cross-frequencies
+#'
+#' @param .tbl A tibble
+#' @param col Variable to pivot to columns
+#' @param row Variable to rows
+#' @param group_col Variable to group_by. Default to NULL
+#' @param percent Should percentages be scaled? Default to `T`
+#'
+#' @return A cross-table of
+#'
+#' @importFrom rlang :=
+#'
+#'
+#' @export
+cross_freq_gt_table <- function(.tbl, row, col, group_col = NULL, percent = T){
+
+  row_name <- rlang::as_name(rlang::enquo(row))
+  col_name <- rlang::as_name(rlang::enquo(col))
+  group_name <- rlang::as_name(rlang::enquo(group_col))
+
+  cnt <- cross_count(.tbl, {{ row }}, {{ col }}, {{ group_col }}) |>
+    dplyr::group_by({{ group_col }})
+
+
+  cols_col <- cnt |>
+    dplyr::select(-dplyr::all_of(row_name)) |>
+    colnames()
+
+  gt_tbl <- gt::gt(cnt) |>
+    gt::cols_label(
+      {{ row }} := ""
+    ) |>
+    gt::tab_header(
+      title = ifelse(
+        rlang::is_null(group_name),
+        paste(row_name, "vs.", col_name, sep = " "),
+        paste(row_name, "vs.", col_name, "by", group_name, sep = " ")
+      )) |>
+    gt::tab_spanner(
+      label = col_name,
+      columns = cols_col
+    ) |>
+    gt::tab_spanner(
+      label = row_name,
+      columns = row_name
+    )
+
+
+  gt::fmt_percent(
+    columns = cols_col,
+    decimals = 1
+  )
+
+  return(gt_tbl)
+}
+
+
+
 #' @title Tidy rowwise optimum (default to pmax) of several columns
 #'
 #' @param .tbl A tibble
