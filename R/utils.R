@@ -570,3 +570,31 @@ split_survey <- function (survey, col_to_split, into = c("type", "list_name"),
 }
 
 
+
+
+#' @title Named group split
+#'
+#' @param .tbl A tibble of data
+#' @param group Column to split group by
+#'
+#' @return  A split and named list of tibbles
+#'
+#' @export
+named_group_split <- function (.tbl, group){
+
+  group_name <- rlang::as_name(rlang::enquo(group))
+  if_not_in_stop(.tbl, group_name, ".tbl", "group")
+
+  names <- .tbl |>
+    dplyr::group_by({{ group }}) |>
+    dplyr::group_keys() |>
+    dplyr::pull({{ group }})
+
+  split <- .tbl |>
+    dplyr::group_split({{ group }}) |>
+    purrr::set_names(names)
+
+  return(split)
+}
+
+

@@ -4,78 +4,116 @@
 #' @param col Variable to pivot to columns
 #' @param row Variable to rows
 #' @param group_col Variable to group_by. Default to NULL
+#' @param output Default to 1. What should be the output? 1 for frequencies only, 2 for counts only, 3 for both.
 #'
 #' @return A cross-table of frequencies
 #'
 #' @export
-cross_freq <- function(.tbl, row, col, group_col = NULL) {
-  count <- .tbl |>
-    dplyr::group_by({{ row }}, {{ col }}, {{ group_col }}) |>
-    dplyr::summarize(n = dplyr::n(), .groups = "drop_last") |>
-    dplyr::mutate(freq = n / sum(n), .keep = "unused") |>
-    tidyr::pivot_wider(names_from = {{col}}, values_from = "freq") |>
+cross_freq <- function(.tbl, row, col, group_col = NULL, output = 1) {
+
+  if (!rlang::quo_is_null(rlang::enquo(group_col))) {
+    group_col_name <- rlang::as_name(rlang::enquo(group_col))
+    if_not_in_stop(.tbl, group_col_name, ".tbl", "group_col")
+  }
+
+  row_name <- rlang::as_name(rlang::enquo(row))
+  col_name <- rlang::as_name(rlang::enquo(col))
+  if_not_in_stop(.tbl, row_name, ".tbl", "row")
+  if_not_in_stop(.tbl, col_name, ".tbl", "col")
+
+  count <- if (rlang::quo_is_null(rlang::enquo(group_col))) {
+    .tbl |>
+      dplyr::group_by({{ row }}, {{ col }}) |>
+      dplyr::summarize("n" := dplyr::n(), .groups = "drop_last") |>
+      dplyr::mutate("freq" := round(.data$n / sum(.data$n), 3), .keep = "all")
+    } else {
+      .tbl |>
+        named_group_split({{ group_col }}) |>
+        purrr::map(
+          ~ .x |>
+            dplyr::group_by({{ row }}, {{ col }}) |>
+            dplyr::summarize("n" := dplyr::n(), .groups = "drop_last") |>
+            dplyr::mutate("freq" :=  round(.data$n / sum(.data$n), 3), .keep = "all")
+        ) |>
+        dplyr::bind_rows(.id = group_col_name)
+    }
+
+  if (output == 1){
+    final <- count |>
+      dplyr::select(- .data$n) |>
+      tidyr::pivot_wider(names_from = {{col}}, values_from = .data$freq)
+  } else if (output == 2){
+    final <- count |>
+      dplyr::select(- .data$freq) |>
+      tidyr::pivot_wider(names_from = {{col}}, values_from = .data$n)
+  } else if (output == 3){
+    final <- count |>
+      dplyr::mutate("conc" := paste0(.data$n, " (", scales::percent(.data$freq), ")")) |>
+      dplyr::select(- c(.data$freq, .data$n)) |>
+      tidyr::pivot_wider(names_from = {{col}}, values_from = .data$conc)
+  } else {
+    rlang::abort("`output` must be one of 1, 2, or 3")
+  }
+  final <- final |>
     dplyr::ungroup()
 
-  return(freq)
+  return(final)
 }
 
 
-#' @title Calculate cross-frequencies
+
+#' @title Calculate cross-frequencies and expose gt table
 #'
 #' @param .tbl A tibble
 #' @param col Variable to pivot to columns
 #' @param row Variable to rows
 #' @param group_col Variable to group_by. Default to NULL
-#' @param percent Should percentages be scaled? Default to `T`
+#' @param output Default to 1. What should be the output? 1 for frequencies only, 2 for counts only, 3 for both.
 #'
-#' @return A cross-table of
+#' @return A gt table of cross-frequencies
 #'
 #' @importFrom rlang :=
 #'
-#'
 #' @export
-cross_freq_gt_table <- function(.tbl, row, col, group_col = NULL, percent = T){
+cross_freq_gt_table <- function(.tbl, row, col, group_col = NULL, output = 1){
 
-  row_name <- rlang::as_name(rlang::enquo(row))
-  col_name <- rlang::as_name(rlang::enquo(col))
-  group_name <- rlang::as_name(rlang::enquo(group_col))
+    row_name <- rlang::as_name(rlang::enquo(row))
+    col_name <- rlang::as_name(rlang::enquo(col))
 
-  cnt <- cross_count(.tbl, {{ row }}, {{ col }}, {{ group_col }}) |>
-    dplyr::group_by({{ group_col }})
+    if (!rlang::quo_is_null(rlang::enquo(group_col))) {
+      group_col_name <- rlang::as_name(rlang::enquo(group_col))
+      if_not_in_stop(.tbl, group_col_name, ".tbl", "group_col")
+    }
 
-
-  cols_col <- cnt |>
-    dplyr::select(-dplyr::all_of(row_name)) |>
-    colnames()
-
-  gt_tbl <- gt::gt(cnt) |>
-    gt::cols_label(
-      {{ row }} := ""
-    ) |>
-    gt::tab_header(
-      title = ifelse(
-        rlang::is_null(group_name),
-        paste(row_name, "vs.", col_name, sep = " "),
-        paste(row_name, "vs.", col_name, "by", group_name, sep = " ")
-      )) |>
-    gt::tab_spanner(
-      label = col_name,
-      columns = cols_col
-    ) |>
-    gt::tab_spanner(
-      label = row_name,
-      columns = row_name
-    )
+    cnt <- cross_freq(.tbl, {{ row }}, {{ col }}, {{ group_col }}, output = output) |>
+      dplyr::group_by({{ group_col }})
 
 
-  gt::fmt_percent(
-    columns = cols_col,
-    decimals = 1
-  )
+    cols_col <- cnt |>
+      dplyr::select(-dplyr::all_of(row_name)) |>
+      colnames()
 
-  return(gt_tbl)
-}
+    gt_tbl <- gt::gt(cnt) |>
+      gt::cols_label(
+        {{ row }} := ""
+      ) |>
+      gt::tab_header(
+        title = ifelse(
+          rlang::quo_is_null(rlang::enquo(group_col)),
+          paste(row_name, "vs.", col_name, sep = " "),
+          paste(row_name, "vs.", col_name, "by", group_col_name, sep = " ")
+        )) |>
+      gt::tab_spanner(
+        label = col_name,
+        columns = cols_col
+      ) |>
+      gt::tab_spanner(
+        label = row_name,
+        columns = row_name
+      )
 
+    return(gt_tbl)
+  }
 
 
 #' @title Tidy rowwise optimum (default to pmax) of several columns

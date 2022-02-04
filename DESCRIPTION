@@ -43,4 +43,5 @@ Imports:
     tidyselect,
     glue,
     grDevices,
-    scales
+    scales,
+    gt
