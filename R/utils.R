@@ -450,17 +450,38 @@ diff_tibbles <- function(tibble_a, tibble_b, cols){
 #' @title Get all select multiple from survey sheet
 #'
 #' @param survey The survey sheet from Kobo (with column "type" split)
-#' @param type Unquoted column type in the survey sheet. Default to type.
 #'
-#' @details This function has a tibble and the associated survey sheet as inputs, as well as the beginning of the "other" character string. It returns all columns that exist in the tibble and are either a multiple choice or a parent other question. This allows then to compute these columns with `impactR::count_occ` after parent question may have been recoded.
+#' @details survey should have a split type column with types of variables such as "select_one", "select_multiple", etc.
+#'
+#' @return A character vector of select_one questions
+#'
+#' @export
+get_one <- function(survey){
+#
+#   if (typeof(rlang::enquo(type)) == "character"){
+#     type <- rlang::sym(type)
+#   }
+
+  select_one <- survey |>
+    dplyr::filter(.data$type == "select_one") |>
+    dplyr::pull(.data$name)
+
+  return(select_one)
+}
+
+
+#' @title Get all select multiple from survey sheet
+#' @param survey The survey sheet from Kobo (with column "type" split)
+#'
+#' @details survey should have a split type column with types of variables such as "select_one", "select_multiple", etc.
 #'
 #' @return A character vector of select_multiple questions
 #'
 #' @export
-get_multiple <- function(survey, type = "type"){
+get_multiple <- function(survey){
 
   select_multiple <- survey |>
-    dplyr::filter({{ type }} == "select_multiple") |>
+    dplyr::filter(.data$type == "select_multiple") |>
     dplyr::pull(.data$name)
 
   return(select_multiple)
@@ -505,11 +526,11 @@ get_other_parent <- function(.tbl, other){
 #' @return A character vector of select_multiple and other questions
 #'
 #' @export
-get_multiple_and_other_parent <- function(.tbl, survey, other, type = "type"){
+get_multiple_and_other_parent <- function(.tbl, survey, other){
 
   other_parent <- get_other_parent(.tbl, other)
 
-  select_multiple <- get_multiple(survey, type)
+  select_multiple <- get_multiple(survey)
 
   union(other_parent, select_multiple)
 }
@@ -518,7 +539,7 @@ get_multiple_and_other_parent <- function(.tbl, survey, other, type = "type"){
 
 #' @title Get choices from survey name (and paste them if you want!)
 #'
-#' @param survey A survey sheet from Kobo (already split with columns list_name and name)
+#' @param survey A survey sheet from Kobo (already split with columns list_name and name present)
 #' @param choices A choices sheet from Kobo (with column list_name and name)
 #' @param col A quoted column name
 #' @param conc Should choices be concatenated to column name? Default to true.
