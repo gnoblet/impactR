@@ -10,6 +10,12 @@
     <loc>/LICENSE.html</loc>
   </url>
   <url>
+    <loc>/articles/index.html</loc>
+  </url>
+  <url>
+    <loc>/articles/main-workflow.html</loc>
+  </url>
+  <url>
     <loc>/authors.html</loc>
   </url>
   <url>
@@ -38,12 +44,6 @@
   </url>
   <url>
     <loc>/reference/count_occ_all.html</loc>
-  </url>
-  <url>
-    <loc>/reference/cross_freq.html</loc>
-  </url>
-  <url>
-    <loc>/reference/cross_freq_gt_table.html</loc>
   </url>
   <url>
     <loc>/reference/date_to_day_month.html</loc>
