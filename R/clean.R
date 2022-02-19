@@ -317,13 +317,12 @@ count_occ <- function(.tbl, id_col, col){
 #' @param survey A survey sheet from Kobo (with column "type" split)
 #' @param choices A choices sheet from Kobo
 #' @param id_col Usually uuid... to count.
-#' @param type Unquoted column type in the survey sheet. Default to type.
 #' @param return Either "count" (a list of counts of select_multiple) or "updated" (the updated .tbl).
 #'
 #' @return An updated tibble or a list of occurences
 #'
 #' @export
-count_occ_all <- function(.tbl, survey, choices, id_col, type = "type", return = "updated"){
+count_occ_all <- function(.tbl, survey, choices, id_col, return = "updated"){
 
   # Initialize -----------------------------
 
@@ -338,7 +337,7 @@ count_occ_all <- function(.tbl, survey, choices, id_col, type = "type", return =
   # Prepare objects -----------------------------
 
   #  Get multiple questions
-  mult_question <- get_multiple(survey, type)
+  mult_question <- get_multiple(survey)
 
   # Get choices from multiple questions
   mult_choices<- mult_question |>
@@ -438,7 +437,7 @@ clean_all <- function(.tbl, log, survey, choices, id_col){
   .tbl <- recode_other_parent_from_log(.tbl, log, id_col = rlang::as_name(rlang::enquo(id_col)))
   .tbl <- remove_duplicate(.tbl, log, id_col = rlang::as_name(rlang::enquo(id_col)))
   .tbl <- remove_from_log(.tbl, log, id_col = rlang::as_name(rlang::enquo(id_col)))
-  .tbl <- count_occ_all(.tbl, survey, choices, {{ id_col }}, type = "type", return = "updated")
+  .tbl <- count_occ_all(.tbl, survey, choices, {{ id_col }}, return = "updated")
 
   return(.tbl)
 }

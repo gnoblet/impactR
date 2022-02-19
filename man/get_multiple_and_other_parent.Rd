@@ -4,7 +4,7 @@
 \alias{get_multiple_and_other_parent}
 \title{Get all select multiple and parent other questions}
 \usage{
-get_multiple_and_other_parent(.tbl, survey, other, type = "type")
+get_multiple_and_other_parent(.tbl, survey, other)
 }
 \arguments{
 \item{.tbl}{A tibble of data}
@@ -12,8 +12,6 @@ get_multiple_and_other_parent(.tbl, survey, other, type = "type")
 \item{survey}{The survey sheet from Kobo (with column "type" split)}
 
 \item{other}{A character vector of the start of all other column names. E.g., other = "other_"}
-
-\item{type}{Unquoted column type in the survey sheet. Default to type.}
 }
 \value{
 A character vector of select_multiple and other questions

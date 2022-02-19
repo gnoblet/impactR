@@ -519,7 +519,6 @@ get_other_parent <- function(.tbl, other){
 #' @param .tbl A tibble of data
 #' @param survey The survey sheet from Kobo (with column "type" split)
 #' @param other  A character vector of the start of all other column names. E.g., other = "other_"
-#' @param type Unquoted column type in the survey sheet. Default to type.
 #'
 #' @details This function has a tibble and the associated survey sheet as inputs, as well as the beginning of the "other" character string. It returns all columns that exist in the tibble and are either a multiple choice or a parent other question. This allows then to compute these columns with `impactR::count_occ` after parent question may have been recoded.
 #'

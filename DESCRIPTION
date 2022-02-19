@@ -1,7 +1,7 @@
 Package: impactR
 Type: Package
 Title: Ease IMPACT's data and database officers woRk
-Version: 0.4.10
+Version: 0.4.11
 Authors@R: c(
         person(
             'Noblet', 'Guillaume',
@@ -44,4 +44,5 @@ Imports:
     glue,
     grDevices,
     scales,
-    gt
+    gt,
+    gtsummary
