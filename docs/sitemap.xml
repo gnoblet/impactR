@@ -58,6 +58,9 @@
     <loc>/reference/get_multiple_and_other_parent.html</loc>
   </url>
   <url>
+    <loc>/reference/get_one.html</loc>
+  </url>
+  <url>
     <loc>/reference/get_other_parent.html</loc>
   </url>
   <url>
@@ -104,6 +107,9 @@
   </url>
   <url>
     <loc>/reference/modify_from_log.html</loc>
+  </url>
+  <url>
+    <loc>/reference/named_group_split.html</loc>
   </url>
   <url>
     <loc>/reference/numeric_cols.html</loc>
@@ -196,7 +202,16 @@
     <loc>/reference/svy_interact.html</loc>
   </url>
   <url>
+    <loc>/reference/svy_mean.html</loc>
+  </url>
+  <url>
+    <loc>/reference/svy_median.html</loc>
+  </url>
+  <url>
     <loc>/reference/svy_prop.html</loc>
+  </url>
+  <url>
+    <loc>/reference/svy_ratio.html</loc>
   </url>
   <url>
     <loc>/reference/tbl_col_end.html</loc>

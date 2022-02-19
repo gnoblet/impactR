@@ -4,12 +4,10 @@
 \alias{get_multiple}
 \title{Get all select multiple from survey sheet}
 \usage{
-get_multiple(survey, type = "type")
+get_multiple(survey)
 }
 \arguments{
 \item{survey}{The survey sheet from Kobo (with column "type" split)}
-
-\item{type}{Unquoted column type in the survey sheet. Default to type.}
 }
 \value{
 A character vector of select_multiple questions
@@ -18,5 +16,5 @@ A character vector of select_multiple questions
 Get all select multiple from survey sheet
 }
 \details{
-This function has a tibble and the associated survey sheet as inputs, as well as the beginning of the "other" character string. It returns all columns that exist in the tibble and are either a multiple choice or a parent other question. This allows then to compute these columns with `impactR::count_occ` after parent question may have been recoded.
+survey should have a split type column with types of variables such as "select_one", "select_multiple", etc.
 }

@@ -7,7 +7,7 @@
 get_choices(survey, choices, col, conc = T)
 }
 \arguments{
-\item{survey}{A survey sheet from Kobo (already split with columns list_name and name)}
+\item{survey}{A survey sheet from Kobo (already split with columns list_name and name present)}
 
 \item{choices}{A choices sheet from Kobo (with column list_name and name)}
 

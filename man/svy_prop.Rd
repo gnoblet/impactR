@@ -2,9 +2,9 @@
 % Please edit documentation in R/analysis.R
 \name{svy_prop}
 \alias{svy_prop}
-\title{Survey prop}
+\title{Survey proportion}
 \usage{
-svy_prop(design, col, group = NULL, ...)
+svy_prop(design, col, group = NULL, na_rm = T, ...)
 }
 \arguments{
 \item{design}{A srvyr::design object}
@@ -13,11 +13,13 @@ svy_prop(design, col, group = NULL, ...)
 
 \item{group}{A quoted or unquoted vector of columns to group by. Default to NULL for no group.}
 
+\item{na_rm}{Should NAs from `col` be removed? Default to TRUE. na.rm does not work anymore within srvyr functions (workaround for now)}
+
 \item{...}{Parameters to pass to `srvyr::survey_prop()`}
 }
 \value{
 A survey-summarized-proportion tibble
 }
 \description{
-Survey prop
+Survey proportion
 }
