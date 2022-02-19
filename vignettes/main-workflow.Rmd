@@ -1,0 +1,77 @@
+---
+title: "Some workflow"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Why?
+
+This document aims at providing the workflow that may arise from and through the use of `impactR`. Let's load the package.
+```{r initiate-impactr}
+# If you haven't done so 
+# devtools::install_github("impactR)
+box::use(impactR[...])
+```
+
+
+
+Below, let's use the 'airports' dataset from package `nycflights13`
+```{r initiate-airports}
+#install.packages("nycflights13")
+library(nycflights13)
+
+# Load dataset in environment
+data(airports)
+
+# Show the first lines and types of airports' tibble
+airports
+```
+
+Most of `impactR`'s functions are written with the assumption that the provided data may be coerced to a tibble, since it extensively use the tidyverse.
+
+Let's sat we have a survey sheet composed as: 
+```{r initiate-survey}
+survey <- tibble::tibble(
+  type = c("select_one faa_list", "select_one name_list", "decimal", "decimal", "integer", "gps", "select_one destination_list", "select_one tzone_list"),
+  name = colnames(airports),
+  label = colnames(airports)
+)
+```
+
+First thing to do with 'survey' as it will be used elsewhere: separate the type column.
+```{r split-survey}
+# All are already defaults apart from 'col_to_split'
+survey <- survey |>  
+  split_survey(
+    col_to_split = "type",
+    into = c("type", "list_name"),
+    sep = " ",
+    fill = "right")
+```
+
+
+
+## Monitor data collection
+
+### Check for outliers
+
+In order to check for outliers, there's a main one that you can use, that will check for two types of outliers: Deviation from the mean and IQR deviation.
+
+```{r monitor-outliers1}
+# Helper to get numeric columns
+numeric_cols(airports) # Get all numeric columns : it includes for example numeric enumerator ids or gps locations
+numeric_cols(airports, survey) # Check for numeric columns using the survey sheet.
+
+# Get IQR outliers (1.5 default rule)
+outliers_iqr(airports, col = "alt",times = 1.5,  id_col = "faa") # id_col is usually "uuid" with Kobo
+
+# Get standard deviation outliers
+outliers_sd(airports, "alt", times = 3, id_col = "faa")
+
+# Create the full log of outliers
+#make_log_outlier(airports, survey, id_col = "faa", cols_to_keep = "tzone")
+```
+
+
