@@ -40,6 +40,12 @@
     <loc>/reference/count_occ_all.html</loc>
   </url>
   <url>
+    <loc>/reference/cross_freq.html</loc>
+  </url>
+  <url>
+    <loc>/reference/cross_freq_gt_table.html</loc>
+  </url>
+  <url>
     <loc>/reference/date_to_day_month.html</loc>
   </url>
   <url>
@@ -104,6 +110,9 @@
   </url>
   <url>
     <loc>/reference/modify_from_log.html</loc>
+  </url>
+  <url>
+    <loc>/reference/named_group_split.html</loc>
   </url>
   <url>
     <loc>/reference/numeric_cols.html</loc>
