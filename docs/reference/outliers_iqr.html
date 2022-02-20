@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">impactR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.11</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.12</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -24,7 +24,7 @@
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
-    <a class="dropdown-item" href="../articles/main-workflow.html">Some workflow</a>
+    <a class="dropdown-item" href="../articles/1_main_workflow.html">Some workflow</a>
   </div>
 </li>
       </ul><form class="form-inline my-2 my-lg-0" role="search">
@@ -54,7 +54,7 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">outliers_iqr</span><span class="op">(</span><span class="va">.tbl</span>, <span class="va">col</span>, times <span class="op">=</span> <span class="fl">1.5</span>, id_col <span class="op">=</span> <span class="st">"uuid"</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">outliers_iqr</span><span class="op">(</span><span class="va">.tbl</span>, <span class="va">col</span>, times <span class="op">=</span> <span class="fl">1.5</span>, <span class="va">id_col</span><span class="op">)</span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -64,9 +64,9 @@
 <dt>col</dt>
 <dd><p>A numeric columns</p></dd>
 <dt>times</dt>
-<dd><p>How many from the med</p></dd>
+<dd><p>How much to deviate from IQR? Default to 1.5</p></dd>
 <dt>id_col</dt>
-<dd><p>Usually "uuid". Default to row index</p></dd>
+<dd><p>Usually uuid</p></dd>
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
