@@ -641,7 +641,7 @@ make_log_outlier <- function(.tbl, survey, id_col, ...) {
   new_tbl <- dplyr::bind_rows(iqr, sd) |>
     dplyr::distinct() |>
     dplyr::left_join(survey |> dplyr::select(.data$name, .data$label), by = c("question_name" = "name")) |>
-    dplyr::rename(`question_label` := .data$label) |>
+    dplyr::rename('question_label' := .data$label) |>
     dplyr::left_join(.tbl |> dplyr::select({{ id_col }},...), by = id_col_name)
 
   new_log <- tibble::tibble(

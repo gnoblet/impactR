@@ -4,16 +4,16 @@
 \alias{outliers_iqr}
 \title{Get outliers using interquartile range (better for skewed-distribution)}
 \usage{
-outliers_iqr(.tbl, col, times = 1.5, id_col = "uuid")
+outliers_iqr(.tbl, col, times = 1.5, id_col)
 }
 \arguments{
 \item{.tbl}{A tibble}
 
 \item{col}{A numeric columns}
 
-\item{times}{How many from the med}
+\item{times}{How much to deviate from IQR? Default to 1.5}
 
-\item{id_col}{Usually "uuid". Default to row index}
+\item{id_col}{Usually uuid}
 }
 \value{
 A tibble of outliers
