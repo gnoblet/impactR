@@ -515,21 +515,30 @@ numeric_cols <- function(.tbl, survey = NULL) {
 #'
 #' @param .tbl A tibble
 #' @param col A numeric columns
-#' @param times How many standard deviations from the mean?
-#' @param id_col Usually "uuid". Default to row index
+#' @param times How many standard deviations from the mean? Default to 3
+#' @param id_col Usually uuid
 #'
 #' @return A tibble of outliers
 #'
 #' @export
-outliers_sd <- function(.tbl, col, times = 3, id_col = "uuid") {
+outliers_sd <- function(.tbl, col, times = 3, id_col) {
 
-  if_not_in_stop(.tbl, id_col, ".tbl", "id_col")
-  if_not_in_stop(.tbl, col, ".tbl", "col")
+  #------- Checks
+
+  # Check for id_col in .tbl
+  id_col_name <- rlang::enquo(id_col) |> rlang::as_name()
+  if_not_in_stop(.tbl, id_col_name, ".tbl", "id_col")
+
+  # Check for col in .tbl
+  col_name <- rlang::enquo(col) |> rlang::as_name()
+  if_not_in_stop(.tbl, col_name, ".tbl", "col")
+
+  #-------- Get outliers
 
   outliers <- .tbl |>
-    dplyr::select(!!rlang::sym(id_col), !!rlang::sym(col)) |>
-    dplyr::filter(abs(!!rlang::sym(col) - mean(!!rlang::sym(col))) > times * stats::sd(!!rlang::sym(col))) |>
-    tidyr::pivot_longer(!!rlang::sym(col),
+    dplyr::select({{ id_col }}, {{ col }}) |>
+    dplyr::filter(abs(!!rlang::sym(col_name) - mean(!!rlang::sym(col_name))) > times * stats::sd(!!rlang::sym(col_name))) |>
+    tidyr::pivot_longer({{ col }},
                         names_to = "question_name",
                         values_to = "old_value")
 
@@ -542,27 +551,40 @@ outliers_sd <- function(.tbl, col, times = 3, id_col = "uuid") {
 #'
 #' @param .tbl A tibble
 #' @param col A numeric columns
-#' @param times How many from the med
-#' @param id_col Usually "uuid". Default to row index
+#' @param times How much to deviate from IQR? Default to 1.5
+#' @param id_col Usually uuid
 #'
 #' @return A tibble of outliers
 #'
 #' @export
-outliers_iqr <- function(.tbl, col, times = 1.5, id_col = "uuid") {
+outliers_iqr <- function(.tbl, col, times = 1.5, id_col) {
 
-  if_not_in_stop(.tbl, id_col, ".tbl", "id_col")
-  if_not_in_stop(.tbl, col, ".tbl", "col")
+  #------- Checks
 
-  pulled_col <- .tbl |> dplyr::pull(!!rlang::sym(col))
+  # Check for id_col in .tbl
+  id_col_name <- rlang::enquo(id_col) |> rlang::as_name()
+  if_not_in_stop(.tbl, id_col_name, ".tbl", "id_col")
 
+  # Check for col in .tbl
+  col_name <- rlang::enquo(col) |> rlang::as_name()
+  if_not_in_stop(.tbl, col_name, ".tbl", "col")
+
+  #-------- Get outliers
+
+  # Get col
+  pulled_col <- .tbl |> dplyr::pull({{ col }})
+
+  # Get IQR
   iqr <- stats::IQR(pulled_col, na.rm = T)
 
+  # Get quantiles
   quantiles <- stats::quantile(pulled_col, na.rm = T)
 
+  # Filter with the times * IQR rule
   outliers <- .tbl |>
-    dplyr::select(!!rlang::sym(id_col), !!rlang::sym(col)) |>
-    dplyr::filter(!!rlang::sym(col) < quantiles[2] - times * iqr | !!rlang::sym(col) > quantiles[4] + times * iqr)  |>
-    tidyr::pivot_longer(!!rlang::sym(col),
+    dplyr::select({{ id_col }}, {{ col }}) |>
+    dplyr::filter(!!rlang::sym(col_name) < quantiles[2] - times * iqr | !!rlang::sym(col_name) > quantiles[4] + times * iqr)  |>
+    tidyr::pivot_longer({{ col }},
                         names_to = "question_name",
                         values_to = "old_value")
 
@@ -575,8 +597,8 @@ outliers_iqr <- function(.tbl, col, times = 1.5, id_col = "uuid") {
 #'
 #' @param .tbl A tibble of data
 #' @param survey The survey sheet from Kobo
-#' @param id_col Survey id, usually "uuid".
-#' @param cols_to_keep Columns to keep in the log, e.g. uuid, enum_id
+#' @param id_col Survey id, usually uuid
+#' @param ... Columns to keep in the log, e.g, today, enum_id
 #'
 #' @return A log with outliers
 #'
@@ -591,25 +613,41 @@ outliers_iqr <- function(.tbl, col, times = 1.5, id_col = "uuid") {
 #' @importFrom rlang .data
 #'
 #' @export
-make_log_outlier <- function(.tbl, survey, id_col = "uuid", cols_to_keep) {
+make_log_outlier <- function(.tbl, survey, id_col, ...) {
 
-  if_not_in_stop(.tbl, cols_to_keep, ".tbl", "cols_to_keep")
+  #-------- Checks
 
+  # Check for id_col in .tbl
+  id_col_name <- rlang::enquo(id_col) |> rlang::as_name()
+  if_not_in_stop(.tbl, id_col_name, ".tbl", "id_col")
+
+  # Check for ... in .tbl
+  cols_to_keep <- purrr::map_chr(rlang::enquos(...), rlang::as_name)
+  if_not_in_stop(.tbl, cols_to_keep, ".tbl", arg = "...")
+
+  #-------- Get outliers and construc log tibble
+
+  # Get all numeric cols
   num_cols <- numeric_cols(.tbl, survey)
 
-  iqr <- num_cols |> purrr::map(~ outliers_iqr(.tbl, .x, id_col = id_col))
-  sd <- num_cols |> purrr::map(~ outliers_sd(.tbl, .x, id_col = id_col))
+  # Get IQR outliers
+  iqr <- num_cols |> purrr::map(~ outliers_iqr(.tbl, {{ .x }}, id_col = {{ id_col }}))
+
+  # Get standard deviation outliers
+  sd <- num_cols |> purrr::map(~ outliers_sd(.tbl, {{ .x }}, id_col = {{ id_col }}))
+
+  #-------- Construct log tibble
 
   new_tbl <- dplyr::bind_rows(iqr, sd) |>
     dplyr::distinct() |>
     dplyr::left_join(survey |> dplyr::select(.data$name, .data$label), by = c("question_name" = "name")) |>
-    dplyr::rename(question_label = .data$label) |>
-    dplyr::left_join(.tbl |> dplyr::select(!!rlang::sym(id_col), !!!rlang::syms(cols_to_keep)), by = id_col)
+    dplyr::rename(`question_label` := .data$label) |>
+    dplyr::left_join(.tbl |> dplyr::select({{ id_col }},...), by = id_col_name)
 
   new_log <- tibble::tibble(
     id_check = "outlier",
     new_tbl |>
-      dplyr::select(!!!rlang::syms(cols_to_keep), !!rlang::sym(id_col), .data$question_name),
+      dplyr::select(..., {{ id_col }}, .data$question_name),
     new_tbl |>
       dplyr::select(.data$question_label),
     why = "Outlier",
