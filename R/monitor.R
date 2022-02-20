@@ -604,7 +604,7 @@ make_log_outlier <- function(.tbl, survey, id_col = "uuid", cols_to_keep) {
     dplyr::distinct() |>
     dplyr::left_join(survey |> dplyr::select(.data$name, .data$label), by = c("question_name" = "name")) |>
     dplyr::rename(question_label = .data$label) |>
-    dplyr::left_join(.tbl |> dplyr::select(!!!rlang::syms(cols_to_keep)), by = id_col)
+    dplyr::left_join(.tbl |> dplyr::select(!!rlang::sym(id_col), !!!rlang::syms(cols_to_keep)), by = id_col)
 
   new_log <- tibble::tibble(
     id_check = "outlier",
