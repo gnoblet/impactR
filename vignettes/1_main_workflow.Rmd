@@ -1,5 +1,10 @@
 ---
 title: "Some workflow"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Some workflow}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
 ---
 
 ```{r setup, include=FALSE}
@@ -12,7 +17,7 @@ This document aims at providing the workflow that may arise from and through the
 ```{r initiate-impactr}
 # If you haven't done so 
 # devtools::install_github("impactR)
-box::use(impactR[...])
+library(impactR)
 ```
 
 
@@ -65,13 +70,13 @@ numeric_cols(airports) # Get all numeric columns : it includes for example numer
 numeric_cols(airports, survey) # Check for numeric columns using the survey sheet.
 
 # Get IQR outliers (1.5 default rule)
-outliers_iqr(airports, col = "alt",times = 1.5,  id_col = "faa") # id_col is usually "uuid" with Kobo
+outliers_iqr(airports, col = alt,times = 1.5,  id_col = faa) # id_col is usually "uuid" with Kobo
 
 # Get standard deviation outliers
-outliers_sd(airports, "alt", times = 3, id_col = "faa")
+outliers_sd(airports, alt, times = 3, id_col = faa)
 
-# Create the full log of outliers
-#make_log_outlier(airports, survey, id_col = "faa", cols_to_keep = "tzone")
+# Create the full log of outliers of all numeri columns
+make_log_outlier(airports, survey, id_col = faa, tzone)
 ```
 
 

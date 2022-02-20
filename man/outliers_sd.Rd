@@ -4,16 +4,16 @@
 \alias{outliers_sd}
 \title{Get outliers outside standard deviations from the mean}
 \usage{
-outliers_sd(.tbl, col, times = 3, id_col = "uuid")
+outliers_sd(.tbl, col, times = 3, id_col)
 }
 \arguments{
 \item{.tbl}{A tibble}
 
 \item{col}{A numeric columns}
 
-\item{times}{How many standard deviations from the mean?}
+\item{times}{How many standard deviations from the mean? Default to 3}
 
-\item{id_col}{Usually "uuid". Default to row index}
+\item{id_col}{Usually uuid}
 }
 \value{
 A tibble of outliers
