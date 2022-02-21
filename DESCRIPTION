@@ -1,7 +1,7 @@
 Package: impactR
 Type: Package
 Title: Ease IMPACT's data and database officers woRk
-Version: 0.4.12
+Version: 0.4.13
 Authors@R: c(
         person(
             'Noblet', 'Guillaume',
@@ -52,3 +52,4 @@ Suggests:
     knitr,
     nycflights13
 VignetteBuilder: knitr 
+LazyData: true
