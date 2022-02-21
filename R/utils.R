@@ -42,6 +42,7 @@ if_not_in_stop <- function(.tbl, cols, df, arg = NULL){
     msg <- glue::glue("following column/s is/are missing in `{df}`:")
   }
   else {
+    msg <- glue::glue("following column/s from `{arg}` is/are missing in `{df}`:")
   }
   if (!all(cols %in% colnames(.tbl))) {
     rlang::abort(
