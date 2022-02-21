@@ -42,7 +42,6 @@ if_not_in_stop <- function(.tbl, cols, df, arg = NULL){
     msg <- glue::glue("following column/s is/are missing in `{df}`:")
   }
   else {
-    msg <- glue::glue("following column/s from `{arg}` is/are missing in `{df}`:")
   }
   if (!all(cols %in% colnames(.tbl))) {
     rlang::abort(
@@ -319,7 +318,7 @@ rename_cols <- function(.tbl, old_cols, new_cols){
   }
 
   up_tbl <- .tbl |>
-    dplyr::rename_with(~ new_cols, .cols = old_cols)
+    dplyr::rename_with(~ new_cols, .cols = dplyr::all_of(old_cols))
 
   return(up_tbl)
 }
