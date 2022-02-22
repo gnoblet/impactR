@@ -251,20 +251,22 @@ make_log_from_check_list <- function(.tbl, survey, check_list, id_col = "uuid", 
 #'
 #' @param .tbl A tibble of data
 #' @param other  A character vector of the start of all other column names. E.g., other = "other_"
-#' @param id_col Survey id, usually "uuid"
+#' @param id_col Survey id, usually "uuid
 #'
 #' @return A tibble with all "other" answers
 #'
 #' @export
 other_cols <- function(.tbl, other, id_col) {
 
+  #-------- Checks
   id_col_name <- rlang::as_name(rlang::enquo(id_col))
-
   if_not_in_stop(.tbl, id_col_name, ".tbl", "id_col")
+
   if (length(tbl_col_start(.tbl, other)) == 0) {
     rlang::abort(paste("at least one column in `.tbl` must start with '", other, "'"))
   }
 
+  #-------- Get others
   other <- .tbl |>
     dplyr::select({{ id_col }}, dplyr::starts_with(other)) |>
     # Faire pivoter la table et virer les NA
@@ -285,7 +287,7 @@ other_cols <- function(.tbl, other, id_col) {
 #' @param .tbl A tibble of data
 #' @param other_cols A tibble produced by `other_cols`
 #' @param other  A character vector of the start of all other column names. E.g., other = "other_"
-#' @param id_col Unquoted survey id, usually uuid. Need some fix to be used also with quoted names, with the use of `dplyr::group_split`
+#' @param id_col Survey id, usuallly uuid
 #'
 #' @return A tibble with all "other" values and their parent values
 #'
@@ -294,13 +296,16 @@ other_cols <- function(.tbl, other, id_col) {
 #' @export
 other_parent_cols <- function(.tbl, other_cols, other, id_col) {
 
-  id_col_name <- rlang::as_name(rlang::enquo(id_col))
+  #-------- Checks
 
+  id_col_name <- rlang::as_name(rlang::enquo(id_col))
   if_not_in_stop(.tbl, id_col_name, ".tbl", "id_col")
+
   if (length(tbl_col_start(.tbl, other)) == 0) {
     rlang::abort(paste("at least one column in `.tbl` must start with '", other, "'"))
   }
 
+  #-------- Prepare other tibble
   other_parent <- other_cols |>
     tibble::add_column(other_old_value = "")
 
@@ -341,14 +346,16 @@ other_parent_cols <- function(.tbl, other_cols, other, id_col) {
 #' @export
 bind_others <- function(.tbl, other, id_col) {
 
-  id_col_name <- rlang::as_name(rlang::enquo(id_col))
+  #-------- Checks
 
+  id_col_name <- rlang::as_name(rlang::enquo(id_col))
   if_not_in_stop(.tbl, id_col_name, ".tbl", "id_col")
 
   if (length(tbl_col_start(.tbl, other)) == 0) {
     rlang::abort(paste("at least one column in `.tbl` must start with '", other, "'"))
   }
 
+  #-------- Bind
   other_df <- other_cols(.tbl, other, {{ id_col }})
   other_parent_df <- other_parent_cols(.tbl, other_df, other, {{ id_col }})
 
@@ -359,43 +366,13 @@ bind_others <- function(.tbl, other, id_col) {
 
 
 
-#' @title Get survey label from question name
-#'
-#' @param .tbl A tibble with at least a column made of Kobo survey names
-#' @param survey The survey
-#' @param col_to_join Column character string to join
-#'
-#' @details It is mainly used in the make_log* functions. E.g., after `bind_others`
-#'
-#' @return A tibble with question_label
-#'
-#' @importFrom rlang .data
-#'
-#' @export
-get_survey_label <- function(.tbl, survey, col_to_join) {
-
-  if_not_in_stop(survey, c("name", "label"), "survey")
-  if_not_in_stop(survey, col_to_join, "survey", "col_to_join")
-  if_not_in_stop(.tbl, col_to_join, ".tbl", "col_to_join")
-
-  sub_survey <- survey |>
-    dplyr::select(.data$name, .data$label) |>
-    rename_cols(c("label", "name"), c("question_label", col_to_join))
-
-  labelled_tbl <- dplyr::left_join(.tbl, sub_survey, by = col_to_join)
-
-  return(labelled_tbl)
-}
-
-
-
 #' @title Make "other questions" log
 #'
 #' @param .tbl A tibble of data
 #' @param survey The survey sheet from Kobo
 #' @param other A character vector of the start of all other column names. E.g., other = "other_".
-#' @param id_col Survey id, usually "uuid".
-#' @param cols_to_keep Columns to keep in the log, e.g. uuid, enum_id
+#' @param id_col Survey id, usually uuid
+#' @param ... Columns to keep in the log, e.g. uuid, enum_id
 #'
 #' @details It assumes that a parent question and its children "other" are coded as follows
 #'     within the kobo tool : e.g., parent_question, other_parent_question.
@@ -415,29 +392,46 @@ make_log_other <- function(
   .tbl,
   survey,
   other,
-  id_col = "uuid",
-  cols_to_keep
+  id_col,
+  ...
 ) {
 
-  if_not_in_stop(.tbl, id_col, ".tbl", "id_col")
-  if_not_in_stop(.tbl, cols_to_keep, ".tbl", "cols_to_keep")
+  #-------- Checks
 
+  # Check for id_col in .tbl
+  id_col_name <- rlang::enquo(id_col) |> rlang::as_name()
+  if_not_in_stop(.tbl, id_col_name, ".tbl", "id_col")
+
+  # Check for ... in .tbl
+  cols_to_keep <- purrr::map_chr(rlang::enquos(...), rlang::as_name)
+  if_not_in_stop(.tbl, cols_to_keep, ".tbl", arg = "...")
+
+  #-------- Construct log tibble
+
+  # Prepare survey
+  survey <- survey |>
+    rename_cols("label", "question_label")
+
+  # Prepare data
+  .old_tbl <- .tbl |>
+    dplyr::select({{ id_col }}, ...)
 
   # Get sub data frame will all other values and their question name
   # Join and get perfect wonderful butterflies
   new_tbl <- .tbl |>
-    bind_others(other, id_col) |>
-    get_survey_label(survey, "other_parent_question") |>
-    dplyr::left_join(.tbl |>
-                       dplyr::select(!!rlang::sym(id_col), !!!rlang::syms(cols_to_keep)),
-                     by = id_col)
+    bind_others(other, {{ id_col }}) |>
+    dplyr::left_join(survey, by = c("other_parent_question" = "name")) |>
+    dplyr::left_join(.old_tbl, by = id_col_name)
 
+  # Create log
   new_log <- tibble::tibble(
     id_check = other,
     new_tbl |>
-      dplyr::select(!!!rlang::syms(cols_to_keep), !!rlang::sym(id_col), .data$question_name),
-    new_tbl |>
-      dplyr::select(.data$question_label),
+      dplyr::select(
+        ...,
+        {{ id_col }},
+        .data$question_name,
+        .data$question_label),
     why = "Other answer",
     feedback = "Fill in",
     action = "check",
