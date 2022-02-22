@@ -267,7 +267,7 @@ other_cols <- function(.tbl, other, id_col) {
   }
 
   #-------- Get others
-  other <- .tbl |>
+  others <- .tbl |>
     dplyr::select({{ id_col }}, dplyr::starts_with(other)) |>
     # Faire pivoter la table et virer les NA
     tidyr::pivot_longer(tidyr::starts_with(other),
@@ -277,7 +277,7 @@ other_cols <- function(.tbl, other, id_col) {
     dplyr::mutate(other_parent_question = stringr::str_remove(.data$question_name, other))
 
 
-  return(other)
+  return(others)
 }
 
 

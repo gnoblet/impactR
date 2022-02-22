@@ -1,8 +1,8 @@
 ---
-title: "Base de travail avec `impactR`"
+title: "Base de travail avec impactR"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{`Base de travail avec `impactR`}
+  %\VignetteIndexEntry{Base de travail avec impactR}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---

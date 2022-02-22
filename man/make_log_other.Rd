@@ -4,7 +4,7 @@
 \alias{make_log_other}
 \title{Make "other questions" log}
 \usage{
-make_log_other(.tbl, survey, other, id_col = "uuid", cols_to_keep)
+make_log_other(.tbl, survey, other, id_col, ...)
 }
 \arguments{
 \item{.tbl}{A tibble of data}
@@ -13,9 +13,9 @@ make_log_other(.tbl, survey, other, id_col = "uuid", cols_to_keep)
 
 \item{other}{A character vector of the start of all other column names. E.g., other = "other_".}
 
-\item{id_col}{Survey id, usually "uuid".}
+\item{id_col}{Survey id, usually uuid}
 
-\item{cols_to_keep}{Columns to keep in the log, e.g. uuid, enum_id}
+\item{...}{Columns to keep in the log, e.g. uuid, enum_id}
 }
 \value{
 A log with all "other_cols".
