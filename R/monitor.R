@@ -50,22 +50,26 @@ svy_diff_time <- function(.tbl, id_enum, start, end){
 #'
 #' @param .tbl A tibble
 #' @param logical_test A logical test as a character expression
-#' @param id_col Survey id, usually "uuid".
+#' @param id_col Survey id, usually uuid
 #'
 #' @return A vector of ids
 #'
 #' @export
-pull_uuid <- function(.tbl, logical_test = "uuid", id_col = "uuid"){
+pull_uuid <- function(.tbl, logical_test = "uuid", id_col){
 
+  #-------- Checks
+
+  # Check for id_col in .tbl
+  id_col_name <- rlang::enquo(id_col) |> rlang::as_name()
+  if_not_in_stop(.tbl, id_col_name, ".tbl", "id_col")
   if(!is.data.frame(.tbl)) abort_bad_argument(".tbl", "be a data.frame", not = .tbl)
-  if_not_in_stop(.tbl, id_col, ".tbl", "id_col")
 
   if(logical_test == "uuid"){
     .tbl |> dplyr::pull({{ id_col }})
   } else {
     .tbl |>
       dplyr::filter(!!rlang::parse_expr(logical_test)) |>
-      dplyr::pull({{ id_col }})
+      dplyr::select({{ id_col }})
   }
 }
 
@@ -75,8 +79,7 @@ pull_uuid <- function(.tbl, logical_test = "uuid", id_col = "uuid"){
 #'
 #' @param .tbl A tibble of data
 #' @param survey The survey sheet from the Kobo tool
-#' @param id_col Survey id, usually "uuid"
-#' @param cols_to_keep Columns to keep in the log, e.g. c("today", "i_enum_id")
+#' @param id_col Survey id, usually uuid
 #' @param id_check A string to identify the check
 #' @param question_name A column of .tbl
 #' @param why A long character string
@@ -84,6 +87,7 @@ pull_uuid <- function(.tbl, logical_test = "uuid", id_col = "uuid"){
 #' @param new_value Should we suggest a new value?
 #' @param action A character with "check" as default
 #' @param type The type of the question "double" or "character"
+#' @param ... Columns to keep in the log
 #'
 #' @return A tibble with a log for one question and one logical test
 #'
@@ -99,22 +103,30 @@ pull_uuid <- function(.tbl, logical_test = "uuid", id_col = "uuid"){
 make_log <- function(
   .tbl,
   survey,
-  id_col = "uuid",
-  cols_to_keep,
+  id_col,
   id_check = "empty",
   question_name,
   why = "empty",
   logical_test,
   new_value,
   action,
-  type
+  type,
+  ...
 ){
 
   name <- label <- NULL
 
-  if_not_in_stop(.tbl, id_col, ".tbl", "id_col")
-  if_not_in_stop(.tbl, question_name, ".tbl", "question_name")
-  if_not_in_stop(.tbl, cols_to_keep, ".tbl", "cols_to_keep")
+
+  #-------- Checks
+
+  # Check for id_col in .tbl
+  id_col_name <- rlang::enquo(id_col) |> rlang::as_name()
+  if_not_in_stop(.tbl, id_col_name, ".tbl", "id_col")
+
+  # Check for ... in .tbl
+  cols_to_keep <- purrr::map_chr(rlang::enquos(...), rlang::as_name)
+  if_not_in_stop(.tbl, cols_to_keep, ".tbl", arg = "...")
+
 
   # To do:
   # - add an abort check if type != question_name type or warninf if coerced introduction
@@ -122,22 +134,29 @@ make_log <- function(
   # - add a warning check if new_value's type != question name's
 
 
+  #-------- Make log tibble
+
   # Get uuid using the logical test
   pulled_uuid <- .tbl |>
-    pull_uuid(logical_test, id_col)
+    pull_uuid(logical_test, {{ id_col }})
+
   # Join and get the subset of .tbl
   new_tbl <- pulled_uuid  |>
-    dplyr::left_join(.tbl, by = id_col)
+    dplyr::left_join(.tbl, by = id_col_name)
+
   # Get label question
   question_label <- survey |>
     dplyr::filter(.data$name == question_name) |>
-    dplyr::pull(label)
+    dplyr::pull(.data$label)
+
+  question_label <- ifelse(rlang::is_empty(question_label) | rlang::is_na(question_label), "", question_label)
+
   # Create the new_log entry
   new_log <- tibble::tibble(
     id_check = id_check,
-    new_tbl |>  dplyr::select(!!!rlang::syms(cols_to_keep), !!rlang::sym(id_col)),
+    new_tbl |>  dplyr::select(..., {{ id_col }}),
     question_name = question_name,
-    question_label = dplyr::if_else(question_label == "character(0)" | is.na(question_label), "", question_label),
+    question_label = question_label,
     why = why,
     feedback = "Verified in check list",
     action = ifelse(is.na(action), "check", action),
@@ -154,6 +173,7 @@ make_log <- function(
   return(new_log)
 
 }
+
 
 
 #' @title  Check cleaning log against data
@@ -178,7 +198,7 @@ check_check_list <- function(check_list, .tbl){
   if(rlang::is_na(check_list$id_check)) rlang::abort("There are missing `id_check` values")
 
   # Check if all question_names are there
-  if(rlang::is_na(check_list$question_name)) rlang::abort("There are missing `question_nametr(` values")
+  if(rlang::is_na(check_list$question_name)) rlang::abort("There are missing `question_name` values")
 
   # Check if types are one of the right ones
   types <- sum(stringr::str_count(check_list$type, pattern = "character|double"))
@@ -198,7 +218,6 @@ check_check_list <- function(check_list, .tbl){
 
   if_not_in_stop(.tbl ,
                  check_list |>
-                   dplyr::filter(.data$action == "modify") |>
                    dplyr::pull(.data$question_name),
                  ".tbl",
                  "question_name")
@@ -213,8 +232,8 @@ check_check_list <- function(check_list, .tbl){
 #' @param .tbl A tibble of data
 #' @param survey The survey sheet of the Kobo tool
 #' @param check_list A tibble of logical test to check for
-#' @param id_col Survey id, usually "uuid"
-#' @param cols_to_keep Columns to keep in the log, e.g. today, enum_id
+#' @param id_col Survey id, usually uuid
+#' @param ... Columns to keep in the log, e.g. today, i_enum_id
 #'
 #' @family functions to make logs
 #' @seealso [make_log] for a log based on a logical test
@@ -225,9 +244,18 @@ check_check_list <- function(check_list, .tbl){
 #' @importFrom rlang .data
 #'
 #' @export
-make_log_from_check_list <- function(.tbl, survey, check_list, id_col = "uuid", cols_to_keep) {
+make_log_from_check_list <- function(.tbl, survey, check_list, id_col, ...) {
 
   check_check_list(check_list, .tbl)
+
+
+  # Check for id_col in .tbl
+  id_col_name <- rlang::enquo(id_col) |> rlang::as_name()
+  if_not_in_stop(.tbl, id_col_name, ".tbl", "id_col")
+
+  # Check for ... in .tbl
+  cols_to_keep <- purrr::map_chr(rlang::enquos(...), rlang::as_name)
+  if_not_in_stop(.tbl, cols_to_keep, ".tbl", arg = "...")
 
   new_log <- check_list |>
     dplyr::select(.data$id_check, .data$question_name, .data$why, .data$logical_test, .data$new_value, .data$action, .data$type) |>
@@ -235,10 +263,10 @@ make_log_from_check_list <- function(.tbl, survey, check_list, id_col = "uuid", 
     purrr::map(~ as.list(.x))|>
     purrr::map(~ purrr::exec(make_log, !!!(c(.tbl = list(.tbl),
                                              survey = list(survey),
-                                             id_col = list(id_col),
+                                             id_col = list(id_col_name),
                                              cols_to_keep = list(cols_to_keep),
                                              .x)))) |>
-    purrr::map(~ .x |> dplyr::mutate(question_label = as.character(question_label))) |>
+    purrr::map(~ .x |> dplyr::mutate(dplyr::across(c(.data$question_label, .data$old_value), as.character))) |>
     dplyr::bind_rows()
 
   return(new_log)
