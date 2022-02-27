@@ -34,3 +34,16 @@
 #'   ...
 #' }
 "choices"
+
+
+#' Some table of checks
+#'
+#' A dataset (in French) containing a list of checks to pass to `make_log`
+#'
+#' @format A data frame with a few rows and variables:
+#' \describe{
+#'   \item{id_check}{The check id}
+#'   \item{question_name}{Tne Kobo survey question name}
+#'   ...
+#' }
+"check_list"
