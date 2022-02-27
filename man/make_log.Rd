@@ -7,15 +7,15 @@
 make_log(
   .tbl,
   survey,
-  id_col = "uuid",
-  cols_to_keep,
+  id_col,
   id_check = "empty",
   question_name,
   why = "empty",
   logical_test,
   new_value,
   action,
-  type
+  type,
+  cols_to_keep
 )
 }
 \arguments{
@@ -23,9 +23,7 @@ make_log(
 
 \item{survey}{The survey sheet from the Kobo tool}
 
-\item{id_col}{Survey id, usually "uuid"}
-
-\item{cols_to_keep}{Columns to keep in the log, e.g. c("today", "i_enum_id")}
+\item{id_col}{Survey id, usually uuid}
 
 \item{id_check}{A string to identify the check}
 
@@ -40,6 +38,8 @@ make_log(
 \item{action}{A character with "check" as default}
 
 \item{type}{The type of the question "double" or "character"}
+
+\item{cols_to_keep}{Columns to keep in the log}
 }
 \value{
 A tibble with a log for one question and one logical test

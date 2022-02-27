@@ -4,14 +4,14 @@
 \alias{pull_uuid}
 \title{Pull uuid from a logical test}
 \usage{
-pull_uuid(.tbl, logical_test = "uuid", id_col = "uuid")
+pull_uuid(.tbl, logical_test = "uuid", id_col)
 }
 \arguments{
 \item{.tbl}{A tibble}
 
 \item{logical_test}{A logical test as a character expression}
 
-\item{id_col}{Survey id, usually "uuid".}
+\item{id_col}{Survey id, usually uuid}
 }
 \value{
 A vector of ids
