@@ -39,9 +39,9 @@ svy_duration <- function(.tbl, start = "start", end = "end"){
 #' @export
 svy_diff_time <- function(.tbl, id_enum, start, end){
   diff_time <- .tbl |>
-    dplyr::arrange(!!rlang::enquo(id_enum), !!rlang::enquo(start)) |>
-    dplyr::group_by(!!rlang::enquo(id_enum)) |>
-    dplyr::mutate(difftime_survey = difftime(!!rlang::enquo(start), dplyr::lag(!!rlang::enquo(end)), units = "mins") |> round() |> as.double())
+    dplyr::arrange({{ id_enum }}, {{ start }}) |>
+    dplyr::group_by({{ id_enum }} ) |>
+    dplyr::mutate(survey_difftime = difftime({{ start }}, dplyr::lag({{ end }}), units = "mins") |> round() |> as.double())
     return(diff_time)
 }
 
