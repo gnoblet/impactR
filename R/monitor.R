@@ -87,7 +87,7 @@ pull_uuid <- function(.tbl, logical_test = "uuid", id_col){
 #' @param new_value Should we suggest a new value?
 #' @param action A character with "check" as default
 #' @param type The type of the question "double" or "character"
-#' @param ... Columns to keep in the log
+#' @param cols_to_keep Columns to keep in the log
 #'
 #' @return A tibble with a log for one question and one logical test
 #'
@@ -111,7 +111,7 @@ make_log <- function(
   new_value,
   action,
   type,
-  ...
+  cols_to_keep
 ){
 
   name <- label <- NULL
@@ -124,7 +124,6 @@ make_log <- function(
   if_not_in_stop(.tbl, id_col_name, ".tbl", "id_col")
 
   # Check for ... in .tbl
-  cols_to_keep <- purrr::map_chr(rlang::enquos(...), rlang::as_name)
   if_not_in_stop(.tbl, cols_to_keep, ".tbl", arg = "...")
 
 
@@ -154,7 +153,7 @@ make_log <- function(
   # Create the new_log entry
   new_log <- tibble::tibble(
     id_check = id_check,
-    new_tbl |>  dplyr::select(..., {{ id_col }}),
+    new_tbl |>  dplyr::select({{ cols_to_keep }}, {{ id_col }}),
     question_name = question_name,
     question_label = question_label,
     why = why,
@@ -697,7 +696,7 @@ make_log_outlier <- function(.tbl, survey, id_col, ...) {
 #' @param check_list A tibble of logical test to check for
 #' @param other A character vector of the start of all other column names. E.g., other = "other_"
 #' @param id_col Survey id, usually "uuid"
-#' @param cols_to_keep Columns to keep in the log, e.g. today, enum_id
+#' @param ... Columns to keep in the log, e.g. today, i_enum_id
 #'
 #' @return A full log as a tibble
 #'
@@ -710,15 +709,15 @@ make_log_outlier <- function(.tbl, survey, id_col, ...) {
 #' @importFrom rlang .data
 #'
 #' @export
-make_all_logs <- function(.tbl, survey, check_list, other, id_col, cols_to_keep) {
-  dplyr::bind_rows(
-    make_log_from_check_list(.tbl, survey, check_list, id_col, cols_to_keep) |>
-      dplyr::mutate(dplyr::across(.fns = as.character)),
-    make_log_other(.tbl, survey, other, id_col, cols_to_keep)  |>
-      dplyr::mutate(dplyr::across(.fns = as.character)),
-    make_log_outlier(.tbl, survey, id_col, cols_to_keep) |>
-      dplyr::mutate(dplyr::across(.fns = as.character))
-  )
+make_all_logs <- function(.tbl, survey, check_list, other, id_col, ...) {
+  list(
+    make_log_from_check_list(.tbl, survey, check_list, {{ id_col }}, ...),
+    make_log_other(.tbl, survey, other,  {{ id_col }}, ...),
+    make_log_outlier(.tbl, survey, {{ id_col }}, ...)
+  ) |>
+    purrr::map(~ .x |> dplyr::mutate(dplyr::across(.fns = as.character))) |>
+    dplyr::bind_rows() |>
+    readr::type_convert()
 }
 
 
