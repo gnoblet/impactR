@@ -37,7 +37,7 @@ svy_duration <- function(.tbl, start = "start", end = "end"){
 #' @return A tibble with ... removed
 #'
 #' @export
-svy_diff_time <- function(.tbl, id_enum, start, end){
+svy_difftime <- function(.tbl, id_enum, start, end){
   diff_time <- .tbl |>
     dplyr::arrange({{ id_enum }}, {{ start }}) |>
     dplyr::group_by({{ id_enum }} ) |>
