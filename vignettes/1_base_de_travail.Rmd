@@ -1,6 +1,9 @@
 ---
 title: "Base de travail avec impactR"
-output: rmarkdown::html_vignette
+output: 
+  rmarkdown::html_vignette:
+    number_sections: true
+
 vignette: >
   %\VignetteIndexEntry{Base de travail avec impactR}
   %\VignetteEngine{knitr::rmarkdown}
@@ -11,7 +14,7 @@ vignette: >
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## Pourquoi ?
+# Pourquoi ?
 
 Cette vignette a pour but d'expliciter l'usage d'`impactR` et la manière dont il est possible de l'utiliser dans le cadre d'un suivi de collecte de données et du nettoyage. Commençons par charger le package.
 ```{r initiate-impactr}
@@ -57,10 +60,9 @@ survey
 ```
 
 
+# Contrôle de la qualité des données
 
-## Contrôle de la qualité des données
-
-### Journal de nettoyage des valeurs aberrantes
+## Journal de nettoyage des valeurs aberrantes
 
 Afin de pouvoir obtenir les valeurs dites aberrantes (pour les variables numériques), vous pouvez utiliser la fonction `make_log_outlier` qui permet d'obtenir deux types de valeurs aberrantes : l'écart par rapport à la moyenne et l'écart interquartile.
 
@@ -80,7 +82,7 @@ log_outliers <- make_log_outlier(data, survey, id_col = uuid, today, i_enum_id, 
 log_outliers
 ```
 
-### Journal de nettoyage des "autres"
+## Journal de nettoyage des "autres"
 
 ```{r monitor-others}
 # Obtenir les autres 
@@ -91,8 +93,76 @@ other_cols
 other_parent_cols(data, other_cols, "autre_", id_col = uuid)
 
 # Fabriquer le journal de nettoyage des "autres"
-log_others <- make_log_other(data, survey, "autre_", uuid, i_enum_id, i_zad) 
+log_others <- make_log_other(data, survey, "autre_", uuid, today, i_enum_id, i_zad) 
 log_others
 
 ```
+
+## Journal de nettoyage basé sur une liste de vérifications
+
+Il suffit d'avoir produit en amont un fichier Excel de vérification logique, qu'il est par ailleurs possible de modifier au cours de la collecte.
+
+```{r monitor-check-list}
+data(check_list)
+check_list <- check_list |> tibble::as_tibble()
+check_list
+```
+
+Le tableur excel de vérifications doit suivre quelques règles pour pouvoir être lu par les fonctions d'impactR [ajouter la liste]. Par exemple, il est nécessaire que toutes les variables présentes dans les tests logiques (colonne 'logical_test' du tableau de vérifications) existent aussi dans les données, objet `data`. Pour cela, on peut utiliser la fonction `check_check_list`, qui vise à valider ou non un tableur de vérifications logiques [note : elle n'est pas encore robuste, mais elle permet déjà de faire un certain nombre de contrôles].
+
+Par exemple, ci-dessous la colonne `survey_duration` n'existe pas dans les données `data`. Pourtant, il y a des vérifications logiques qui la prennent en compte dans le tableur de vérifications logiques `check_list`. Si onlance la commande suivante, on obtiendrait une erreur :
+```{r check-check-list, eval = F}
+check_check_list(check_list, data)
+# following column/s from `question_name` is/are missing in `.tbl`: survey_duration, survey_duration, survey_duration
+```
+
+On va donc jouter la colonne de durée d'enquête à l'aide de la fonction `svy_duration`. On en profite pour assi ajouter la différence de temps entre deux enquêtes par enquêteur.rice :
+```{r survey-duration}
+data <- data |> 
+  svy_duration() |> 
+  svy_difftime(i_enum_id, start, end)
+data$survey_duration
+```
+
+On peut vérifier de nouveau le tableur de vérifications logiques :
+```{r check-check-list-true}
+check_check_list(check_list, data)
+```
+
+Cette fois-ci, c'est bon, la fonction donne `TRUE`, on peut donc procéder avec la production du log de nettoyage.
+```{r log-check-list}
+log_check_list <- make_log_from_check_list(data, survey, check_list, uuid, today, i_enum_id, i_zad)
+
+log_check_list
+```
+
+
+
+## Journal de nettoyage complet et exportation
+
+
+Pour terminer, il nous suffit de combiner tous ces journaux de nettoyage en un seul. On peut ensuite l'exporter en fichier excel.
+```{r bind-export, message = F, warning = F}
+log <- list(log_outliers, log_check_list, log_others) |> 
+  purrr::map(~ .x |> dplyr::mutate(dplyr::across(.fns = as.character))) |> 
+  dplyr::bind_rows() |> 
+  readr::type_convert()
+log
+```
+Il est aussi possible d'utiliser la fonction `make_all_logs` qui combine ces trois fonctions et ne sort qu'un unique journal de nettoyage.
+```{r make-all-logs, message = F, warning = F}
+log <- make_all_logs(data, survey, check_list, "autre_", uuid, today, i_enum_id, i_zad)
+log
+```
+
+Enfin, il existe plusieurs manière d'exporter. Ici on donne l'exemple avec le package `writexl`:
+```{r export}
+# Not run! La plus simple
+# writexl::write_xlsx(log, "output/log.xlsx)
+
+# On peut y ajouter la date du jour pour permettre le suivi
+# writexl::write_xlsx(log, paste0("output/log_", Sys.Date(), ".xlsx))
+```
+
+
 

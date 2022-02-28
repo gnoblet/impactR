@@ -41,7 +41,9 @@ svy_difftime <- function(.tbl, id_enum, start, end){
   diff_time <- .tbl |>
     dplyr::arrange({{ id_enum }}, {{ start }}) |>
     dplyr::group_by({{ id_enum }} ) |>
-    dplyr::mutate(survey_difftime = difftime({{ start }}, dplyr::lag({{ end }}), units = "mins") |> round() |> as.double())
+    dplyr::mutate(survey_difftime = difftime({{ start }}, dplyr::lag({{ end }}), units = "mins") |> round() |> as.double()) |>
+    dplyr::ungroup()
+
     return(diff_time)
 }
 
@@ -263,8 +265,12 @@ make_log_from_check_list <- function(.tbl, survey, check_list, id_col, ...) {
     purrr::map(~ purrr::exec(make_log, !!!(c(.tbl = list(.tbl),
                                              survey = list(survey),
                                              id_col = list(id_col_name),
-                                             cols_to_keep = list(cols_to_keep),
-                                             .x)))) |>
+                                             .x,
+                                             cols_to_keep = list(cols_to_keep)
+                                             )
+                                           )
+                             )
+               ) |>
     purrr::map(~ .x |> dplyr::mutate(dplyr::across(c(.data$question_label, .data$old_value), as.character))) |>
     dplyr::bind_rows()
 
