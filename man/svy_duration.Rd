@@ -4,14 +4,14 @@
 \alias{svy_duration}
 \title{Calculate the duration of a survey}
 \usage{
-svy_duration(.tbl, start = "start", end = "end")
+svy_duration(.tbl, start, end)
 }
 \arguments{
 \item{.tbl}{A tibble}
 
-\item{start}{Start column name. Default to start}
+\item{start}{Start column name}
 
-\item{end}{End column name. Default to end}
+\item{end}{End column name}
 }
 \value{
 A tibble with three new colums, including the duration of survey in minutes

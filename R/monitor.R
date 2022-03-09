@@ -5,21 +5,21 @@ utils::globalVariables("where")
 #' @title Calculate the duration of a survey
 #'
 #' @param .tbl A tibble
-#' @param start Start column name. Default to start
-#' @param end End column name. Default to end
+#' @param start Start column name
+#' @param end End column name
 #'
 #' @details Note: it is necessary to have 'start' and 'end' columns
 #'
 #' @return A tibble with three new colums, including the duration of survey in minutes
 #'
 #' @export
-svy_duration <- function(.tbl, start = "start", end = "end"){
+svy_duration <- function(.tbl, start, end){
 
   duration <- .tbl  |>
     dplyr::mutate(
-      start = lubridate::ymd_hms(start, truncated = 1),
-      end = lubridate::ymd_hms(end, truncated = 1),
-      survey_duration = round(difftime(end,  start, units = "mins")) |>  as.double()
+      start = lubridate::ymd_hms({{ start }}, truncated = 1),
+      end = lubridate::ymd_hms({{ end }}, truncated = 1),
+      survey_duration = round(difftime({{ end }},  start, units = "mins")) |>  as.double()
     )
 
   return(duration)
@@ -29,19 +29,37 @@ svy_duration <- function(.tbl, start = "start", end = "end"){
 #' @title Check in-between surveys time
 #'
 #' @param .tbl A tibble
-#' @param id_enum The enumerator id column
 #' @param start Start column (unquoted)
 #' @param end End column (unquoted)
+#' @param new_colname The new column name of the time difference
+#' @param ... The columns to group by, usually a locality or an enumerator id
 #' @details Note: it is necessary to have 'start' and 'end' columns with no NA
 #'
 #' @return A tibble with ... removed
 #'
 #' @export
-svy_difftime <- function(.tbl, id_enum, start, end){
+svy_difftime <- function(.tbl, start, end, new_colname = "survey_difftime", ...){
+
+  #-------- Checks
+
+  # Check for start in .tbl
+  start_name <- rlang::enquo(start) |> rlang::as_name()
+  if_not_in_stop(.tbl, start_name, ".tbl", "start")
+
+  # Check for start in .tbl
+  end_name <- rlang::enquo(end()) |> rlang::as_name()
+  if_not_in_stop(.tbl, end_name, ".tbl", "end")
+
+  # Check for ... in .tbl
+  cols_to_keep <- purrr::map_chr(rlang::enquos(...), rlang::as_name)
+  if_not_in_stop(.tbl, cols_to_keep, ".tbl", arg = "...")
+
+  #-------- Add difftime column
+
   diff_time <- .tbl |>
-    dplyr::arrange({{ id_enum }}, {{ start }}) |>
-    dplyr::group_by({{ id_enum }} ) |>
-    dplyr::mutate(survey_difftime = difftime({{ start }}, dplyr::lag({{ end }}), units = "mins") |> round() |> as.double()) |>
+    dplyr::arrange(..., {{ start }}) |>
+    dplyr::group_by(...) |>
+    dplyr::mutate("{new_colname}" := difftime({{ start }}, dplyr::lag({{ end }}), units = "mins") |> round() |> as.double()) |>
     dplyr::ungroup()
 
     return(diff_time)
@@ -351,7 +369,7 @@ other_parent_cols <- function(.tbl, other_cols, other, id_col) {
                                              names_from = .data$other_parent_question,
                                              values_from = .data$other_old_value)) |>
       purrr::map(~ .tbl |>
-                   dplyr::select(any_of(names(.x))) |>
+                   dplyr::select(dplyr::any_of(names(.x))) |>
                    dplyr::semi_join(.x, by = id_col_name)) |>
       dplyr::bind_rows() |>
       tidyr::pivot_longer(-{{ id_col }},

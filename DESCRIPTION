@@ -1,13 +1,12 @@
 Package: impactR
 Type: Package
 Title: Ease IMPACT's data and database officers woRk
-Version: 0.5
+Version: 0.6
 Authors@R: c(
         person(
             'Noblet', 'Guillaume',
             email = 'gnoblet@zaclys.net',
-            role = c('aut', 'cre'),
-            comment = c(ORCID = '0000-0002-6395-1191')
+            role = c('aut', 'cre')
             )
         )
 URL: https://github.com/gnoblet/impactR,
@@ -19,7 +18,6 @@ Description: Mainly a reminder of totally-perfectible functions used and made on
     Kobo survey data, mainly using the `srvyr` package and #' the tidyverse overall.
     It requires R 4.1+ (mostly for the native pipe `|>`).
 Depends: R (>= 4.1.0)
-License: GPL (>= 3) + file LICENSE
 Encoding: UTF-8
 RoxygenNote: 7.1.2
 Imports:
@@ -31,11 +29,8 @@ Imports:
     janitor,
     rlang,
     tidyr,
-    ggplot2,
     stringr,
     tibble,
-    tmap,
-    sf,
     lubridate,
     httr,
     jsonlite,
@@ -43,12 +38,16 @@ Imports:
     utils,
     tidyselect,
     glue,
-    grDevices,
     scales,
     gt,
     gtsummary
 Suggests:
     rmarkdown,
-    knitr
+    knitr,
+    tmap,
+    sf,
+    grDevices,
+    ggplot2
 VignetteBuilder: knitr 
 LazyData: true
+License: GPL (>= 3)

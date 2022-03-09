@@ -64,18 +64,18 @@ survey
 
 ## Journal de nettoyage des valeurs aberrantes
 
-Afin de pouvoir obtenir les valeurs dites aberrantes (pour les variables numériques), vous pouvez utiliser la fonction `make_log_outlier` qui permet d'obtenir deux types de valeurs aberrantes : l'écart par rapport à la moyenne et l'écart interquartile.
+Afin de pouvoir obtenir les valeurs dites aberrantes (pour les variables numériques), vous pouvez utiliser la fonction `make_log_outlier` qui permet d'obtenir deux types de valeurs aberrantes : l'écart par rapport à la moyenne en utilisant la fonction `outliers_sd` et l'écart interquartile en utilisant la fonction `outliers_iqr`.
 
 ```{r monitor-outliers1}
 # Utilitaire pour obtenir toutes les variables numériques
-numeric_cols(data) #  Obtenir toutes les colonnes numériques : cela inclut par exemple les identifiants numériques des énumérateurs ou les points GPS.
-numeric_cols(data, survey) # Obtenir toutes les colonnes numériques en utilisant la feuille 'survey' de l'outil Kobo (uniquement les calculate, integer, etc.)
+#numeric_cols(data) #  Obtenir toutes les colonnes numériques : cela inclut par exemple les identifiants numériques des énumérateurs ou les points GPS.
+#numeric_cols(data, survey) # Obtenir toutes les colonnes numériques en utilisant la feuille 'survey' de l'outil Kobo (uniquement les calculate, integer, etc.)
 
 # Valeurs aberrantes interquartle (règle des 1,5 fois par défaut)
-outliers_iqr(data, col = i_enquete_age,times = 1.5,  id_col = uuid) # La colonne d'identifiant 'id_col' est habituellement "uuid" avec Kobo
+#outliers_iqr(data, col = i_enquete_age,times = 1.5,  id_col = uuid) # La colonne d'identifiant 'id_col' est habituellement "uuid" avec Kobo
 
 # Valeurs aberrantes à la moyenne
-outliers_sd(data, i_enquete_age, times = 3, id_col = uuid)
+#outliers_sd(data, i_enquete_age, times = 3, id_col = uuid)
 
 # Fabriquer le journal de nettoyage entier pour toutes les variables numériques (en prenant en compte l'outil Kobo)
 log_outliers <- make_log_outlier(data, survey, id_col = uuid, today, i_enum_id, i_zad)
@@ -119,8 +119,9 @@ check_check_list(check_list, data)
 On va donc jouter la colonne de durée d'enquête à l'aide de la fonction `svy_duration`. On en profite pour assi ajouter la différence de temps entre deux enquêtes par enquêteur.rice :
 ```{r survey-duration}
 data <- data |> 
-  svy_duration() |> 
-  svy_difftime(i_enum_id, start, end)
+  svy_duration(start, end) #|>
+  # NOT RUN!
+  # svy_difftime(start, end, new_colname = "survey_difftime", i_enum_id)
 data$survey_duration
 ```
 

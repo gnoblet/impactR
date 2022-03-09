@@ -47,3 +47,16 @@
 #'   ...
 #' }
 "check_list"
+
+
+#' Some random dap test
+#'
+#' A dataset (in French) containing a basic dap, just to test. Very experimental
+#'
+#' @format A data frame with 5 rows and 13 variables:
+#' \describe{
+#'   \item{question_name}{The question_name or the ratio}
+#'   \item{analysis}{Tne R type of analysis to pass to `make_analysis`}
+#'   ...
+#' }
+"dap"

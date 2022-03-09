@@ -4,16 +4,18 @@
 \alias{svy_difftime}
 \title{Check in-between surveys time}
 \usage{
-svy_difftime(.tbl, id_enum, start, end)
+svy_difftime(.tbl, start, end, new_colname = "survey_difftime", ...)
 }
 \arguments{
 \item{.tbl}{A tibble}
 
-\item{id_enum}{The enumerator id column}
-
 \item{start}{Start column (unquoted)}
 
 \item{end}{End column (unquoted)}
+
+\item{new_colname}{The new column name of the time difference}
+
+\item{...}{The columns to group by, usually a locality or an enumerator id}
 }
 \value{
 A tibble with ... removed

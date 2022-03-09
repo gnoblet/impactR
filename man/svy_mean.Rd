@@ -4,7 +4,7 @@
 \alias{svy_mean}
 \title{Survey mean}
 \usage{
-svy_mean(design, col, group = NULL, na_rm = T, ...)
+svy_mean(design, col, group = NULL, na_rm = T, stat_name = "mean", ...)
 }
 \arguments{
 \item{design}{A srvyr::design object}
@@ -14,6 +14,8 @@ svy_mean(design, col, group = NULL, na_rm = T, ...)
 \item{group}{A quoted or unquoted vector of columns to group by. Default to NULL for no group.}
 
 \item{na_rm}{Should NAs from `col` be removed? Default to TRUE. na.rm does not work anymore within srvyr functions (workaround for now). It should work for `survey_mean`, matter of precaution}
+
+\item{stat_name}{What should the statistic's column be named? Default to "ratio"}
 
 \item{...}{Parameters to pass to `srvyr::survey_mean()`}
 }
