@@ -4,9 +4,6 @@
     <loc>https://gnoblet.github.io/impactR/404.html</loc>
   </url>
   <url>
-    <loc>https://gnoblet.github.io/impactR/LICENSE-text.html</loc>
-  </url>
-  <url>
     <loc>https://gnoblet.github.io/impactR/LICENSE.html</loc>
   </url>
   <url>
@@ -53,6 +50,9 @@
   </url>
   <url>
     <loc>https://gnoblet.github.io/impactR/reference/count_occ_all.html</loc>
+  </url>
+  <url>
+    <loc>https://gnoblet.github.io/impactR/reference/dap.html</loc>
   </url>
   <url>
     <loc>https://gnoblet.github.io/impactR/reference/data.html</loc>
@@ -109,6 +109,12 @@
     <loc>https://gnoblet.github.io/impactR/reference/make_all_logs.html</loc>
   </url>
   <url>
+    <loc>https://gnoblet.github.io/impactR/reference/make_analysis.html</loc>
+  </url>
+  <url>
+    <loc>https://gnoblet.github.io/impactR/reference/make_analysis_from_dap.html</loc>
+  </url>
+  <url>
     <loc>https://gnoblet.github.io/impactR/reference/make_log.html</loc>
   </url>
   <url>
@@ -143,9 +149,6 @@
   </url>
   <url>
     <loc>https://gnoblet.github.io/impactR/reference/pull_uuid.html</loc>
-  </url>
-  <url>
-    <loc>https://gnoblet.github.io/impactR/reference/reach_colors.html</loc>
   </url>
   <url>
     <loc>https://gnoblet.github.io/impactR/reference/reach_cols.html</loc>
