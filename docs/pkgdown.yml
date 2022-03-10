@@ -4,7 +4,7 @@ pkgdown_sha: ~
 articles:
   1_base_de_travail: 1_base_de_travail.html
   1_main_workflow: 1_main_workflow.html
-last_built: 2022-03-10T09:16Z
+last_built: 2022-03-10T10:45Z
 urls:
   reference: https://gnoblet.github.io/impactR/reference
   article: https://gnoblet.github.io/impactR/articles
