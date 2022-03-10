@@ -11,7 +11,7 @@ other_cols(.tbl, other, id_col)
 
 \item{other}{A character vector of the start of all other column names. E.g., other = "other_"}
 
-\item{id_col}{Survey id, usually "uuid}
+\item{id_col}{Survey id, usually uuid}
 }
 \value{
 A tibble with all "other" answers

@@ -4,12 +4,12 @@
 \alias{rec_na}
 \title{Replace many types of NAs of a tibble to NA}
 \usage{
-rec_na(.tbl, cols)
+rec_na(.tbl, ...)
 }
 \arguments{
 \item{.tbl}{A tibble}
 
-\item{cols}{A vector of column names (quoted)}
+\item{...}{Column names}
 }
 \value{
 A tibble with one type of NAs

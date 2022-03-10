@@ -4,7 +4,7 @@
 \alias{rec_values}
 \title{Replace values of some tibble's columns to one value}
 \usage{
-rec_values(.tbl, values, to_value, cols)
+rec_values(.tbl, values, to_value, ...)
 }
 \arguments{
 \item{.tbl}{A tibble}
@@ -13,7 +13,7 @@ rec_values(.tbl, values, to_value, cols)
 
 \item{to_value}{A value}
 
-\item{cols}{A vector of column names (quoted)}
+\item{...}{Column names}
 }
 \value{
 A tibble with recoded values to one value
