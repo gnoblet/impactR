@@ -675,6 +675,8 @@ make_log_outlier <- function(.tbl, survey, id_col, ...) {
   # Get all numeric cols
   num_cols <- numeric_cols(.tbl, survey)
 
+  if (length(num_cols) == 0) rlang::abort("There is no numeric columns in .tbl")
+
   # Get IQR outliers
   iqr <- num_cols |> purrr::map(~ outliers_iqr(.tbl, {{ .x }}, id_col = {{ id_col }}))
 
