@@ -16,12 +16,16 @@ svy_interact(
 }
 \arguments{
 \item{design}{A srvyr::design object}
-\item{interact_cols}{A vector of columns to get interactions from}
-\item{group}{A vector of columns to group by. Default to NULL}
-\item{unnest_interaction}{Should interaction be unnested? Default to TRUE}
-\item{na_rm}{Should NAs from `interact_cols` be removed? Default to TRUE}
-\item{stat_name}{What should the statistic's column be named? Default to "prop"}
 
+\item{interact_cols}{A vector of columns to get interactions from}
+
+\item{group}{A vector of columns to group by. Default to NULL}
+
+\item{unnest_interaction}{Should interaction be unnested? Default to TRUE}
+
+\item{na_rm}{Should NAs from `interact_cols` be removed? Default to TRUE}
+
+\item{stat_name}{What should the statistic's column be named? Default to "prop"}
 
 \item{...}{Parameters to pass to srvyr::survey_mean()}
 }

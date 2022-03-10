@@ -4,12 +4,12 @@
 \alias{rm_cols}
 \title{Remove cols from tibble}
 \usage{
-rm_cols(.tbl, cols)
+rm_cols(.tbl, ...)
 }
 \arguments{
 \item{.tbl}{A tibble}
 
-\item{cols}{A vector of column names (quoted)}
+\item{...}{Column names}
 }
 \value{
 A tibble with columns removed

@@ -41,7 +41,7 @@
     
     <a class="navbar-brand me-2" href="index.html">impactR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.1</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -88,20 +88,25 @@
 <p>Ease IMPACT’s data and database officers woRk</p>
 </blockquote>
 <p><code>impactR</code> started as a simple project: mainly a reminder of totally-perfectible functions used and made on the go for the Burkina Faso mission in 2021.</p>
-<p>All of this is still a very rough draft, but useable.</p>
-<p>Yet, it is becoming somehow bigger to make data officers and database officers daily R work easier as follows:</p>
+<p>It became broader, aiming now to ease data teams daily R work as follows:</p>
 <ul>
-<li>utils.R: functions used on an everyday basis: import .csv and .xlsx files, recode NAs, get column names starting with a pattern, etc.</li>
-<li>monitor.R: functions to produce logs and help monitoring data collection (logical tests, outliers, other answers)</li>
-<li>clean.R: use of the same logs to clean the dataset (update values, delete surveys)</li>
-<li>analysis.R: calculate optimums, weighted proportions and interactions, pivot tables reports</li>
-<li>plots.R: plot functions and themes (colors, fonts)</li>
-<li>maps.R: some utils (e.g. ease bbox) and some themes (mainly using <code>tmap</code>)</li>
+<li>
+<em>utils.R</em> - functions used on an everyday basis (import a xlsx file, recode NAs, get column names starting with a pattern)</li>
+<li>
+<em>monitor.R</em> - functions to produce logs and help monitoring data collection (logical tests, outliers, other answers)</li>
+<li>
+<em>clean.R</em> - functions that uses the same logs to clean the dataset</li>
+<li>
+<em>analysis.R</em> - functions to calculate optimums, weighted proportions and interactions, pivot tables reports</li>
+<li>
+<em>plots.R</em> - plot functions and REACH themes (colors, fonts)</li>
+<li>
+<em>maps.R</em> - some utils (e.g. ease bbox) and some themes (for <code>tmap</code>)</li>
 </ul>
-<p>There is still a need to consolidate parameters and log checks, and (a lot) of documentation to write.</p>
+<p>Documentation is on the edge of being written (French and English version)</p>
 <p>Specs:</p>
 <ul>
-<li>mainly using Kobo collection and the <code>tidyverse</code>, <code>srvyr</code>, <code>janitor</code>, <code>tmap</code>
+<li>mainly using Kobo collection and the <code>tidyverse</code> for most, <code>srvyr</code> for survey data analysis, <code>janitor</code>, <code>tmap</code>
 </li>
 <li>it requires R 4.1+ (mostly for the native pipe <code>|&gt;</code>).</li>
 </ul>
@@ -116,63 +121,87 @@
 <div class="section level2">
 <h2 id="roadmap">Roadmap<a class="anchor" aria-label="anchor" href="#roadmap"></a>
 </h2>
-<p>From version 0.4, contributions should go with minimal and complete commits as a good practice. The <code>dev</code> branch will be used from there.</p>
+<p>From version 0.6, contributions should go with minimal and complete commits as a good practice. The <code>dev</code> branch will be used from there. Well, in practice, it isn’t much.</p>
+<p>Roadmap is as follows:</p>
 <ul class="task-list">
 <li>
-<input type="checkbox" disabled>
-introduce tidy eval wherever is makes sense</li>
-<li>
-<input type="checkbox" disabled>
-more plotting functions</li>
+<input type="checkbox" disabled checked>
+(done ?) introduce tidy eval wherever it makes sense</li>
 <li>
 <input type="checkbox" disabled checked>
 add (re) count columns post-cleaning for multiple choices columns and simple choice’s other column</li>
 <li>
 <input type="checkbox" disabled>
-MSNA analysis tools : roster (education, demography, WGI), weighting functions, analysis functions</li>
+write more documentaion</li>
 <li>
 <input type="checkbox" disabled>
-Split this big mess into several consolidated small packages : a viz one, an analysis one and a cleaning one (maybe?).</li>
+tidy eval to cleaning functions</li>
+<li>
+<input type="checkbox" disabled>
+dots not as the last arg, not always at least</li>
+<li>
+<input type="checkbox" disabled>
+functions to create a small report of the values that effectively changed or were removed when cleaning thanks to a cleaning log</li>
+<li>
+<input type="checkbox" disabled>
+more plotting functions</li>
+<li>
+<input type="checkbox" disabled>
+(ongoing) MSNA analysis tools : roster (education, demography, WGI), weighting functions, analysis functions</li>
+<li>
+<input type="checkbox" disabled>
+(maybe) Split this big mess into several consolidated small packages : a viz one, an analysis one and a cleaning one</li>
 </ul>
 </div>
 <div class="section level2">
 <h2 id="side-projects">Side projects<a class="anchor" aria-label="anchor" href="#side-projects"></a>
 </h2>
-<p>There will be a Shiny app for cleaning and monitoring (in French for now) whose repo will be <a href="https://github.com/gnoblet/collectoR" class="external-link">collectoR</a>.</p>
+<p>There will be a Shiny app for cleaning and monitoring (in French for now) whose repo will be <a href="https://github.com/gnoblet/collectoR" class="external-link">collectoR</a>. It is experimental and based on older versions of <code>impactR.</code></p>
+</div>
+<div class="section level2">
+<h2 id="vignettes">Vignettes<a class="anchor" aria-label="anchor" href="#vignettes"></a>
+</h2>
+<p>Youpi! some documentation:</p>
+<ul>
+<li><a href="https://gnoblet.github.io/impactR/articles/1_main_workflow.html">The main vignette for the main workflow (en version)</a></li>
+<li><a href="https://gnoblet.github.io/impactR/articles/1_base_de_travail.html">The main vignette for the main workflow (fr version)</a></li>
+</ul>
 </div>
 <div class="section level2">
 <h2 id="example">Example<a class="anchor" aria-label="anchor" href="#example"></a>
 </h2>
 <p>These are basics example of daily uses:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu">box</span><span class="fu">::</span><span class="fu"><a href="http://klmr.me/box/reference/use.html" class="external-link">use</a></span><span class="op">(</span><span class="va">impactR</span><span class="op">[</span><span class="va">...</span><span class="op">]</span><span class="op">)</span>
+<code class="sourceCode R"><span class="co"># Attach all functions, equivalent to library("impactR")</span>
+<span class="fu">box</span><span class="fu">::</span><span class="fu"><a href="http://klmr.me/box/reference/use.html" class="external-link">use</a></span><span class="op">(</span><span class="va">impactR</span><span class="op">[</span><span class="va">...</span><span class="op">]</span><span class="op">)</span>
+
 <span class="co">## basic example codes and uses (not run!)</span>
 
 <span class="co">## Import a csv file with clean names and clean types</span>
-<span class="co">#import_csv("data.csv")</span>
+<span class="co"># import_csv("data.csv")</span>
 
 <span class="co">## Get colnames for sector foodsec whose variables start with "f_"</span>
-<span class="co">#tbl_col_start(data, "f_")</span>
+<span class="co"># tbl_col_start(data, "f_")</span>
 
 <span class="co">## Bbox with a buffer (useful to add compass, scale_bar, legends to a map)</span>
-<span class="co">#buffer_bbox(admin1_sf, buffer = 0.05)</span>
+<span class="co"># buffer_bbox(admin1_sf, buffer = 0.05)</span>
 
 <span class="co">## Make an outlier log for all numeric variables in the data.frame/tibble</span>
-<span class="co">#make_log_outlier(rawdata, survey, id_col = "uuid", cols_to_keep = c("uuid", "i_enum_id"))</span>
+<span class="co"># make_log_outlier(rawdata, survey, id_col = uuid, i_enum_id)</span>
 
 <span class="co">## Make a log based on logical tests, outliers and "other" answers</span>
-<span class="co">#make_all_logs(rawdata, </span>
-<span class="co">#              survey, </span>
-<span class="co">#              check_list,</span>
-<span class="co">#              other = "other_", </span>
-<span class="co">#              id_col = "uuid", </span>
-<span class="co">#              cols_to_keep = c("uuid", "i_enum_id"))</span>
+<span class="co"># make_all_logs(rawdata, </span>
+<span class="co">#               survey, </span>
+<span class="co">#               check_list,</span>
+<span class="co">#               other = "other_", </span>
+<span class="co">#               id_col = uuid, </span>
+<span class="co">#               i_enum_id)</span>
 
 <span class="co">## Recode parent "other" from a well-filled cleaning log</span>
-<span class="co">#recode_other_parent_from_log(data, log, id_col = "uuid")</span>
+<span class="co"># recode_other_parent_from_log(data, log, id_col = "uuid")</span>
 
 <span class="co">## Calculate weigthed proportion for shelter type by group (e.g. administrative areas or population groups)</span>
-<span class="co">#svy_prop(design, group_cols = c("admin1", "group_pop"), "s_shelter_type", na.rm = T, level = 0.95)</span></code></pre></div>
+<span class="co"># svy_prop(design, s_shelter_type, c(admin1, group_pop), na.rm = T, stat_name = "prop", level = 0.95)</span></code></pre></div>
 </div>
 </div>
   </main><aside class="col-md-3"><div class="links">
