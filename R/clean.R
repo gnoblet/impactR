@@ -316,7 +316,7 @@ count_occ <- function(.tbl, id_col, col){
 #' @param .tbl A tibble
 #' @param survey A survey sheet from Kobo (with column "type" split)
 #' @param choices A choices sheet from Kobo
-#' @param id_col Usually uuid... to count.
+#' @param id_col Usually uuid... to count
 #' @param return Either "count" (a list of counts of select_multiple) or "updated" (the updated .tbl).
 #'
 #' @return An updated tibble or a list of occurences
