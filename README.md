@@ -38,7 +38,7 @@ You can install the last version of impactR from
 
 ``` r
 # install.packages("devtools")
-devtools::install_github("gnoblet/impactR")
+devtools::install_github("gnoblet/impactR", build_vignettes = T)
 ```
 
 ## Roadmap
@@ -79,6 +79,13 @@ Youpi! some documentation:
     version)](https://gnoblet.github.io/impactR/articles/1_main_workflow.html)
 -   [The main vignette for the main workflow (fr
     version)](https://gnoblet.github.io/impactR/articles/1_base_de_travail.html)
+
+In R, use :
+
+``` r
+vignette("1_base_de_travail", "impactR")
+vignette("1_main_workflow", "impactR")
+```
 
 ## Example
 
