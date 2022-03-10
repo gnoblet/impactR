@@ -203,6 +203,7 @@
 <div class="section level3">
 <h3 id="journal-de-nettoyage-des-autres">Journal de nettoyage des “autres”<a class="anchor" aria-label="anchor" href="#journal-de-nettoyage-des-autres"></a>
 </h3>
+<p>Cette fonction nécessite que la question Kobo avec la réponse “autre” soit définie comme “variable” pour la question parent et “autre_variable” pour la question parent. “autre_” peut être différent selon les outils et est défini dans la question suivante par l’argument “autre”, qui est la chaîne de caractères de chaque début de variable autre codée dans Kobo. Dans l’exemple qui suit, il s’agit de “autre_”.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Obtenir les autres </span>
 <span class="va">other_cols</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/other_cols.html">other_cols</a></span><span class="op">(</span><span class="va">data</span>, <span class="st">"autre_"</span>, id_col <span class="op">=</span> <span class="va">uuid</span><span class="op">)</span>
@@ -251,7 +252,7 @@
 <span class="co">## <span style="color: #BCBCBC;">4</span> id4      survey_duration   Durée d'enquêt… <span style="color: #949494;">"</span>survey_dur… <span style="color: #BB0000;">NA</span>        urgen… doub…</span>
 <span class="co">## <span style="color: #BCBCBC;">5</span> id5      c_chef_menage_age Le ou la cheff… <span style="color: #949494;">"</span>c_chef_men… <span style="color: #BB0000;">NA</span>        check  doub…</span></code></pre>
 <p>Le tableur excel de vérifications doit suivre quelques règles pour pouvoir être lu par les fonctions d’impactR [ajouter la liste]. Par exemple, il est nécessaire que toutes les variables présentes dans les tests logiques (colonne ‘logical_test’ du tableau de vérifications) existent aussi dans les données, objet <code>data</code>. Pour cela, on peut utiliser la fonction <code>check_check_list</code>, qui vise à valider ou non un tableur de vérifications logiques [note : elle n’est pas encore robuste, mais elle permet déjà de faire un certain nombre de contrôles].</p>
-<p>Par exemple, ci-dessous la colonne <code>survey_duration</code> n’existe pas dans les données <code>data</code>. Pourtant, il y a des vérifications logiques qui la prennent en compte dans le tableur de vérifications logiques <code>check_list</code>. Si onlance la commande suivante, on obtiendrait une erreur :</p>
+<p>Par exemple, ci-dessous la colonne <code>survey_duration</code> n’existe pas dans les données <code>data</code>. Pourtant, il y a des vérifications logiques qui la prennent en compte dans le tableur de vérifications logiques <code>check_list</code>. Si on lance la commande suivante, on obtiendrait une erreur :</p>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/check_check_list.html">check_check_list</a></span><span class="op">(</span><span class="va">check_list</span>, <span class="va">data</span><span class="op">)</span>
 <span class="co"># following column/s from `question_name` is/are missing in `.tbl`: survey_duration, survey_duration, survey_duration</span></code></pre></div>
@@ -299,33 +300,9 @@
 <code class="sourceCode R"><span class="va">log</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">log_outliers</span>, <span class="va">log_check_list</span>, <span class="va">log_others</span><span class="op">)</span> |&gt; 
   <span class="fu">purrr</span><span class="fu">::</span><span class="fu"><a href="https://purrr.tidyverse.org/reference/map.html" class="external-link">map</a></span><span class="op">(</span><span class="op">~</span> <span class="va">.x</span> |&gt; <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span><span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/across.html" class="external-link">across</a></span><span class="op">(</span>.fns <span class="op">=</span> <span class="va">as.character</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> |&gt; 
   <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind.html" class="external-link">bind_rows</a></span><span class="op">(</span><span class="op">)</span> |&gt; 
-  <span class="fu">readr</span><span class="fu">::</span><span class="fu"><a href="https://readr.tidyverse.org/reference/type_convert.html" class="external-link">type_convert</a></span><span class="op">(</span><span class="op">)</span>
-<span class="va">log</span></code></pre></div>
-<pre><code><span class="co">## <span style="color: #949494;"># A tibble: 17 × 17</span></span>
-<span class="co">##    id_check today      i_enum_id i_zad  uuid  question_name question_label why  </span>
-<span class="co">##    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span></span>
-<span class="co">## <span style="color: #BCBCBC;"> 1</span> outlier  2021-10-20         3 wendou x2    i_enquete_age Quel est votr… Outl…</span>
-<span class="co">## <span style="color: #BCBCBC;"> 2</span> outlier  2021-10-18         8 wendou x1    c_n_chef_men… Quel est l'âg… Outl…</span>
-<span class="co">## <span style="color: #BCBCBC;"> 3</span> outlier  2021-10-20         3 wendou x2    c_n_chef_men… Quel est l'âg… Outl…</span>
-<span class="co">## <span style="color: #BCBCBC;"> 4</span> outlier  2021-10-18         8 wendou x1    c_chef_menag… Age exact du … Outl…</span>
-<span class="co">## <span style="color: #BCBCBC;"> 5</span> id1      2021-10-20        12 wendou x7    i_consensus   Bonjour, je s… Pas …</span>
-<span class="co">## <span style="color: #BCBCBC;"> 6</span> id1      2021-10-20        12 wendou x8    i_consensus   Bonjour, je s… Pas …</span>
-<span class="co">## <span style="color: #BCBCBC;"> 7</span> id3      2021-10-18         8 wendou x1    survey_durat… <span style="color: #BB0000;">NA</span>             Duré…</span>
-<span class="co">## <span style="color: #BCBCBC;"> 8</span> id3      2021-10-20         3 wendou x2    survey_durat… <span style="color: #BB0000;">NA</span>             Duré…</span>
-<span class="co">## <span style="color: #BCBCBC;"> 9</span> id3      2021-10-20         3 wendou x3    survey_durat… <span style="color: #BB0000;">NA</span>             Duré…</span>
-<span class="co">## <span style="color: #BCBCBC;">10</span> id3      2021-10-20         3 wendou x4    survey_durat… <span style="color: #BB0000;">NA</span>             Duré…</span>
-<span class="co">## <span style="color: #BCBCBC;">11</span> id3      2021-10-20         3 wendou x5    survey_durat… <span style="color: #BB0000;">NA</span>             Duré…</span>
-<span class="co">## <span style="color: #BCBCBC;">12</span> id3      2021-10-20         3 wendou x6    survey_durat… <span style="color: #BB0000;">NA</span>             Duré…</span>
-<span class="co">## <span style="color: #BCBCBC;">13</span> id3      2021-10-20        12 wendou x7    survey_durat… <span style="color: #BB0000;">NA</span>             Duré…</span>
-<span class="co">## <span style="color: #BCBCBC;">14</span> id3      2021-10-20        12 wendou x8    survey_durat… <span style="color: #BB0000;">NA</span>             Duré…</span>
-<span class="co">## <span style="color: #BCBCBC;">15</span> id5      2021-10-20         3 wendou x2    c_chef_menag… Age exact du … Le o…</span>
-<span class="co">## <span style="color: #BCBCBC;">16</span> autre_   2021-10-20         3 wendou x5    autre_h_3_ty… Lesquelles pr… Othe…</span>
-<span class="co">## <span style="color: #BCBCBC;">17</span> autre_   2021-10-20        12 wendou x7    autre_r_beso… De quels type… Othe…</span>
-<span class="co">## <span style="color: #949494;"># … with 9 more variables: feedback &lt;chr&gt;, action &lt;chr&gt;, old_value &lt;chr&gt;,</span></span>
-<span class="co">## <span style="color: #949494;">#   new_value &lt;chr&gt;, type &lt;chr&gt;, other_parent_question &lt;chr&gt;,</span></span>
-<span class="co">## <span style="color: #949494;">#   other_new_value &lt;lgl&gt;, checkdate &lt;chr&gt;, other_old_value &lt;chr&gt;</span></span></code></pre>
+  <span class="fu">readr</span><span class="fu">::</span><span class="fu"><a href="https://readr.tidyverse.org/reference/type_convert.html" class="external-link">type_convert</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <p>Il est aussi possible d’utiliser la fonction <code>make_all_logs</code> qui combine ces trois fonctions et ne sort qu’un unique journal de nettoyage.</p>
-<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">log</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/make_all_logs.html">make_all_logs</a></span><span class="op">(</span><span class="va">data</span>, <span class="va">survey</span>, <span class="va">check_list</span>, <span class="st">"autre_"</span>, <span class="va">uuid</span>, <span class="va">today</span>, <span class="va">i_enum_id</span>, <span class="va">i_zad</span><span class="op">)</span>
 <span class="va">log</span></code></pre></div>
 <pre><code><span class="co">## <span style="color: #949494;"># A tibble: 17 × 17</span></span>
@@ -352,7 +329,7 @@
 <span class="co">## <span style="color: #949494;">#   new_value &lt;chr&gt;, type &lt;chr&gt;, other_parent_question &lt;chr&gt;,</span></span>
 <span class="co">## <span style="color: #949494;">#   other_old_value &lt;chr&gt;, other_new_value &lt;lgl&gt;, checkdate &lt;chr&gt;</span></span></code></pre>
 <p>Enfin, il existe plusieurs manière d’exporter. Ici on donne l’exemple avec le package <code>writexl</code>:</p>
-<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Not run! La plus simple</span>
 <span class="co"># writexl::write_xlsx(log, "output/log.xlsx)</span>
 
