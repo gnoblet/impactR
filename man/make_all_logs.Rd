@@ -4,7 +4,7 @@
 \alias{make_all_logs}
 \title{Make all logs}
 \usage{
-make_all_logs(.tbl, survey, check_list, other, id_col, cols_to_keep)
+make_all_logs(.tbl, survey, check_list, other, id_col, ...)
 }
 \arguments{
 \item{.tbl}{A tibble of data}
@@ -17,7 +17,7 @@ make_all_logs(.tbl, survey, check_list, other, id_col, cols_to_keep)
 
 \item{id_col}{Survey id, usually "uuid"}
 
-\item{cols_to_keep}{Columns to keep in the log, e.g. today, enum_id}
+\item{...}{Columns to keep in the log, e.g. today, i_enum_id}
 }
 \value{
 A full log as a tibble

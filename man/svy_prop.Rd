@@ -4,7 +4,7 @@
 \alias{svy_prop}
 \title{Survey proportion}
 \usage{
-svy_prop(design, col, group = NULL, na_rm = T, ...)
+svy_prop(design, col, group = NULL, na_rm = T, stat_name = "prop", ...)
 }
 \arguments{
 \item{design}{A srvyr::design object}
@@ -15,11 +15,8 @@ svy_prop(design, col, group = NULL, na_rm = T, ...)
 
 \item{na_rm}{Should NAs from `col` be removed? Default to TRUE. na.rm does not work anymore within srvyr functions (workaround for now)}
 
-<<<<<<< Updated upstream
-=======
 \item{stat_name}{What should the statistic's column be named? Default to "prop"}
 
->>>>>>> Stashed changes
 \item{...}{Parameters to pass to `srvyr::survey_prop()`}
 }
 \value{

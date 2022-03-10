@@ -36,6 +36,9 @@ tmap_options_reach <- function(check_and_fix = T,
                                outer_margins= c(0,0,0,0),
                                asp = 0,
                                ...){
+
+  rlang::check_installed("tmap", reason = "Package \"tmap\" needed for `tmap_options_reach()` to work. Please install it.")
+
   tmap::tmap_options(check.and.fix = check_and_fix,
                      fontfamily = fontfamily,
                      fontface = fontface,
@@ -63,6 +66,9 @@ tmap_options_reach <- function(check_and_fix = T,
 #'
 #' @export
 buffer_bbox <- function(sf_obj, buffer = 0){
+
+  rlang::check_installed("sf", reason = "Package \"sf\" needed for `buffer_bbox()` to work. Please install it.")
+
 
   if (!(length(buffer) %in% c(1,4)) | !is.numeric(buffer)) stop("Please provide a numeric buffer of length 1 or 4.")
 

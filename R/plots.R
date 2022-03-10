@@ -21,6 +21,9 @@
 #'
 #' @export
 theme_reach <- function(family = "Leelawadee UI") {
+
+  rlang::check_installed("ggplot2", reason = "Package \"ggplot2\" needed for `theme_reach()` to work. Please install it.")
+
   ggplot2::theme_bw() +
     ggplot2::theme(
       title = ggplot2::element_text(family = family,
@@ -51,6 +54,9 @@ theme_reach <- function(family = "Leelawadee UI") {
 #'
 #' @export
 theme_flip_simple_reach <- function(family = "Leelawadee UI") {
+
+  rlang::check_installed("ggplot2", reason = "Package \"ggplot2\" needed for `theme_flip_simple_reach()` to work. Please install it.")
+
   ggplot2::theme_bw() +
     ggplot2::theme(
       title = ggplot2::element_text(family = family,
@@ -83,6 +89,9 @@ theme_flip_simple_reach <- function(family = "Leelawadee UI") {
 #'
 #' @export
 theme_hist_simple_reach <- function(family = "Leelawadee UI") {
+
+  rlang::check_installed("ggplot2", reason = "Package \"ggplot2\" needed for `theme_hist_simple_reach()` to work. Please install it.")
+
   ggplot2::theme_bw() +
     ggplot2::theme(
       title = ggplot2::element_text(family = family,
@@ -186,6 +195,7 @@ reach_cols <- function(...) {
 #' @export
 reach_pal <- function(palette = "main", reverse = FALSE, color_ramp_palette = T, ...) {
 
+
   reach_palettes <- list(
     `main`            = reach_cols("main_grey", "main_red", "main_lt_grey", "main_beige"),
     `primary`         = reach_cols("main_grey", "main_red"),
@@ -201,12 +211,14 @@ reach_pal <- function(palette = "main", reverse = FALSE, color_ramp_palette = T,
 
   if (reverse) pal <- rev(pal)
 
-  if (rlang::is_true(color_ramp_palette)) pal <- grDevices::colorRampPalette(pal, ...)
+  if (rlang::is_true(color_ramp_palette)) {
+    rlang::check_installed("grDevices", reason = "Package \"grDevices\" needed for `reach_pal()` woth 'color_ramp_palette' set to `TRUE` to work. Please install it.")
+
+    pal <- grDevices::colorRampPalette(pal, ...)
+  }
 
   return(pal)
 }
-
-
 
 
 
@@ -223,6 +235,9 @@ reach_pal <- function(palette = "main", reverse = FALSE, color_ramp_palette = T,
 #'
 #' @export
 scale_color_reach  <- function(palette = "main", discrete = TRUE, reverse = FALSE, ...) {
+
+  rlang::check_installed("ggplot2", reason = "Package \"ggplot2\" needed for `scale_color_reach()` to work. Please install it.")
+
   pal <- reach_pal(palette = palette, reverse = reverse)
 
   if (discrete) {
@@ -243,6 +258,9 @@ scale_color_reach  <- function(palette = "main", discrete = TRUE, reverse = FALS
 #'
 #' @export
 scale_fill_reach <- function(palette = "main", discrete = TRUE, reverse = FALSE, ...) {
+
+  rlang::check_installed("ggplot2", reason = "Package \"ggplot2\" needed for `scale_fill_reach()` to work. Please install it.")
+
   pal <- reach_pal(palette = palette, reverse = reverse)
 
   if (discrete) {
@@ -302,6 +320,10 @@ reach_flip_bar <- function(.tbl,
                            title         = NULL,
                            xlab          = NULL,
                            ylab          = NULL) {
+
+
+  rlang::check_installed("ggplot2", reason = "Package \"ggplot2\" needed for `reach_flip_bar()` to work. Please install it.")
+
   # Tidy eval over there
   # Main mapping
   if (rlang::is_null(fill_levels) & rlang::is_null(fill_labels)){
@@ -468,6 +490,9 @@ reach_hist_bar <- function(.tbl,
                            title         = NULL,
                            xlab          = NULL,
                            ylab          = NULL) {
+
+  rlang::check_installed("ggplot2", reason = "Package \"ggplot2\" needed for `reach_hist_bar()` to work. Please install it.")
+
   # Tidy eval over there
   # Main mapping
   if (rlang::is_null(fill_levels) & rlang::is_null(fill_labels)){

@@ -4,13 +4,7 @@
 \alias{make_log_from_check_list}
 \title{Apply `make_log` to a tibble of check_list (one logical test per row)}
 \usage{
-make_log_from_check_list(
-  .tbl,
-  survey,
-  check_list,
-  id_col = "uuid",
-  cols_to_keep
-)
+make_log_from_check_list(.tbl, survey, check_list, id_col, ...)
 }
 \arguments{
 \item{.tbl}{A tibble of data}
@@ -19,9 +13,9 @@ make_log_from_check_list(
 
 \item{check_list}{A tibble of logical test to check for}
 
-\item{id_col}{Survey id, usually "uuid"}
+\item{id_col}{Survey id, usually uuid}
 
-\item{cols_to_keep}{Columns to keep in the log, e.g. today, enum_id}
+\item{...}{Columns to keep in the log, e.g. today, i_enum_id}
 }
 \description{
 Apply `make_log` to a tibble of check_list (one logical test per row)

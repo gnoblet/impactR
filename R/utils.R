@@ -319,7 +319,7 @@ rename_cols <- function(.tbl, old_cols, new_cols){
   }
 
   up_tbl <- .tbl |>
-    dplyr::rename_with(~ new_cols, .cols = old_cols)
+    dplyr::rename_with(~ new_cols, .cols = dplyr::all_of(old_cols))
 
   return(up_tbl)
 }
@@ -553,7 +553,7 @@ get_choices <- function(survey, choices, col, conc = T){
   if_vec_not_in_stop(survey$name, col_name, "survey$name", "col")
 
   to_return <- survey |>
-    dplyr::filter(.data$name == col) |>
+    dplyr::filter(.data$name == col_name) |>
     dplyr::select(.data$list_name) |>
     dplyr::left_join(choices, by = "list_name") |>
     dplyr::pull(.data$name)

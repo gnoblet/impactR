@@ -2,6 +2,10 @@ pandoc: 2.14.0.3
 pkgdown: 2.0.2
 pkgdown_sha: ~
 articles:
-  main-workflow: main-workflow.html
-last_built: 2022-02-19T20:09Z
+  1_base_de_travail: 1_base_de_travail.html
+  1_main_workflow: 1_main_workflow.html
+last_built: 2022-03-09T17:20Z
+urls:
+  reference: https://gnoblet.github.io/impactR/reference
+  article: https://gnoblet.github.io/impactR/articles
 

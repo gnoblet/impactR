@@ -13,7 +13,7 @@ other_parent_cols(.tbl, other_cols, other, id_col)
 
 \item{other}{A character vector of the start of all other column names. E.g., other = "other_"}
 
-\item{id_col}{Unquoted survey id, usually uuid. Need some fix to be used also with quoted names, with the use of `dplyr::group_split`}
+\item{id_col}{Survey id, usuallly uuid}
 }
 \value{
 A tibble with all "other" values and their parent values

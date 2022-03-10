@@ -1,33 +1,34 @@
-#'
-#' #' @title Download form (survey and choices)
-#' #'
-#' #' @param long_formid The long form id as a character string
-#' #' @param user User name
-#' #' @param pwd Password
-#' #' @param api Link to api. Default to "https://kobo.humanitarianresponse.info"
-#' #'
-#' #' @details Heavily adapted from and many thanks to @ElliotMesss at https://github.com/ElliottMess/koboAPI/t
-#' #'
-#' #' @return A list of two tibbles survey and choices
-#' #'
-#' #' @export
-#' dl_form <- function(long_formid, user, pwd, api = "https://kobo.humanitarianresponse.info") {
-#'   raw_form_text_json <- paste0(api, "/assets/", long_formid, "/") |>
-#'     httr::GET(httr::authenticate(user, pwd), httr::progress()) |>
-#'     httr::content("text", encoding = "UTF-8") |>
-#'     jsonlite::fromJSON()
-#'
-#'   # languages <- as.vector(raw_form_text_json$content$translations)
-#'   # languages_labels <- paste0("label::", languages)
-#'
-#'
-#'   choices <- raw_form_text_json$content$choices |>
-#'     tibble::as_tibble() |>
-#'     janitor::clean_names()
-#'   survey <-  raw_form_text_json$content$survey |>
-#'     tibble::as_tibble() |>
-#'     janitor::clean_names()
-#'
-#'   form <- list("survey" = survey, "choices" = choices)
-#'   return(form)
-#' }
+# usr <- "bkf_hsm_bdd"
+# pwd <- "hsm_BDD"
+#
+# ####----set global variables ----------
+# kobo_server_url<-"https://kobo.humanitarianresponse.info/"
+# kc_server_url<-"https://kc.humanitarianresponse.info/"
+#
+# kobo.humanitarianresponse.info
+#
+# api_token <- "57873b77d086f46ab900c9e63cacc677b96ba906"
+#
+#
+# box::use(robotoolbox[...])
+#
+# library(robotoolbox)
+# token <- kobo_token(username = usr,
+#                     password = pwd,
+#                     url = kobo_server_url)
+# token
+#
+# kobo_setup(url = kobo_server_url, token = api_token)
+#
+# l <- kobo_asset_list()
+# l
+#
+# data <- kobo_data("a8zTzGMJt53f9ATyhXH3jz")
+#
+#
+#
+# label_lookup_map <-function(.tbl) {
+#   tibble::tibble(
+#     col_name = .tbl |> colnames(),
+#     labels = .tbl |> purrr::map_chr(purrr::attr_getter("label"))
+#   )}

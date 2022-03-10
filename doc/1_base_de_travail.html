@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>Base de travail avec impactR</title>
+
+<script src="data:application/javascript;base64,Ly8gUGFuZG9jIDIuOSBhZGRzIGF0dHJpYnV0ZXMgb24gYm90aCBoZWFkZXIgYW5kIGRpdi4gV2UgcmVtb3ZlIHRoZSBmb3JtZXIgKHRvCi8vIGJlIGNvbXBhdGlibGUgd2l0aCB0aGUgYmVoYXZpb3Igb2YgUGFuZG9jIDwgMi44KS4KZG9jdW1lbnQuYWRkRXZlbnRMaXN0ZW5lcignRE9NQ29udGVudExvYWRlZCcsIGZ1bmN0aW9uKGUpIHsKICB2YXIgaHMgPSBkb2N1bWVudC5xdWVyeVNlbGVjdG9yQWxsKCJkaXYuc2VjdGlvbltjbGFzcyo9J2xldmVsJ10gPiA6Zmlyc3QtY2hpbGQiKTsKICB2YXIgaSwgaCwgYTsKICBmb3IgKGkgPSAwOyBpIDwgaHMubGVuZ3RoOyBpKyspIHsKICAgIGggPSBoc1tpXTsKICAgIGlmICghL15oWzEtNl0kL2kudGVzdChoLnRhZ05hbWUpKSBjb250aW51ZTsgIC8vIGl0IHNob3VsZCBiZSBhIGhlYWRlciBoMS1oNgogICAgYSA9IGguYXR0cmlidXRlczsKICAgIHdoaWxlIChhLmxlbmd0aCA+IDApIGgucmVtb3ZlQXR0cmlidXRlKGFbMF0ubmFtZSk7CiAgfQp9KTsK"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+
+<style type="text/css">
+  code {
+    white-space: pre;
+  }
+  .sourceCode {
+    overflow: visible;
+  }
+</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<link rel="stylesheet" href="data:text/css,body%20%7B%0Abackground%2Dcolor%3A%20%23fff%3B%0Amargin%3A%201em%20auto%3B%0Amax%2Dwidth%3A%20700px%3B%0Aoverflow%3A%20visible%3B%0Apadding%2Dleft%3A%202em%3B%0Apadding%2Dright%3A%202em%3B%0Afont%2Dfamily%3A%20%22Open%20Sans%22%2C%20%22Helvetica%20Neue%22%2C%20Helvetica%2C%20Arial%2C%20sans%2Dserif%3B%0Afont%2Dsize%3A%2014px%3B%0Aline%2Dheight%3A%201%2E35%3B%0A%7D%0A%23TOC%20%7B%0Aclear%3A%20both%3B%0Amargin%3A%200%200%2010px%2010px%3B%0Apadding%3A%204px%3B%0Awidth%3A%20400px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Aborder%2Dradius%3A%205px%3B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Afont%2Dsize%3A%2013px%3B%0Aline%2Dheight%3A%201%2E3%3B%0A%7D%0A%23TOC%20%2Etoctitle%20%7B%0Afont%2Dweight%3A%20bold%3B%0Afont%2Dsize%3A%2015px%3B%0Amargin%2Dleft%3A%205px%3B%0A%7D%0A%23TOC%20ul%20%7B%0Apadding%2Dleft%3A%2040px%3B%0Amargin%2Dleft%3A%20%2D1%2E5em%3B%0Amargin%2Dtop%3A%205px%3B%0Amargin%2Dbottom%3A%205px%3B%0A%7D%0A%23TOC%20ul%20ul%20%7B%0Amargin%2Dleft%3A%20%2D2em%3B%0A%7D%0A%23TOC%20li%20%7B%0Aline%2Dheight%3A%2016px%3B%0A%7D%0Atable%20%7B%0Amargin%3A%201em%20auto%3B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dcolor%3A%20%23DDDDDD%3B%0Aborder%2Dstyle%3A%20outset%3B%0Aborder%2Dcollapse%3A%20collapse%3B%0A%7D%0Atable%20th%20%7B%0Aborder%2Dwidth%3A%202px%3B%0Apadding%3A%205px%3B%0Aborder%2Dstyle%3A%20inset%3B%0A%7D%0Atable%20td%20%7B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dstyle%3A%20inset%3B%0Aline%2Dheight%3A%2018px%3B%0Apadding%3A%205px%205px%3B%0A%7D%0Atable%2C%20table%20th%2C%20table%20td%20%7B%0Aborder%2Dleft%2Dstyle%3A%20none%3B%0Aborder%2Dright%2Dstyle%3A%20none%3B%0A%7D%0Atable%20thead%2C%20table%20tr%2Eeven%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Ap%20%7B%0Amargin%3A%200%2E5em%200%3B%0A%7D%0Ablockquote%20%7B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Apadding%3A%200%2E25em%200%2E75em%3B%0A%7D%0Ahr%20%7B%0Aborder%2Dstyle%3A%20solid%3B%0Aborder%3A%20none%3B%0Aborder%2Dtop%3A%201px%20solid%20%23777%3B%0Amargin%3A%2028px%200%3B%0A%7D%0Adl%20%7B%0Amargin%2Dleft%3A%200%3B%0A%7D%0Adl%20dd%20%7B%0Amargin%2Dbottom%3A%2013px%3B%0Amargin%2Dleft%3A%2013px%3B%0A%7D%0Adl%20dt%20%7B%0Afont%2Dweight%3A%20bold%3B%0A%7D%0Aul%20%7B%0Amargin%2Dtop%3A%200%3B%0A%7D%0Aul%20li%20%7B%0Alist%2Dstyle%3A%20circle%20outside%3B%0A%7D%0Aul%20ul%20%7B%0Amargin%2Dbottom%3A%200%3B%0A%7D%0Apre%2C%20code%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0Aborder%2Dradius%3A%203px%3B%0Acolor%3A%20%23333%3B%0Awhite%2Dspace%3A%20pre%2Dwrap%3B%20%0A%7D%0Apre%20%7B%0Aborder%2Dradius%3A%203px%3B%0Amargin%3A%205px%200px%2010px%200px%3B%0Apadding%3A%2010px%3B%0A%7D%0Apre%3Anot%28%5Bclass%5D%29%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Acode%20%7B%0Afont%2Dfamily%3A%20Consolas%2C%20Monaco%2C%20%27Courier%20New%27%2C%20monospace%3B%0Afont%2Dsize%3A%2085%25%3B%0A%7D%0Ap%20%3E%20code%2C%20li%20%3E%20code%20%7B%0Apadding%3A%202px%200px%3B%0A%7D%0Adiv%2Efigure%20%7B%0Atext%2Dalign%3A%20center%3B%0A%7D%0Aimg%20%7B%0Abackground%2Dcolor%3A%20%23FFFFFF%3B%0Apadding%3A%202px%3B%0Aborder%3A%201px%20solid%20%23DDDDDD%3B%0Aborder%2Dradius%3A%203px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Amargin%3A%200%205px%3B%0A%7D%0Ah1%20%7B%0Amargin%2Dtop%3A%200%3B%0Afont%2Dsize%3A%2035px%3B%0Aline%2Dheight%3A%2040px%3B%0A%7D%0Ah2%20%7B%0Aborder%2Dbottom%3A%204px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Apadding%2Dbottom%3A%202px%3B%0Afont%2Dsize%3A%20145%25%3B%0A%7D%0Ah3%20%7B%0Aborder%2Dbottom%3A%202px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Afont%2Dsize%3A%20120%25%3B%0A%7D%0Ah4%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23f7f7f7%3B%0Amargin%2Dleft%3A%208px%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Ah5%2C%20h6%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23ccc%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Aa%20%7B%0Acolor%3A%20%230033dd%3B%0Atext%2Ddecoration%3A%20none%3B%0A%7D%0Aa%3Ahover%20%7B%0Acolor%3A%20%236666ff%3B%20%7D%0Aa%3Avisited%20%7B%0Acolor%3A%20%23800080%3B%20%7D%0Aa%3Avisited%3Ahover%20%7B%0Acolor%3A%20%23BB00BB%3B%20%7D%0Aa%5Bhref%5E%3D%22http%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0Aa%5Bhref%5E%3D%22https%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0A%0Acode%20%3E%20span%2Ekw%20%7B%20color%3A%20%23555%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Edt%20%7B%20color%3A%20%23902000%3B%20%7D%20%0Acode%20%3E%20span%2Edv%20%7B%20color%3A%20%2340a070%3B%20%7D%20%0Acode%20%3E%20span%2Ebn%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Efl%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Ech%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Est%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Eco%20%7B%20color%3A%20%23888888%3B%20font%2Dstyle%3A%20italic%3B%20%7D%20%0Acode%20%3E%20span%2Eot%20%7B%20color%3A%20%23007020%3B%20%7D%20%0Acode%20%3E%20span%2Eal%20%7B%20color%3A%20%23ff0000%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Efu%20%7B%20color%3A%20%23900%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Eer%20%7B%20color%3A%20%23a61717%3B%20background%2Dcolor%3A%20%23e3d2d2%3B%20%7D%20%0A" type="text/css" />
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Base de travail avec impactR</h1>
+
+
+
+<div id="pourquoi" class="section level1" number="1">
+<h1><span class="header-section-number">1</span> Pourquoi ?</h1>
+<p>Cette vignette a pour but d’expliciter l’usage d’<code>impactR</code> et la manière dont il est possible de l’utiliser dans le cadre d’un suivi de collecte de données et du nettoyage. Commençons par charger le package.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Si vous n&#39;avez pas encore installé le package</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co"># devtools::install_github(&quot;impactR)</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(impactR)</span></code></pre></div>
+<p>Ci-dessus, on peut charger des données exemple collectées.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Load dataset in environment</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(data)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Show the first lines and types of airports&#39; tibble</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> data <span class="sc">|&gt;</span> tibble<span class="sc">::</span><span class="fu">as_tibble</span>()</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>data</span></code></pre></div>
+<pre><code>## # A tibble: 8 × 50
+##   uuid  start               end                 today               deviceid    
+##   &lt;chr&gt; &lt;dttm&gt;              &lt;dttm&gt;              &lt;dttm&gt;              &lt;chr&gt;       
+## 1 x1    2021-10-18 09:08:24 2021-10-18 10:01:35 2021-10-18 00:00:00 collect:tgN…
+## 2 x2    2021-10-20 09:14:47 2021-10-20 10:05:22 2021-10-20 00:00:00 35557110048…
+## 3 x3    2021-10-20 10:11:14 2021-10-20 11:00:07 2021-10-20 00:00:00 35557110048…
+## 4 x4    2021-10-20 11:12:05 2021-10-20 12:02:57 2021-10-20 00:00:00 35557110048…
+## 5 x5    2021-10-20 14:14:36 2021-10-20 15:02:31 2021-10-20 00:00:00 35557110048…
+## 6 x6    2021-10-20 15:09:11 2021-10-20 16:04:35 2021-10-20 00:00:00 35557110048…
+## 7 x7    2021-10-20 09:44:15 2021-10-20 10:26:34 2021-10-20 00:00:00 35557110050…
+## 8 x8    2021-10-20 10:31:55 2021-10-20 11:12:48 2021-10-20 00:00:00 35557110050…
+## # … with 45 more variables: i_enum_id &lt;dbl&gt;, i_enum_genre &lt;chr&gt;,
+## #   i_admin2 &lt;chr&gt;, i_ville &lt;chr&gt;, i_secteur &lt;chr&gt;, i_info_secteur &lt;chr&gt;,
+## #   i_zad &lt;chr&gt;, i_zad_1 &lt;chr&gt;, i_consensus &lt;chr&gt;, i_consensus_note &lt;chr&gt;,
+## #   i_enquete_age &lt;dbl&gt;, i_enquete_genre &lt;chr&gt;, i_statut &lt;chr&gt;,
+## #   i_note_statut &lt;lgl&gt;, i_statut_1 &lt;chr&gt;, c_note &lt;lgl&gt;, c_chef_menage &lt;chr&gt;,
+## #   c_n_chef_menage_genre &lt;chr&gt;, c_n_chef_menage_age &lt;dbl&gt;,
+## #   c_chef_menage_age &lt;dbl&gt;, c_chef_menage_genre &lt;chr&gt;, …</code></pre>
+<p>La plupart des fonctions de <code>impactR</code> sont écrites en supposant que les données fournies peuvent être converties en tibble, puisqu’elles utilisent largement le tidyverse.</p>
+<p>Supposons que nous ayons une feuille ‘survey’ composée comme suit :</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(survey)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>survey <span class="ot">&lt;-</span> survey <span class="sc">|&gt;</span> tibble<span class="sc">::</span><span class="fu">as_tibble</span>(survey)</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>survey</span></code></pre></div>
+<pre><code>## # A tibble: 44 × 12
+##    type            name  label hint  required choice_filter calculation relevant
+##    &lt;chr&gt;           &lt;chr&gt; &lt;chr&gt; &lt;lgl&gt; &lt;lgl&gt;    &lt;chr&gt;         &lt;chr&gt;       &lt;chr&gt;   
+##  1 start           start &lt;NA&gt;  NA    NA       &lt;NA&gt;          &lt;NA&gt;        &lt;NA&gt;    
+##  2 end             end   &lt;NA&gt;  NA    NA       &lt;NA&gt;          &lt;NA&gt;        &lt;NA&gt;    
+##  3 today           today &lt;NA&gt;  NA    NA       &lt;NA&gt;          &lt;NA&gt;        &lt;NA&gt;    
+##  4 deviceid        devi… &lt;NA&gt;  NA    NA       &lt;NA&gt;          &lt;NA&gt;        &lt;NA&gt;    
+##  5 select_one l_e… i_en… Code… NA    TRUE     &lt;NA&gt;          &lt;NA&gt;        &lt;NA&gt;    
+##  6 select_one l_g… i_en… Sexe… NA    TRUE     &lt;NA&gt;          &lt;NA&gt;        &lt;NA&gt;    
+##  7 hidden          i_ad… Quel… NA    FALSE    &lt;NA&gt;          &lt;NA&gt;        &lt;NA&gt;    
+##  8 hidden          i_vi… Quel… NA    FALSE    &lt;NA&gt;          &lt;NA&gt;        &lt;NA&gt;    
+##  9 select_one l_s… i_se… Quel… NA    TRUE     &lt;NA&gt;          &lt;NA&gt;        &lt;NA&gt;    
+## 10 calculate       i_in… &lt;NA&gt;  NA    TRUE     &lt;NA&gt;          jr:choice-… &lt;NA&gt;    
+## # … with 34 more rows, and 4 more variables: constraint &lt;chr&gt;,
+## #   constraint_message &lt;chr&gt;, given_name &lt;lgl&gt;, default &lt;chr&gt;</code></pre>
+<p>La première chose à faire avec l’objet ‘survey’, car il sera utilisé ailleurs : il faut séparer en deux la colonne ‘type’.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Miseà part l&#39;argument &#39;col_to_split&#39; (la colonne à séparer), les autres paramètres sont les paramètres par défaut</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>survey <span class="ot">&lt;-</span> survey <span class="sc">|&gt;</span>  </span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">split_survey</span>(</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">col_to_split =</span> <span class="st">&quot;type&quot;</span>,</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">into =</span> <span class="fu">c</span>(<span class="st">&quot;type&quot;</span>, <span class="st">&quot;list_name&quot;</span>),</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">sep =</span> <span class="st">&quot; &quot;</span>,</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">fill =</span> <span class="st">&quot;right&quot;</span>)</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>survey</span></code></pre></div>
+<pre><code>## # A tibble: 44 × 13
+##    type  list_name name  label hint  required choice_filter calculation relevant
+##    &lt;chr&gt; &lt;chr&gt;     &lt;chr&gt; &lt;chr&gt; &lt;lgl&gt; &lt;lgl&gt;    &lt;chr&gt;         &lt;chr&gt;       &lt;chr&gt;   
+##  1 start &lt;NA&gt;      start &lt;NA&gt;  NA    NA       &lt;NA&gt;          &lt;NA&gt;        &lt;NA&gt;    
+##  2 end   &lt;NA&gt;      end   &lt;NA&gt;  NA    NA       &lt;NA&gt;          &lt;NA&gt;        &lt;NA&gt;    
+##  3 today &lt;NA&gt;      today &lt;NA&gt;  NA    NA       &lt;NA&gt;          &lt;NA&gt;        &lt;NA&gt;    
+##  4 devi… &lt;NA&gt;      devi… &lt;NA&gt;  NA    NA       &lt;NA&gt;          &lt;NA&gt;        &lt;NA&gt;    
+##  5 sele… l_enum_id i_en… Code… NA    TRUE     &lt;NA&gt;          &lt;NA&gt;        &lt;NA&gt;    
+##  6 sele… l_genre   i_en… Sexe… NA    TRUE     &lt;NA&gt;          &lt;NA&gt;        &lt;NA&gt;    
+##  7 hidd… &lt;NA&gt;      i_ad… Quel… NA    FALSE    &lt;NA&gt;          &lt;NA&gt;        &lt;NA&gt;    
+##  8 hidd… &lt;NA&gt;      i_vi… Quel… NA    FALSE    &lt;NA&gt;          &lt;NA&gt;        &lt;NA&gt;    
+##  9 sele… l_secteur i_se… Quel… NA    TRUE     &lt;NA&gt;          &lt;NA&gt;        &lt;NA&gt;    
+## 10 calc… &lt;NA&gt;      i_in… &lt;NA&gt;  NA    TRUE     &lt;NA&gt;          jr:choice-… &lt;NA&gt;    
+## # … with 34 more rows, and 4 more variables: constraint &lt;chr&gt;,
+## #   constraint_message &lt;chr&gt;, given_name &lt;lgl&gt;, default &lt;chr&gt;</code></pre>
+</div>
+<div id="contrôle-de-la-qualité-des-données" class="section level1" number="2">
+<h1><span class="header-section-number">2</span> Contrôle de la qualité des données</h1>
+<div id="journal-de-nettoyage-des-valeurs-aberrantes" class="section level2" number="2.1">
+<h2><span class="header-section-number">2.1</span> Journal de nettoyage des valeurs aberrantes</h2>
+<p>Afin de pouvoir obtenir les valeurs dites aberrantes (pour les variables numériques), vous pouvez utiliser la fonction <code>make_log_outlier</code> qui permet d’obtenir deux types de valeurs aberrantes : l’écart par rapport à la moyenne en utilisant la fonction <code>outliers_sd</code> et l’écart interquartile en utilisant la fonction <code>outliers_iqr</code>.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Utilitaire pour obtenir toutes les variables numériques</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="co">#numeric_cols(data) #  Obtenir toutes les colonnes numériques : cela inclut par exemple les identifiants numériques des énumérateurs ou les points GPS.</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="co">#numeric_cols(data, survey) # Obtenir toutes les colonnes numériques en utilisant la feuille &#39;survey&#39; de l&#39;outil Kobo (uniquement les calculate, integer, etc.)</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Valeurs aberrantes interquartle (règle des 1,5 fois par défaut)</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="co">#outliers_iqr(data, col = i_enquete_age,times = 1.5,  id_col = uuid) # La colonne d&#39;identifiant &#39;id_col&#39; est habituellement &quot;uuid&quot; avec Kobo</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Valeurs aberrantes à la moyenne</span></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a><span class="co">#outliers_sd(data, i_enquete_age, times = 3, id_col = uuid)</span></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Fabriquer le journal de nettoyage entier pour toutes les variables numériques (en prenant en compte l&#39;outil Kobo)</span></span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>log_outliers <span class="ot">&lt;-</span> <span class="fu">make_log_outlier</span>(data, survey, <span class="at">id_col =</span> uuid, today, i_enum_id, i_zad)</span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>log_outliers</span></code></pre></div>
+<pre><code>## # A tibble: 4 × 16
+##   id_check today               i_enum_id i_zad  uuid  question_name      
+##   &lt;chr&gt;    &lt;dttm&gt;                  &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt; &lt;chr&gt;              
+## 1 outlier  2021-10-20 00:00:00         3 wendou x2    i_enquete_age      
+## 2 outlier  2021-10-18 00:00:00         8 wendou x1    c_n_chef_menage_age
+## 3 outlier  2021-10-20 00:00:00         3 wendou x2    c_n_chef_menage_age
+## 4 outlier  2021-10-18 00:00:00         8 wendou x1    c_chef_menage_age  
+## # … with 10 more variables: question_label &lt;chr&gt;, why &lt;chr&gt;, feedback &lt;chr&gt;,
+## #   action &lt;chr&gt;, old_value &lt;dbl&gt;, new_value &lt;chr&gt;, type &lt;chr&gt;,
+## #   other_parent_question &lt;chr&gt;, other_new_value &lt;chr&gt;, checkdate &lt;chr&gt;</code></pre>
+</div>
+<div id="journal-de-nettoyage-des-autres" class="section level2" number="2.2">
+<h2><span class="header-section-number">2.2</span> Journal de nettoyage des “autres”</h2>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Obtenir les autres </span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>other_cols <span class="ot">&lt;-</span> <span class="fu">other_cols</span>(data, <span class="st">&quot;autre_&quot;</span>, <span class="at">id_col =</span> uuid)</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>other_cols</span></code></pre></div>
+<pre><code>## # A tibble: 2 × 4
+##   uuid  question_name             old_value                 other_parent_questi…
+##   &lt;chr&gt; &lt;chr&gt;                     &lt;chr&gt;                     &lt;chr&gt;               
+## 1 x5    autre_h_3_type_latrine    Aussi latrines communales h_3_type_latrine    
+## 2 x7    autre_r_besoin_assistance Un métier                 r_besoin_assistance</code></pre>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Obtenir les autres parents</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="fu">other_parent_cols</span>(data, other_cols, <span class="st">&quot;autre_&quot;</span>, <span class="at">id_col =</span> uuid)</span></code></pre></div>
+<pre><code>## # A tibble: 2 × 3
+##   uuid  other_parent_question other_old_value            
+##   &lt;chr&gt; &lt;chr&gt;                 &lt;chr&gt;                      
+## 1 x5    h_3_type_latrine      latrine_prive_partage autre
+## 2 x7    r_besoin_assistance   abri_bna secal autre</code></pre>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Fabriquer le journal de nettoyage des &quot;autres&quot;</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>log_others <span class="ot">&lt;-</span> <span class="fu">make_log_other</span>(data, survey, <span class="st">&quot;autre_&quot;</span>, uuid, today, i_enum_id, i_zad) </span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>log_others</span></code></pre></div>
+<pre><code>## # A tibble: 2 × 17
+##   id_check today               i_enum_id i_zad  uuid  question_name            
+##   &lt;chr&gt;    &lt;dttm&gt;                  &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt; &lt;chr&gt;                    
+## 1 autre_   2021-10-20 00:00:00         3 wendou x5    autre_h_3_type_latrine   
+## 2 autre_   2021-10-20 00:00:00        12 wendou x7    autre_r_besoin_assistance
+## # … with 11 more variables: question_label &lt;chr&gt;, why &lt;chr&gt;, feedback &lt;chr&gt;,
+## #   action &lt;chr&gt;, old_value &lt;chr&gt;, new_value &lt;chr&gt;, type &lt;chr&gt;,
+## #   other_parent_question &lt;chr&gt;, other_old_value &lt;chr&gt;, other_new_value &lt;chr&gt;,
+## #   checkdate &lt;chr&gt;</code></pre>
+</div>
+<div id="journal-de-nettoyage-basé-sur-une-liste-de-vérifications" class="section level2" number="2.3">
+<h2><span class="header-section-number">2.3</span> Journal de nettoyage basé sur une liste de vérifications</h2>
+<p>Il suffit d’avoir produit en amont un fichier Excel de vérification logique, qu’il est par ailleurs possible de modifier au cours de la collecte.</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(check_list)</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>check_list <span class="ot">&lt;-</span> check_list <span class="sc">|&gt;</span> tibble<span class="sc">::</span><span class="fu">as_tibble</span>()</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>check_list</span></code></pre></div>
+<pre><code>## # A tibble: 5 × 7
+##   id_check question_name     why             logical_test new_value action type 
+##   &lt;chr&gt;    &lt;chr&gt;             &lt;chr&gt;           &lt;chr&gt;        &lt;lgl&gt;     &lt;chr&gt;  &lt;chr&gt;
+## 1 id1      i_consensus       Pas de consent… &quot;i_consensu… NA        remove char…
+## 2 id2      survey_duration   Durée d&#39;enquêt… &quot;survey_dur… NA        urgen… doub…
+## 3 id3      survey_duration   Durée d&#39;enquêt… &quot;survey_dur… NA        check  doub…
+## 4 id4      survey_duration   Durée d&#39;enquêt… &quot;survey_dur… NA        urgen… doub…
+## 5 id5      c_chef_menage_age Le ou la cheff… &quot;c_chef_men… NA        check  doub…</code></pre>
+<p>Le tableur excel de vérifications doit suivre quelques règles pour pouvoir être lu par les fonctions d’impactR [ajouter la liste]. Par exemple, il est nécessaire que toutes les variables présentes dans les tests logiques (colonne ‘logical_test’ du tableau de vérifications) existent aussi dans les données, objet <code>data</code>. Pour cela, on peut utiliser la fonction <code>check_check_list</code>, qui vise à valider ou non un tableur de vérifications logiques [note : elle n’est pas encore robuste, mais elle permet déjà de faire un certain nombre de contrôles].</p>
+<p>Par exemple, ci-dessous la colonne <code>survey_duration</code> n’existe pas dans les données <code>data</code>. Pourtant, il y a des vérifications logiques qui la prennent en compte dans le tableur de vérifications logiques <code>check_list</code>. Si onlance la commande suivante, on obtiendrait une erreur :</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">check_check_list</span>(check_list, data)</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="co"># following column/s from `question_name` is/are missing in `.tbl`: survey_duration, survey_duration, survey_duration</span></span></code></pre></div>
+<p>On va donc jouter la colonne de durée d’enquête à l’aide de la fonction <code>svy_duration</code>. On en profite pour assi ajouter la différence de temps entre deux enquêtes par enquêteur.rice :</p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> data <span class="sc">|&gt;</span> </span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">svy_duration</span>(start, end) <span class="co">#|&gt;</span></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>  <span class="co"># NOT RUN!</span></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>  <span class="co"># svy_difftime(start, end, new_colname = &quot;survey_difftime&quot;, i_enum_id)</span></span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>data<span class="sc">$</span>survey_duration</span></code></pre></div>
+<pre><code>## [1] 53 51 49 51 48 55 42 41</code></pre>
+<p>On peut vérifier de nouveau le tableur de vérifications logiques :</p>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">check_check_list</span>(check_list, data)</span></code></pre></div>
+<pre><code>## [1] TRUE</code></pre>
+<p>Cette fois-ci, c’est bon, la fonction donne <code>TRUE</code>, on peut donc procéder avec la production du log de nettoyage.</p>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>log_check_list <span class="ot">&lt;-</span> <span class="fu">make_log_from_check_list</span>(data, survey, check_list, uuid, today, i_enum_id, i_zad)</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>log_check_list</span></code></pre></div>
+<pre><code>## # A tibble: 11 × 17
+##    id_check today               i_enum_id i_zad  uuid  question_name    
+##    &lt;chr&gt;    &lt;dttm&gt;                  &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt; &lt;chr&gt;            
+##  1 id1      2021-10-20 00:00:00        12 wendou x7    i_consensus      
+##  2 id1      2021-10-20 00:00:00        12 wendou x8    i_consensus      
+##  3 id3      2021-10-18 00:00:00         8 wendou x1    survey_duration  
+##  4 id3      2021-10-20 00:00:00         3 wendou x2    survey_duration  
+##  5 id3      2021-10-20 00:00:00         3 wendou x3    survey_duration  
+##  6 id3      2021-10-20 00:00:00         3 wendou x4    survey_duration  
+##  7 id3      2021-10-20 00:00:00         3 wendou x5    survey_duration  
+##  8 id3      2021-10-20 00:00:00         3 wendou x6    survey_duration  
+##  9 id3      2021-10-20 00:00:00        12 wendou x7    survey_duration  
+## 10 id3      2021-10-20 00:00:00        12 wendou x8    survey_duration  
+## 11 id5      2021-10-20 00:00:00         3 wendou x2    c_chef_menage_age
+## # … with 11 more variables: question_label &lt;chr&gt;, why &lt;chr&gt;, feedback &lt;chr&gt;,
+## #   action &lt;chr&gt;, old_value &lt;chr&gt;, new_value &lt;lgl&gt;, type &lt;chr&gt;,
+## #   other_parent_question &lt;chr&gt;, other_old_value &lt;chr&gt;, other_new_value &lt;chr&gt;,
+## #   checkdate &lt;chr&gt;</code></pre>
+</div>
+<div id="journal-de-nettoyage-complet-et-exportation" class="section level2" number="2.4">
+<h2><span class="header-section-number">2.4</span> Journal de nettoyage complet et exportation</h2>
+<p>Pour terminer, il nous suffit de combiner tous ces journaux de nettoyage en un seul. On peut ensuite l’exporter en fichier excel.</p>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>log <span class="ot">&lt;-</span> <span class="fu">list</span>(log_outliers, log_check_list, log_others) <span class="sc">|&gt;</span> </span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>  purrr<span class="sc">::</span><span class="fu">map</span>(<span class="sc">~</span> .x <span class="sc">|&gt;</span> dplyr<span class="sc">::</span><span class="fu">mutate</span>(dplyr<span class="sc">::</span><span class="fu">across</span>(<span class="at">.fns =</span> as.character))) <span class="sc">|&gt;</span> </span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">bind_rows</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>  readr<span class="sc">::</span><span class="fu">type_convert</span>()</span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>log</span></code></pre></div>
+<pre><code>## # A tibble: 17 × 17
+##    id_check today      i_enum_id i_zad  uuid  question_name question_label why  
+##    &lt;chr&gt;    &lt;date&gt;         &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt; &lt;chr&gt;         &lt;chr&gt;          &lt;chr&gt;
+##  1 outlier  2021-10-20         3 wendou x2    i_enquete_age Quel est votr… Outl…
+##  2 outlier  2021-10-18         8 wendou x1    c_n_chef_men… Quel est l&#39;âg… Outl…
+##  3 outlier  2021-10-20         3 wendou x2    c_n_chef_men… Quel est l&#39;âg… Outl…
+##  4 outlier  2021-10-18         8 wendou x1    c_chef_menag… Age exact du … Outl…
+##  5 id1      2021-10-20        12 wendou x7    i_consensus   Bonjour, je s… Pas …
+##  6 id1      2021-10-20        12 wendou x8    i_consensus   Bonjour, je s… Pas …
+##  7 id3      2021-10-18         8 wendou x1    survey_durat… &lt;NA&gt;           Duré…
+##  8 id3      2021-10-20         3 wendou x2    survey_durat… &lt;NA&gt;           Duré…
+##  9 id3      2021-10-20         3 wendou x3    survey_durat… &lt;NA&gt;           Duré…
+## 10 id3      2021-10-20         3 wendou x4    survey_durat… &lt;NA&gt;           Duré…
+## 11 id3      2021-10-20         3 wendou x5    survey_durat… &lt;NA&gt;           Duré…
+## 12 id3      2021-10-20         3 wendou x6    survey_durat… &lt;NA&gt;           Duré…
+## 13 id3      2021-10-20        12 wendou x7    survey_durat… &lt;NA&gt;           Duré…
+## 14 id3      2021-10-20        12 wendou x8    survey_durat… &lt;NA&gt;           Duré…
+## 15 id5      2021-10-20         3 wendou x2    c_chef_menag… Age exact du … Le o…
+## 16 autre_   2021-10-20         3 wendou x5    autre_h_3_ty… Lesquelles pr… Othe…
+## 17 autre_   2021-10-20        12 wendou x7    autre_r_beso… De quels type… Othe…
+## # … with 9 more variables: feedback &lt;chr&gt;, action &lt;chr&gt;, old_value &lt;chr&gt;,
+## #   new_value &lt;chr&gt;, type &lt;chr&gt;, other_parent_question &lt;chr&gt;,
+## #   other_new_value &lt;lgl&gt;, checkdate &lt;chr&gt;, other_old_value &lt;chr&gt;</code></pre>
+<p>Il est aussi possible d’utiliser la fonction <code>make_all_logs</code> qui combine ces trois fonctions et ne sort qu’un unique journal de nettoyage.</p>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>log <span class="ot">&lt;-</span> <span class="fu">make_all_logs</span>(data, survey, check_list, <span class="st">&quot;autre_&quot;</span>, uuid, today, i_enum_id, i_zad)</span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>log</span></code></pre></div>
+<pre><code>## # A tibble: 17 × 17
+##    id_check today      i_enum_id i_zad  uuid  question_name question_label why  
+##    &lt;chr&gt;    &lt;date&gt;         &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt; &lt;chr&gt;         &lt;chr&gt;          &lt;chr&gt;
+##  1 id1      2021-10-20        12 wendou x7    i_consensus   Bonjour, je s… Pas …
+##  2 id1      2021-10-20        12 wendou x8    i_consensus   Bonjour, je s… Pas …
+##  3 id3      2021-10-18         8 wendou x1    survey_durat… &lt;NA&gt;           Duré…
+##  4 id3      2021-10-20         3 wendou x2    survey_durat… &lt;NA&gt;           Duré…
+##  5 id3      2021-10-20         3 wendou x3    survey_durat… &lt;NA&gt;           Duré…
+##  6 id3      2021-10-20         3 wendou x4    survey_durat… &lt;NA&gt;           Duré…
+##  7 id3      2021-10-20         3 wendou x5    survey_durat… &lt;NA&gt;           Duré…
+##  8 id3      2021-10-20         3 wendou x6    survey_durat… &lt;NA&gt;           Duré…
+##  9 id3      2021-10-20        12 wendou x7    survey_durat… &lt;NA&gt;           Duré…
+## 10 id3      2021-10-20        12 wendou x8    survey_durat… &lt;NA&gt;           Duré…
+## 11 id5      2021-10-20         3 wendou x2    c_chef_menag… Age exact du … Le o…
+## 12 autre_   2021-10-20         3 wendou x5    autre_h_3_ty… Lesquelles pr… Othe…
+## 13 autre_   2021-10-20        12 wendou x7    autre_r_beso… De quels type… Othe…
+## 14 outlier  2021-10-20         3 wendou x2    i_enquete_age Quel est votr… Outl…
+## 15 outlier  2021-10-18         8 wendou x1    c_n_chef_men… Quel est l&#39;âg… Outl…
+## 16 outlier  2021-10-20         3 wendou x2    c_n_chef_men… Quel est l&#39;âg… Outl…
+## 17 outlier  2021-10-18         8 wendou x1    c_chef_menag… Age exact du … Outl…
+## # … with 9 more variables: feedback &lt;chr&gt;, action &lt;chr&gt;, old_value &lt;chr&gt;,
+## #   new_value &lt;chr&gt;, type &lt;chr&gt;, other_parent_question &lt;chr&gt;,
+## #   other_old_value &lt;chr&gt;, other_new_value &lt;lgl&gt;, checkdate &lt;chr&gt;</code></pre>
+<p>Enfin, il existe plusieurs manière d’exporter. Ici on donne l’exemple avec le package <code>writexl</code>:</p>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Not run! La plus simple</span></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a><span class="co"># writexl::write_xlsx(log, &quot;output/log.xlsx)</span></span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a><span class="co"># On peut y ajouter la date du jour pour permettre le suivi</span></span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a><span class="co"># writexl::write_xlsx(log, paste0(&quot;output/log_&quot;, Sys.Date(), &quot;.xlsx))</span></span></code></pre></div>
+</div>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

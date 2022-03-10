@@ -4,16 +4,16 @@
 \alias{make_log_outlier}
 \title{Make outlier log}
 \usage{
-make_log_outlier(.tbl, survey, id_col = "uuid", cols_to_keep)
+make_log_outlier(.tbl, survey, id_col, ...)
 }
 \arguments{
 \item{.tbl}{A tibble of data}
 
 \item{survey}{The survey sheet from Kobo}
 
-\item{id_col}{Survey id, usually "uuid".}
+\item{id_col}{Survey id, usually uuid}
 
-\item{cols_to_keep}{Columns to keep in the log, e.g. uuid, enum_id}
+\item{...}{Columns to keep in the log, e.g, today, enum_id}
 }
 \value{
 A log with outliers

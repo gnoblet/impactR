@@ -3,11 +3,8 @@
 ^_pkgdown\.yml$
 ^docs$
 ^pkgdown$
-<<<<<<< Updated upstream
-=======
 ^\.github$
 ^data-raw$
 ^LICENSE\.md$
 ^doc$
 ^Meta$
->>>>>>> Stashed changes
