@@ -13,7 +13,15 @@ svy_interact(design, interact_cols, group = NULL, unnest_interaction = T, ...)
 
 \item{group}{A vector of columns to group by. This is the default.}
 
+<<<<<<< Updated upstream
 \item{unnest_interaction}{Should interaction be unnested? Default to TRUE.}
+=======
+\item{unnest_interaction}{Should interaction be unnested? Default to TRUE}
+
+\item{na_rm}{Should NAs from `interact_cols` be removed? Default to TRUE}
+
+\item{stat_name}{What should the statistic's column be named? Default to "prop"}
+>>>>>>> Stashed changes
 
 \item{...}{Parameters to pass to srvyr::survey_mean()}
 }
