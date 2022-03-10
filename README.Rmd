@@ -80,8 +80,8 @@ There will be a Shiny app for cleaning and monitoring (in French for now) whose 
 
 Youpi! some documentation:
 
-- [The main vignette for the main workflow (en version)](docs/articles/1_main_workflow.html)
-- [The main vignette for the main workflow (fr version)](docs/articles/1_base_de_travail.html)
+- [The main vignette for the main workflow (en version)](https://gnoblet.github.io/impactR/articles/1_main_workflow.html)
+- [The main vignette for the main workflow (fr version)](https://gnoblet.github.io/impactR/articles/1_base_de_travail.html)
 
 ## Example
 
