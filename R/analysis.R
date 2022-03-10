@@ -44,7 +44,7 @@ rowwise_optimum <- function(.tbl, ...,  optimum = "max", max_name = "pmax", min_
 #' @param col A column to calculate proportion from
 #' @param group A quoted or unquoted vector of columns to group by. Default to NULL for no group.
 #' @param na_rm Should NAs from `col` be removed? Default to TRUE. na.rm does not work anymore within srvyr functions (workaround for now)
-#' @param stat_name What should the statistic's column be named? Default to "ratio"
+#' @param stat_name What should the statistic's column be named? Default to "prop"
 #' @param ... Parameters to pass to `srvyr::survey_prop()`
 #'
 #' @return A survey-summarized-proportion tibble
@@ -72,7 +72,7 @@ svy_prop <- function(design, col, group = NULL, na_rm = T, stat_name = "prop", .
 #' @param col A column to calculate mean from
 #' @param group A quoted or unquoted vector of columns to group by. Default to NULL for no group.
 #' @param na_rm Should NAs from `col` be removed? Default to TRUE. na.rm does not work anymore within srvyr functions (workaround for now). It should work for `survey_mean`, matter of precaution
-#' @param stat_name What should the statistic's column be named? Default to "ratio"
+#' @param stat_name What should the statistic's column be named? Default to "mean"
 #' @param ... Parameters to pass to `srvyr::survey_mean()`
 #'
 #' @return A survey-summarized-proportion tibble
@@ -101,7 +101,7 @@ svy_mean <- function(design, col, group = NULL, na_rm = T, stat_name = "mean", .
 #' @param col A column to calculate median from
 #' @param group A quoted or unquoted vector of columns to group by. Default to NULL for no group
 #' @param na_rm Should NAs from `col` be removed? Default to TRUE. na.rm does not work anymore within srvyr functions (workaround for now). It should work for `survey_median`, matter of precaution
-#' @param stat_name What should the statistic's column be named? Default to "ratio"
+#' @param stat_name What should the statistic's column be named? Default to "median"
 #' @param ... Parameters to pass to `srvyr::survey_median()`
 #'
 #' @return A survey-summarized-proportion tibble
@@ -132,7 +132,7 @@ svy_median <- function(design, col, group = NULL, na_rm = T, stat_name = "median
 #' @param group A vector of columns to group by. Default to NULL
 #' @param unnest_interaction Should interaction be unnested? Default to TRUE
 #' @param na_rm Should NAs from `interact_cols` be removed? Default to TRUE
-#' @param stat_name What should the statistic's column be named? Default to "ratio"
+#' @param stat_name What should the statistic's column be named? Default to "prop"
 #' @param ... Parameters to pass to srvyr::survey_mean()
 #'
 #' @return A survey-summarized-interaction tibble

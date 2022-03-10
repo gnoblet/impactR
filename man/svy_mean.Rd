@@ -15,7 +15,7 @@ svy_mean(design, col, group = NULL, na_rm = T, stat_name = "mean", ...)
 
 \item{na_rm}{Should NAs from `col` be removed? Default to TRUE. na.rm does not work anymore within srvyr functions (workaround for now). It should work for `survey_mean`, matter of precaution}
 
-\item{stat_name}{What should the statistic's column be named? Default to "ratio"}
+\item{stat_name}{What should the statistic's column be named? Default to "mean"}
 
 \item{...}{Parameters to pass to `srvyr::survey_mean()`}
 }
