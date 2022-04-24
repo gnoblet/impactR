@@ -84,6 +84,8 @@ log_outliers
 
 ## Journal de nettoyage des "autres"
 
+Cette fonction nécessite que la question Kobo avec la réponse "autre" soit définie comme "variable" pour la question parent et "autre_variable" pour la question parent. "autre_" peut être différent selon les outils et est défini dans la question suivante par l'argument "autre", qui est la chaîne de  caractères de chaque début de variable autre codée dans Kobo. Dans l'exemple qui suit, il s'agit de "autre_".
+
 ```{r monitor-others}
 # Obtenir les autres 
 other_cols <- other_cols(data, "autre_", id_col = uuid)
@@ -110,7 +112,7 @@ check_list
 
 Le tableur excel de vérifications doit suivre quelques règles pour pouvoir être lu par les fonctions d'impactR [ajouter la liste]. Par exemple, il est nécessaire que toutes les variables présentes dans les tests logiques (colonne 'logical_test' du tableau de vérifications) existent aussi dans les données, objet `data`. Pour cela, on peut utiliser la fonction `check_check_list`, qui vise à valider ou non un tableur de vérifications logiques [note : elle n'est pas encore robuste, mais elle permet déjà de faire un certain nombre de contrôles].
 
-Par exemple, ci-dessous la colonne `survey_duration` n'existe pas dans les données `data`. Pourtant, il y a des vérifications logiques qui la prennent en compte dans le tableur de vérifications logiques `check_list`. Si onlance la commande suivante, on obtiendrait une erreur :
+Par exemple, ci-dessous la colonne `survey_duration` n'existe pas dans les données `data`. Pourtant, il y a des vérifications logiques qui la prennent en compte dans le tableur de vérifications logiques `check_list`. Si on lance la commande suivante, on obtiendrait une erreur :
 ```{r check-check-list, eval = F}
 check_check_list(check_list, data)
 # following column/s from `question_name` is/are missing in `.tbl`: survey_duration, survey_duration, survey_duration
@@ -143,12 +145,11 @@ log_check_list
 
 
 Pour terminer, il nous suffit de combiner tous ces journaux de nettoyage en un seul. On peut ensuite l'exporter en fichier excel.
-```{r bind-export, message = F, warning = F}
+```{r bind-export, message = F, warning = F, eval = F}
 log <- list(log_outliers, log_check_list, log_others) |> 
   purrr::map(~ .x |> dplyr::mutate(dplyr::across(.fns = as.character))) |> 
   dplyr::bind_rows() |> 
   readr::type_convert()
-log
 ```
 Il est aussi possible d'utiliser la fonction `make_all_logs` qui combine ces trois fonctions et ne sort qu'un unique journal de nettoyage.
 ```{r make-all-logs, message = F, warning = F}

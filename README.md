@@ -38,7 +38,7 @@ You can install the last version of impactR from
 
 ``` r
 # install.packages("devtools")
-devtools::install_github("gnoblet/impactR")
+devtools::install_github("gnoblet/impactR", build_vignettes = T)
 ```
 
 ## Roadmap

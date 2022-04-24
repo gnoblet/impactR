@@ -31,14 +31,14 @@ svy_duration <- function(.tbl, start, end){
 #' @param .tbl A tibble
 #' @param start Start column (unquoted)
 #' @param end End column (unquoted)
-#' @param new_colname The new column name of the time difference
 #' @param ... The columns to group by, usually a locality or an enumerator id
+#' @param new_colname The new column name of the time difference
 #' @details Note: it is necessary to have 'start' and 'end' columns with no NA
 #'
 #' @return A tibble with ... removed
 #'
 #' @export
-svy_difftime <- function(.tbl, start, end, new_colname = "survey_difftime", ...){
+svy_difftime <- function(.tbl, start, end, ..., new_colname = "survey_difftime"){
 
   #-------- Checks
 
@@ -302,7 +302,7 @@ make_log_from_check_list <- function(.tbl, survey, check_list, id_col, ...) {
 #'
 #' @param .tbl A tibble of data
 #' @param other  A character vector of the start of all other column names. E.g., other = "other_"
-#' @param id_col Survey id, usually "uuid
+#' @param id_col Survey id, usually uuid
 #'
 #' @return A tibble with all "other" answers
 #'
@@ -674,6 +674,8 @@ make_log_outlier <- function(.tbl, survey, id_col, ...) {
 
   # Get all numeric cols
   num_cols <- numeric_cols(.tbl, survey)
+
+  if (length(num_cols) == 0) rlang::abort("There is no numeric columns in .tbl")
 
   # Get IQR outliers
   iqr <- num_cols |> purrr::map(~ outliers_iqr(.tbl, {{ .x }}, id_col = {{ id_col }}))

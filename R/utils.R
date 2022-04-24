@@ -39,18 +39,21 @@ abort_bad_argument <- function(arg, must, not = NULL) {
 #' @return A stop statement
 if_not_in_stop <- function(.tbl, cols, df, arg = NULL){
   if (is.null(arg)) {
-    msg <- glue::glue("following column/s is/are missing in `{df}`:")
+    msg <- glue::glue("The following column/s is/are missing in `{df}`:")
   }
   else {
-    msg <- glue::glue("following column/s from `{arg}` is/are missing in `{df}`:")
+    msg <- glue::glue("The following column/s from `{arg}` is/are missing in `{df}`:")
   }
   if (!all(cols %in% colnames(.tbl))) {
     rlang::abort(
-      paste(
-        msg,
+      c("Missing columns",
+        "*" =
         paste(
-          subvec_not_in(cols, colnames(.tbl)),
-          collapse = ", ")
+          msg,
+          paste(
+            subvec_not_in(cols, colnames(.tbl)),
+            collapse = ", ")
+        )
       )
     )
   }
@@ -68,18 +71,21 @@ if_not_in_stop <- function(.tbl, cols, df, arg = NULL){
 #' @return A stop statement
 if_vec_not_in_stop <- function(vec, cols, vec_name, arg = NULL){
   if (is.null(arg)) {
-    msg <- glue::glue("following element/s is/are missing in `{vec_name}`:")
+    msg <- glue::glue("The following element/s is/are missing in `{vec_name}`:")
   }
   else {
-    msg <- glue::glue("following element/s from `{arg}` is/are missing in `{vec_name}`:")
+    msg <- glue::glue("The following element/s from `{arg}` is/are missing in `{vec_name}`:")
   }
   if (!all(cols %in% vec)) {
     rlang::abort(
-      paste(
-        msg,
+      c("Missing elements",
+        "*" =
         paste(
-          subvec_not_in(cols, vec),
-          collapse = ", ")
+          msg,
+          paste(
+            subvec_not_in(cols, vec),
+            collapse = ", ")
+        )
       )
     )
   }
@@ -130,8 +136,8 @@ subvec_not_in <- function(vector, set){
 #' @export
 import_csv <- function(path, delim = ",", uuid = NULL, ...){
 
-  if (rlang::is_missing(path)) {stop("Please provide the path to the CSV file.")}
-  if (!file.exists(path)) {stop("This CSV file does not exist.")}
+  if (rlang::is_missing(path)) {rlang::abort("Please provide the path to the CSV file")}
+  if (!file.exists(path)) {rlang::abort("This CSV file does not exist")}
 
   df <- readr::read_delim(path, delim = delim, guess_max = 21474836, ...) |>
     readr::type_convert() |>
@@ -161,9 +167,9 @@ import_csv <- function(path, delim = ",", uuid = NULL, ...){
 import_xlsx <- function(path, sheet = 1, uuid = NULL, ...){
 
   # Is path provided?
-  if (rlang::is_missing(path)) {stop("Please provide the path to the CSV file.")}
+  if (rlang::is_missing(path)) {rlang::abort("Please provide the path to the CSV file")}
   # Does file exist?
-  if (!file.exists(path)) {stop("This XLSX file does not exist.")}
+  if (!file.exists(path)) {rlang::abort("This XLSX file does not exist")}
 
   # Read, type convert, clean names
   df <- readxl::read_xlsx(path, sheet = sheet, guess_max = 21474836, ...) |>
@@ -172,7 +178,7 @@ import_xlsx <- function(path, sheet = 1, uuid = NULL, ...){
 
   # Useful for kobo loops, change submission_uuid name to something, e.g. "uuid"
   if(!is.null(uuid)) {
-    if(!("submission_uuid" %in% colnames(df))) {stop("'submission_uuid' is not a column name")}
+    if_not_in_stop(df, "submission_uuid", "the dataset", "submission_uuid")
     df <- df |> dplyr::rename(uuid = !!rlang::sym("submission_uuid"))
   }
 
@@ -193,9 +199,9 @@ import_xlsx <- function(path, sheet = 1, uuid = NULL, ...){
 import_full_xlsx <- function(path = NULL, uuid = NULL, ...){
 
   # Is path provided?
-  if (rlang::is_missing(path)) {stop("Please provide the path to the CSV file.")}
+  if (rlang::is_missing(path)) {rlang::abort("Please provide the path to the CSV file")}
   # Does file exist?
-  if (!file.exists(path)) {stop("This XLSX file does not exist.")}
+  if (!file.exists(path)) {rlang::abort("This XLSX file does not exist")}
 
   # Get sheet names
   sheet_names <- readxl::excel_sheets(path)
@@ -215,17 +221,18 @@ import_full_xlsx <- function(path = NULL, uuid = NULL, ...){
 #' @title Remove cols from tibble
 #'
 #' @param .tbl A tibble
-#' @param cols A vector of column names (quoted)
+#' @param ... Column names
 #'
 #' @return A tibble with columns removed
 #'
 #' @export
-rm_cols <- function(.tbl, cols) {
+rm_cols <- function(.tbl, ...) {
 
-  if_not_in_stop(.tbl, cols, ".tbl", "cols")
+  quoted_cols <- purrr::map_chr(rlang::enquos(...), rlang::as_name)
+  if_not_in_stop(.tbl, quoted_cols, ".tbl", arg = "...")
 
   .tbl |>
-    dplyr::select(- {{ cols }})
+    dplyr::select(- dplyr::all_of(quoted_cols))
 }
 
 
@@ -235,19 +242,20 @@ rm_cols <- function(.tbl, cols) {
 #' @param .tbl A tibble
 #' @param values A vector of values
 #' @param to_value A value
-#' @param cols A vector of column names (quoted)
+#' @param ... Column names
 #'
 #' @return A tibble with recoded values to one value
 #'
 #' @details If the column type is a character and the replacement a numeric, then the numeric is coerced to a character. If the column type is a numeric and the replacement is a character, then the column is coerced to character. NAs will remains NAs of the right type.
 #'
 #' @export
-rec_values <- function(.tbl, values, to_value, cols){
+rec_values <- function(.tbl, values, to_value, ...){
 
-  if_not_in_stop(.tbl, cols, ".tbl", "cols")
+  quoted_cols <- purrr::map_chr(rlang::enquos(...), rlang::as_name)
+  if_not_in_stop(.tbl, quoted_cols, ".tbl", arg = "...")
 
   .tbl |>
-    dplyr::mutate(dplyr::across(.cols = {{ cols }}, ~ replace(., . %in% values, to_value)))
+    dplyr::mutate(dplyr::across(.cols = dplyr::all_of(quoted_cols), ~ replace(., . %in% values, to_value)))
 }
 
 
@@ -255,17 +263,17 @@ rec_values <- function(.tbl, values, to_value, cols){
 #' @title Replace many types of NAs of a tibble to NA
 #'
 #' @param .tbl A tibble
-#' @param cols A vector of column names (quoted)
+#' @param ... Column names
 #'
 #' @return A tibble with one type of NAs
 #'
 #' @export
-rec_na <- function(.tbl, cols){
+rec_na <- function(.tbl, ...){
   nas <- c(NULL, "NULL", "N/A", "n/a", 999, 998, 888, " ", Inf, -Inf,
            9999, "(vide)", "(empty)", "d/m", "", "NA", "na", "", " ")
 
   .tbl |>
-    rec_values(nas, NA, {{ cols }})
+    rec_values(nas, NA, ...)
 }
 
 
@@ -424,16 +432,19 @@ left_joints <- function(list, ...) {
 #'
 #' @param tibble_a A tibble to remove columns from
 #' @param tibble_b A tibble to extract columns names from
-#' @param cols Columns to keep in tibble.
+#' @param ... Columns to keep in tibble.
 #'
 #' @return A tibble with some columns removed
 #'
 #' @export
-diff_tibbles <- function(tibble_a, tibble_b, cols){
+diff_tibbles <- function(tibble_a, tibble_b, ...){
 
-  quoted_cols <- purrr::map_chr(rlang::enquos(cols), rlang::as_name)
+  #-------- Checks
 
+  quoted_cols <- purrr::map_chr(rlang::enquos(...), rlang::as_name)
   if_not_in_stop(tibble_b, quoted_cols, "tibble_b", arg = "cols")
+
+  #-------- Make the diff
 
   cols_to_remove <- tibble_b |>
     dplyr::select(- dplyr::all_of(quoted_cols)) |>

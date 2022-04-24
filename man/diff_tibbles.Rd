@@ -4,14 +4,14 @@
 \alias{diff_tibbles}
 \title{Remove cols from a tibble that exists in another tibble}
 \usage{
-diff_tibbles(tibble_a, tibble_b, cols)
+diff_tibbles(tibble_a, tibble_b, ...)
 }
 \arguments{
 \item{tibble_a}{A tibble to remove columns from}
 
 \item{tibble_b}{A tibble to extract columns names from}
 
-\item{cols}{Columns to keep in tibble.}
+\item{...}{Columns to keep in tibble.}
 }
 \value{
 A tibble with some columns removed
