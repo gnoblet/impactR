@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">impactR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.7</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -55,7 +55,7 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">get_choices</span><span class="op">(</span><span class="va">survey</span>, <span class="va">choices</span>, <span class="va">col</span>, conc <span class="op">=</span> <span class="cn">T</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">get_choices</span><span class="op">(</span><span class="va">survey</span>, <span class="va">choices</span>, <span class="va">col</span>, conc <span class="op">=</span> <span class="cn">T</span>, label <span class="op">=</span> <span class="cn">F</span><span class="op">)</span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -63,11 +63,13 @@
     <dl><dt>survey</dt>
 <dd><p>A survey sheet from Kobo (already split with columns list_name and name present)</p></dd>
 <dt>choices</dt>
-<dd><p>A choices sheet from Kobo (with column list_name and name)</p></dd>
+<dd><p>A choices sheet from Kobo (with column list_name, label and name)</p></dd>
 <dt>col</dt>
 <dd><p>A quoted column name</p></dd>
 <dt>conc</dt>
-<dd><p>Should choices be concatenated to column name? Default to true.</p></dd>
+<dd><p>Should choices be concatenated to column name? Default to TRUE. Can only be used together swith label = F.</p></dd>
+<dt>label</dt>
+<dd><p>Should the labels be returned?</p></dd>
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
