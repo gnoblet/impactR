@@ -550,14 +550,15 @@ get_multiple_and_other_parent <- function(.tbl, survey, other){
 #' @title Get choices from survey name (and paste them if you want!)
 #'
 #' @param survey A survey sheet from Kobo (already split with columns list_name and name present)
-#' @param choices A choices sheet from Kobo (with column list_name and name)
+#' @param choices A choices sheet from Kobo (with column list_name, label and name)
 #' @param col A quoted column name
-#' @param conc Should choices be concatenated to column name? Default to true.
+#' @param conc Should choices be concatenated to column name? Default to TRUE. Can only be used together swith label = F.
+#' @param label Should the labels be returned?
 #'
 #' @return A character vector of choices or pasted to `col` choices with sep "_"
 #'
 #' @export
-get_choices <- function(survey, choices, col, conc = T){
+get_choices <- function(survey, choices, col, conc = T, label = F){
 
   col_name <- rlang::as_name(rlang::enquo(col))
 
@@ -566,12 +567,19 @@ get_choices <- function(survey, choices, col, conc = T){
   to_return <- survey |>
     dplyr::filter(.data$name == col_name) |>
     dplyr::select(.data$list_name) |>
-    dplyr::left_join(choices, by = "list_name") |>
-    dplyr::pull(.data$name)
+    dplyr::left_join(choices, by = "list_name")
 
-  if (rlang::is_true(conc)) {
-    to_return <- stringr::str_c(col, to_return, sep = "_")
-  }
+  if (!label) {
+    to_return <- to_return |> dplyr::pull(.data$name)
+
+    if (rlang::is_true(conc)) {
+      to_return <- stringr::str_c(col, to_return, sep = "_")
+    }} else {
+      to_return <- to_return |>
+        dplyr::pull(.data$label)
+    }
+
+
 
   return(to_return)
 }
@@ -629,3 +637,190 @@ named_group_split <- function (.tbl, group){
 }
 
 
+
+
+
+
+
+#' @title Label select_multiple question
+#'
+#' @param data Some kobo data
+#' @param survey Some survey sheet, with a split 'type' column, e.g. with `split_survey(type)`. It must have columns 'list_name' and 'name'
+#' @param choices The corresponding choices sheet; it must have columns name and label
+#' @param id_col The id column; usually uuid
+#' @param col The select_multiple column to labelize
+#' @param return_df Default returns the updated dataframe; "id_col" returns a dataframe with col and id_col; and, "vector" returns
+#'
+#' @return A labelled dataframe, sub-dataframe or vector
+#'
+#' @export
+label_select_multiple <- function(data, survey, choices, id_col, col, return_df = NULL){
+
+  # to ensure quoted or unquoted columns can be passed
+  col <- rlang::sym(rlang::ensym(col))
+
+  dict <- tibble::tibble(choices_name = get_choices(survey, choices, {{ col }}, conc = F),
+                         choices_label = get_choices(survey, choices, {{ col }}, label = T))
+
+  dict <- rlang::set_names(dict$choices_label, dict$choices_name)
+
+  if (rlang::is_na(dict)) {
+    recoded <- data
+
+    rlang::warn(paste0(
+      "There was no choices value to recode for column: ",
+      rlang::as_name(rlang::enquo(col))
+    ))
+  } else {
+    recoded <- data |>
+      tidyr::separate_rows({{ col }}, sep = " ") |>
+      dplyr::mutate("{{ col }}" := dplyr::recode({{ col }}, !!!dict)) |>
+      dplyr::group_by({{ id_col }}) |>
+      dplyr::mutate("{{ col }}" := paste0({{ col }}, collapse = " "))  |>
+      dplyr::distinct() |>
+      dplyr::ungroup()
+  }
+
+  if (!rlang::is_null(return_df)) {
+    if (return_df == "vector"){
+      recoded <- recoded |> dplyr::pull({{ col }})
+    } else if (return_df == "id_col") {
+      recoded <- recoded |> dplyr::select({{ id_col }}, {{ col }})
+    }
+  }
+  return(recoded)
+
+}
+
+
+
+#' @title Label all select_multiple questions
+#'
+#' @param data Some kobo data
+#' @param survey Some survey sheet, with a split 'type' column, e.g. with `split_survey(type)`. It must have columns 'list_name' and 'name'
+#' @param choices The corresponding choices sheet; it must have columns name and label
+#' @param id_col The id column; usually uuid
+#'
+#' @return Select-multiple labelled dataframe
+#'
+#' @export
+label_all_select_multiple <- function(data, survey, choices, id_col){
+
+  id_col_name <- rlang::as_name(rlang::enquo(id_col))
+  col_names <- colnames(data)
+
+  select_multiples  <- survey |>
+    dplyr::filter(type == "select_multiple" & name %in% colnames(data)) |>
+    dplyr::pull(name)
+
+  recoded <- purrr::map(select_multiples, ~ label_select_multiple(data, survey, choices, {{ id_col }}, {{ .x }}, "id_col")) |>
+    left_joints({{ id_col }})
+
+  data <- diff_tibbles(data, recoded, {{ id_col }})
+
+  recoded <- data |>
+    dplyr::left_join(recoded, by = id_col_name) |>
+    dplyr::relocate(dplyr::all_of(col_names))
+
+  return(recoded)
+}
+
+
+
+#' @title Label select_one question
+#'
+#' @param data Some kobo data
+#' @param survey Some survey sheet, with a split 'type' column, e.g. with `split_survey(type)`. It must have columns 'list_name' and 'name'
+#' @param choices The corresponding choices sheet; it must have columns name and label
+#' @param id_col The id column; usually uuid
+#' @param col The select_one column to labelize
+#' @param return_df Default returns the updated dataframe; "id_col" returns a dataframe with col and id_col; and, "vector" returns
+#'
+#' @return A labelled dataframe, sub-dataframe or vector
+#'
+#' @export
+label_select_one <- function(data, survey, choices, id_col, col, return_df = NULL){
+
+  # to ensure quoted or unquoted columns can be passed
+  col <- rlang::sym(rlang::ensym(col))
+
+  dict <- tibble::tibble(choices_name = get_choices(survey, choices, {{ col }}, conc = F),
+                         choices_label = get_choices(survey, choices, {{ col }}, label = T))
+
+  dict <- rlang::set_names(dict$choices_label, dict$choices_name)
+
+  if (rlang::is_na(dict)) {
+    recoded <- data
+
+    rlang::warn(paste0(
+      "There was no choices value to recode for column: ",
+      rlang::as_name(rlang::enquo(col))
+    ))
+  } else {
+    recoded <- data |>
+      dplyr::mutate("{{ col }}" := dplyr::recode({{ col }}, !!!dict))
+  }
+
+  if (!rlang::is_null(return_df)) {
+    if (return_df == "vector"){
+      recoded <- recoded |> dplyr::pull({{ col }})
+    } else if (return_df == "id_col") {
+      recoded <- recoded |> dplyr::select({{ id_col }}, {{ col }})
+    }
+  }
+  return(recoded)
+
+}
+
+
+
+#' @title Label all selecy_one questions
+#'
+#' @param data Some kobo data
+#' @param survey Some survey sheet, with a split 'type' column, e.g. with `split_survey(type)`. It must have columns 'list_name' and 'name'
+#' @param choices The corresponding choices sheet; it must have columns name and label
+#' @param id_col The id column; usually uuid
+#'
+#' @return Select-multiple labelled dataframe#'
+#'
+#' @export
+label_all_select_one <- function(data, survey, choices, id_col){
+
+  id_col_name <- rlang::as_name(rlang::enquo(id_col))
+  col_names <- colnames(data)
+
+  select_multiples  <- survey |>
+    dplyr::filter(type == "select_one" & name %in% colnames(data)) |>
+    dplyr::pull(name)
+
+  recoded <- purrr::map(select_multiples, ~ label_select_one(data, survey, choices, {{ id_col }}, {{ .x }}, "id_col")) |>
+    left_joints({{ id_col }})
+
+  data <- diff_tibbles(data, recoded, {{ id_col }})
+
+  recoded <- data |>
+    dplyr::left_join(recoded, by = id_col_name) |>
+    dplyr::relocate(dplyr::all_of(col_names))
+
+  return(recoded)
+}
+
+
+
+#' @title Label all select_one and select_multiple questions
+#'
+#' @param data Some kobo data
+#' @param survey Some survey sheet, with a split 'type' column, e.g. with `split_survey(type)`. It must have columns 'list_name' and 'name'
+#' @param choices The corresponding choices sheet; it must have columns name and label
+#' @param id_col The id column; usually uuid
+#'
+#' @return Select-multiple labelled dataframe
+#'
+#' @export
+label <- function(data, survey, choices, id_col) {
+
+  data |>
+    label_all_select_multiple(survey, choices, {{ id_col }}) |>
+    label_all_select_one(survey, choices, {{ id_col }})
+
+}
