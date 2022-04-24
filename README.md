@@ -76,9 +76,9 @@ and based on older versions of `impactR.`
 Youpi! some documentation:
 
 -   [The main vignette for the main workflow (en
-    version)](https://gnoblet.github.io/impactR/articles/1_main_workflow.html)
+    version)](https://gnoblet.github.io/impactR/articles/base_de_travail.html)
 -   [The main vignette for the main workflow (fr
-    version)](https://gnoblet.github.io/impactR/articles/1_base_de_travail.html)
+    version)](https://gnoblet.github.io/impactR/articles/main_workflow.html)
 
 ## Example
 

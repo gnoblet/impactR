@@ -699,8 +699,8 @@ label_all_select_multiple <- function(data, survey, choices, id_col){
   col_names <- colnames(data)
 
   select_multiples  <- survey |>
-    dplyr::filter(type == "select_multiple" & name %in% colnames(data)) |>
-    dplyr::pull(name)
+    dplyr::filter(.data$type == "select_multiple" & .data$name %in% colnames(data)) |>
+    dplyr::pull(.data$name)
 
   recoded <- purrr::map(select_multiples, ~ label_select_multiple(data, survey, choices, {{ id_col }}, {{ .x }}, "id_col")) |>
     left_joints({{ id_col }})
@@ -779,8 +779,8 @@ label_all_select_one <- function(data, survey, choices, id_col){
   col_names <- colnames(data)
 
   select_multiples  <- survey |>
-    dplyr::filter(type == "select_one" & name %in% colnames(data)) |>
-    dplyr::pull(name)
+    dplyr::filter(.data$type == "select_one" & .data$name %in% colnames(data)) |>
+    dplyr::pull(.data$name)
 
   recoded <- purrr::map(select_multiples, ~ label_select_one(data, survey, choices, {{ id_col }}, {{ .x }}, "id_col")) |>
     left_joints({{ id_col }})

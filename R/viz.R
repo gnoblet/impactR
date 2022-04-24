@@ -118,7 +118,8 @@ theme_hist_simple_reach <- function(family = "Leelawadee UI") {
 
 #' @title Function to extract reach colors as hex codes
 #'
-#' @param ... Character names of reach colors. If NULL? returns all colors.
+#' @param ... Character names of reach colors. If NULL returns all colors
+#' @param unnamed Should the output vector be unnamed? Default to T
 #'
 #' @return An hex code
 #'

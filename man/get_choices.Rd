@@ -4,16 +4,18 @@
 \alias{get_choices}
 \title{Get choices from survey name (and paste them if you want!)}
 \usage{
-get_choices(survey, choices, col, conc = T)
+get_choices(survey, choices, col, conc = T, label = F)
 }
 \arguments{
 \item{survey}{A survey sheet from Kobo (already split with columns list_name and name present)}
 
-\item{choices}{A choices sheet from Kobo (with column list_name and name)}
+\item{choices}{A choices sheet from Kobo (with column list_name, label and name)}
 
 \item{col}{A quoted column name}
 
-\item{conc}{Should choices be concatenated to column name? Default to true.}
+\item{conc}{Should choices be concatenated to column name? Default to TRUE. Can only be used together swith label = F.}
+
+\item{label}{Should the labels be returned?}
 }
 \value{
 A character vector of choices or pasted to `col` choices with sep "_"
