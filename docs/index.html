@@ -56,9 +56,12 @@
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
-    <a class="dropdown-item" href="articles/1_base_de_travail.html">Base de travail avec impactR</a>
-    <a class="dropdown-item" href="articles/1_main_workflow.html">Some workflow</a>
+    <a class="dropdown-item" href="articles/base_de_travail.html">Base de travail avec impactR</a>
+    <a class="dropdown-item" href="articles/main_workflow.html">Some workflow</a>
   </div>
+</li>
+<li class="nav-item">
+  <a class="nav-link" href="news/index.html">Changelog</a>
 </li>
       </ul>
 <form class="form-inline my-2 my-lg-0" role="search">
@@ -166,12 +169,16 @@ more plotting functions</li>
 <li><a href="https://gnoblet.github.io/impactR/articles/base_de_travail.html">The main vignette for the main workflow (en version)</a></li>
 <li><a href="https://gnoblet.github.io/impactR/articles/main_workflow.html">The main vignette for the main workflow (fr version)</a></li>
 </ul>
+<p>In R, use:</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/vignette.html" class="external-link">vignette</a></span><span class="op">(</span><span class="st">"base_de_travail"</span>, <span class="st">"impactR"</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/utils/vignette.html" class="external-link">vignette</a></span><span class="op">(</span><span class="st">"main_workflow"</span>, <span class="st">"impactR"</span><span class="op">)</span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="example">Example<a class="anchor" aria-label="anchor" href="#example"></a>
 </h2>
 <p>These are basics example of daily uses:</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Attach all functions, equivalent to library("impactR")</span>
 <span class="fu">box</span><span class="fu">::</span><span class="fu"><a href="http://klmr.me/box/reference/use.html" class="external-link">use</a></span><span class="op">(</span><span class="va">impactR</span><span class="op">[</span><span class="va">...</span><span class="op">]</span><span class="op">)</span>
 

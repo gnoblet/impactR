@@ -80,6 +80,13 @@ Youpi! some documentation:
 -   [The main vignette for the main workflow (fr
     version)](https://gnoblet.github.io/impactR/articles/main_workflow.html)
 
+In R, use:
+
+``` r
+vignette("base_de_travail", "impactR")
+vignette("main_workflow", "impactR")
+```
+
 ## Example
 
 These are basics example of daily uses:

@@ -22,8 +22,7 @@ desc = setNames(as.list(desc), colnames(desc))
 
 
 `impactR` started as a simple project: mainly a reminder of
-totally-perfectible functions used and made on the go for the Burkina
-Faso mission in 2021.
+totally-perfectible functions used and made on the go for the Burkina Faso mission in 2021.
 
 It became broader, aiming now to ease data teams daily R work as follows:
 
@@ -82,6 +81,13 @@ Youpi! some documentation:
 
 - [The main vignette for the main workflow (en version)](https://gnoblet.github.io/impactR/articles/base_de_travail.html)
 - [The main vignette for the main workflow (fr version)](https://gnoblet.github.io/impactR/articles/main_workflow.html)
+
+In R, use:
+```{r, eval = F}
+vignette("base_de_travail", "impactR")
+vignette("main_workflow", "impactR")
+```
+
 
 ## Example
 
