@@ -4,7 +4,7 @@
 \alias{update_rows_from_list}
 \title{Update rows from list}
 \usage{
-update_rows_from_list(.tbl, .list, id_col = "uuid")
+update_rows_from_list(.tbl, .list, id_col)
 }
 \arguments{
 \item{.tbl}{A tibble}

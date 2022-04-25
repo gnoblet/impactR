@@ -4,7 +4,7 @@
 \alias{remove_duplicate}
 \title{Remove duplicates}
 \usage{
-remove_duplicate(.tbl, log, id_col = "uuid")
+remove_duplicate(.tbl, log, id_col)
 }
 \arguments{
 \item{.tbl}{A tibble}

@@ -4,7 +4,7 @@
 \alias{recode_other_from_log}
 \title{Recode "other_" from log}
 \usage{
-recode_other_from_log(.tbl, log, id_col = "uuid")
+recode_other_from_log(.tbl, log, id_col, other)
 }
 \arguments{
 \item{.tbl}{A tibble}
@@ -12,6 +12,8 @@ recode_other_from_log(.tbl, log, id_col = "uuid")
 \item{log}{A cleaning log}
 
 \item{id_col}{The column id, usually "uuid"}
+
+\item{other}{A character vector of the start of all other column names. E.g., other = "other_"}
 }
 \value{
 A tibble with "other_" recoded

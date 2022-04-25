@@ -1,5 +1,12 @@
 # impactR 0.7
 
+## Minor bug fixes
+
+* `clean_all()` and all internals functions now have tidy eval and take into acocunt the "other" string (#30)
+
+
+# impactR 0.7
+
 ## New features
 
 * Added a `NEWS.md` file to track changes to the package.

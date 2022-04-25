@@ -4,7 +4,7 @@
 \alias{clean_all}
 \title{Clean all}
 \usage{
-clean_all(.tbl, log, survey, choices, id_col)
+clean_all(.tbl, log, survey, choices, id_col, other)
 }
 \arguments{
 \item{.tbl}{A tibble}
@@ -15,7 +15,9 @@ clean_all(.tbl, log, survey, choices, id_col)
 
 \item{choices}{A choices sheet from Kobo}
 
-\item{id_col}{Usually uuid... to count.}
+\item{id_col}{Usually uuid... to count}
+
+\item{other}{A character vector of the start of all other column names. E.g., other = "other_"}
 }
 \value{
 A cleaned tibble

@@ -107,9 +107,10 @@ check_cleaning_log <- function(log, .tbl){
 #' @importFrom rlang .data
 #'
 #' @export
-remove_from_log <- function(.tbl, log, id_col = "uuid"){
+remove_from_log <- function(.tbl, log, id_col){
 
   id_col_name <- rlang::as_name(rlang::enquo(id_col))
+  if_not_in_stop(.tbl, id_col_name, ".tbl", "id_col")
 
   .tbl |>
     dplyr::anti_join(log |> dplyr::filter(.data$action == "remove"), by = id_col_name)
@@ -128,9 +129,10 @@ remove_from_log <- function(.tbl, log, id_col = "uuid"){
 #' @description Removes duplicated surveys from .tbl where column "action" in the log is set to "duplicate".
 #'
 #' @export
-remove_duplicate <- function(.tbl, log, id_col = "uuid"){
+remove_duplicate <- function(.tbl, log, id_col){
 
   id_col_name <- rlang::as_name(rlang::enquo(id_col))
+  if_not_in_stop(.tbl, id_col_name, ".tbl", "id_col")
 
   to_remove <- log |>
     dplyr::filter(.data$action == "duplicate")
@@ -152,9 +154,6 @@ remove_duplicate <- function(.tbl, log, id_col = "uuid"){
 
 
 
-
-
-
 #' @title Update rows from list
 #'
 #' @param .tbl A tibble
@@ -164,11 +163,13 @@ remove_duplicate <- function(.tbl, log, id_col = "uuid"){
 #' @return A tibble with values updated
 #'
 #' @export
-update_rows_from_list <- function(.tbl, .list, id_col = "uuid"){
+update_rows_from_list <- function(.tbl, .list, id_col){
 
   id_col_name <- rlang::as_name(rlang::enquo(id_col))
+  if_not_in_stop(.tbl, id_col_name, ".tbl", "id_col")
+
   for (i in 1:length(.list)){
-    .tbl <- dplyr::rows_update(.tbl, .list[[i]], by = id_col)
+    .tbl <- dplyr::rows_update(.tbl, .list[[i]], by = id_col_name)
   }
   return(.tbl)
 }
@@ -181,7 +182,6 @@ update_rows_from_list <- function(.tbl, .list, id_col = "uuid"){
 #' @param log A cleaning log
 #' @param id_col The column id, usually "uuid"
 #' @param type Either "character" or "double"
-#'
 #' @return A tibble with values modified
 #'
 #' @importFrom rlang .data
@@ -189,18 +189,21 @@ update_rows_from_list <- function(.tbl, .list, id_col = "uuid"){
 #' @export
 modify_from_log <- function(.tbl, log, id_col, type){
 
+  id_col_name <- rlang::as_name(rlang::enquo(id_col))
+  if_not_in_stop(.tbl, id_col_name, ".tbl", "id_col")
+
   to_modify <- log |>
     dplyr::filter(.data$action == "modify" & .data$id_check != "other" & .data$type == type)
   if (nrow(to_modify) > 0) {
     to_modify <- to_modify |>
-      dplyr::select(.data$id_check, !!rlang::sym(id_col), .data$question_name, .data$new_value) |>
-    dplyr::group_split(.data$question_name) |>
-    purrr::map(~ .x |>
-                 tidyr::pivot_wider(!!rlang::sym(id_col),
-                                    names_from = .data$question_name,
-                                    values_from = .data$new_value))
+      dplyr::select(.data$id_check, {{ id_col }}, .data$question_name, .data$new_value) |>
+      dplyr::group_split(.data$question_name) |>
+      purrr::map(~ .x |>
+                   tidyr::pivot_wider(!!rlang::enquo(id_col),
+                                      names_from = .data$question_name,
+                                      values_from = .data$new_value))
     # Finition
-    .tbl <- .tbl |> update_rows_from_list(to_modify)
+    .tbl <- .tbl |> update_rows_from_list(to_modify, {{ id_col }})
   }
 
     return(.tbl)
@@ -214,29 +217,33 @@ modify_from_log <- function(.tbl, log, id_col, type){
 #' @param .tbl A tibble
 #' @param log A cleaning log
 #' @param id_col The column id, usually "uuid"
+#' @param other  A character vector of the start of all other column names. E.g., other = "other_"
 #'
 #' @return A tibble with "other_" recoded
 #'
 #' @importFrom rlang .data
 #'
 #' @export
-recode_other_from_log <- function(.tbl, log, id_col = "uuid"){
+recode_other_from_log <- function(.tbl, log, id_col, other){
+
+  id_col_name <- rlang::as_name(rlang::enquo(id_col))
+  if_not_in_stop(.tbl, id_col_name, ".tbl", "id_col")
 
   to_recode <- log |>
-    dplyr::filter(.data$action == "modify" & .data$id_check == "other")
+    dplyr::filter(.data$action == "modify" & .data$id_check == other)
 
   if (nrow(to_recode) > 0) {
     to_recode <- to_recode |>
-      dplyr::select(.data$id_check, !!rlang::sym(id_col), .data$question_name, .data$new_value) |>
+      dplyr::select(.data$id_check, {{ id_col }}, .data$question_name, .data$new_value) |>
       dplyr::group_split(.data$question_name) |>
       purrr::map(~ .x |>
                    dplyr::mutate(new_value = as.character(.data$new_value))) |>
       purrr::map(~ .x |>
-                   tidyr::pivot_wider(!!rlang::sym(id_col),
+                   tidyr::pivot_wider({{ id_col }},
                                       names_from = .data$question_name,
                                       values_from = .data$new_value))
 
-    .tbl <- .tbl |> update_rows_from_list(to_recode)
+    .tbl <- .tbl |> update_rows_from_list(to_recode, {{ id_col }})
   }
 
   return(.tbl)
@@ -250,26 +257,31 @@ recode_other_from_log <- function(.tbl, log, id_col = "uuid"){
 #' @param .tbl A tibble
 #' @param log A cleaning log
 #' @param id_col The column id, usually "uuid"
+#' @param other  A character vector of the start of all other column names. E.g., other = "other_"
 #'
 #' @return A tibble parent "other_" recoded
 #'
 #' @importFrom rlang .data
 #'
 #' @export
-recode_other_parent_from_log <- function(.tbl, log, id_col = "uuid"){
+recode_other_parent_from_log <- function(.tbl, log, id_col, other){
+
+  id_col_name <- rlang::as_name(rlang::enquo(id_col))
+  if_not_in_stop(.tbl, id_col_name, ".tbl", "id_col")
+
   to_recode <- log |>
-    dplyr::filter(.data$action == "modify" & .data$id_check == "other")
+    dplyr::filter(.data$action == "modify" & .data$id_check ==  other)
 
   if (nrow(to_recode) > 0) {
     to_recode <- to_recode |>
-      dplyr::select(.data$id_check, !!rlang::sym(id_col), .data$question_name, .data$other_parent_question, .data$other_new_value) |>
+      dplyr::select(.data$id_check, {{ id_col }}, .data$question_name, .data$other_parent_question, .data$other_new_value) |>
       dplyr::group_split(.data$question_name) |>
       purrr::map(~ .x |>
-                   tidyr::pivot_wider(!!rlang::sym(id_col),
+                   tidyr::pivot_wider({{ id_col }},
                                       names_from = .data$other_parent_question,
                                       values_from = .data$other_new_value)
       )
-    .tbl <- .tbl |>  update_rows_from_list(to_recode)
+    .tbl <- .tbl |>  update_rows_from_list(to_recode, {{ id_col }})
   }
 
   return(.tbl)
@@ -317,17 +329,17 @@ count_occ <- function(.tbl, id_col, col){
 #' @param survey A survey sheet from Kobo (with column "type" split)
 #' @param choices A choices sheet from Kobo
 #' @param id_col Usually uuid... to count
-#' @param return Either "count" (a list of counts of select_multiple) or "updated" (the updated .tbl).
+#' @param output Either "count" (a list of counts of select_multiple) or "updated" (the updated .tbl).
 #'
 #' @return An updated tibble or a list of occurences
 #'
 #' @export
-count_occ_all <- function(.tbl, survey, choices, id_col, return = "updated"){
+count_occ_all <- function(.tbl, survey, choices, id_col, output = "updated"){
 
   # Initialize -----------------------------
 
   # Return's choice
-  if (!(return %in% c("count", "updated"))) {rlang::abort("`return` must either be 'count' or 'updated'")}
+  if (!(output %in% c("count", "updated"))) {rlang::abort("`return` must either be 'count' or 'updated'")}
 
   # Is id_col in .tbl?
   id_col_name <- rlang::as_name(rlang::enquo(id_col))
@@ -357,11 +369,12 @@ count_occ_all <- function(.tbl, survey, choices, id_col, return = "updated"){
 
   # Simple count return -----------------------------
 
-  if (return == "count"){
+  if (output == "count"){
 
     return(to_return)
 
-  } else if (return == "updated") {
+  }
+  else if (output == "updated") {
 
 
   # Add missing with zeros and bind all -----------------------------
@@ -423,22 +436,22 @@ count_occ_all <- function(.tbl, survey, choices, id_col, return = "updated"){
 #' @param log A log, which contains a column "action".
 #' @param survey A survey sheet from Kobo (with column "type" split)
 #' @param choices A choices sheet from Kobo
-#' @param id_col Usually uuid... to count.
+#' @param id_col Usually uuid... to count
+#' @param other  A character vector of the start of all other column names. E.g., other = "other_"
 #'
 #' @details Apply all cleaning functions in the right order, modify character and double variables, recode others and other parents, remove duplicates, remove surveys, recount occurences. It uses default for count_occ_all.
 #'
 #' @return A cleaned tibble
 #'
 #' @export
-clean_all <- function(.tbl, log, survey, choices, id_col){
+clean_all <- function(.tbl, log, survey, choices, id_col, other){
   .tbl <- modify_from_log(.tbl, log, {{ id_col }}, "character")
   .tbl <- modify_from_log(.tbl, log, {{ id_col }}, "double")
-  .tbl <- recode_other_from_log(.tbl, log, id_col = rlang::as_name(rlang::enquo(id_col)))
-  .tbl <- recode_other_parent_from_log(.tbl, log, id_col = rlang::as_name(rlang::enquo(id_col)))
-  .tbl <- remove_duplicate(.tbl, log, id_col = rlang::as_name(rlang::enquo(id_col)))
-  .tbl <- remove_from_log(.tbl, log, id_col = rlang::as_name(rlang::enquo(id_col)))
-  .tbl <- count_occ_all(.tbl, survey, choices, {{ id_col }}, return = "updated")
+  .tbl <- recode_other_from_log(.tbl, log, {{ id_col }}, other)
+  .tbl <- recode_other_parent_from_log(.tbl, log, {{ id_col }}, other)
+  .tbl <- remove_duplicate(.tbl, log, {{ id_col }})
+  .tbl <- remove_from_log(.tbl, log, {{ id_col }})
+  .tbl <- count_occ_all(.tbl, survey, choices, {{ id_col }}, output = "updated")
 
   return(.tbl)
 }
-
