@@ -4,7 +4,7 @@
 \alias{remove_from_log}
 \title{Delete from log}
 \usage{
-remove_from_log(.tbl, log, id_col = "uuid")
+remove_from_log(.tbl, log, id_col)
 }
 \arguments{
 \item{.tbl}{A tibble}

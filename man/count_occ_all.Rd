@@ -4,7 +4,7 @@
 \alias{count_occ_all}
 \title{Count all occurences}
 \usage{
-count_occ_all(.tbl, survey, choices, id_col, return = "updated")
+count_occ_all(.tbl, survey, choices, id_col, output = "updated")
 }
 \arguments{
 \item{.tbl}{A tibble}
@@ -15,7 +15,7 @@ count_occ_all(.tbl, survey, choices, id_col, return = "updated")
 
 \item{id_col}{Usually uuid... to count}
 
-\item{return}{Either "count" (a list of counts of select_multiple) or "updated" (the updated .tbl).}
+\item{output}{Either "count" (a list of counts of select_multiple) or "updated" (the updated .tbl).}
 }
 \value{
 An updated tibble or a list of occurences

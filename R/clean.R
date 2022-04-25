@@ -182,7 +182,6 @@ update_rows_from_list <- function(.tbl, .list, id_col){
 #' @param log A cleaning log
 #' @param id_col The column id, usually "uuid"
 #' @param type Either "character" or "double"
-#'
 #' @return A tibble with values modified
 #'
 #' @importFrom rlang .data
@@ -218,6 +217,7 @@ modify_from_log <- function(.tbl, log, id_col, type){
 #' @param .tbl A tibble
 #' @param log A cleaning log
 #' @param id_col The column id, usually "uuid"
+#' @param other  A character vector of the start of all other column names. E.g., other = "other_"
 #'
 #' @return A tibble with "other_" recoded
 #'
@@ -257,6 +257,7 @@ recode_other_from_log <- function(.tbl, log, id_col, other){
 #' @param .tbl A tibble
 #' @param log A cleaning log
 #' @param id_col The column id, usually "uuid"
+#' @param other  A character vector of the start of all other column names. E.g., other = "other_"
 #'
 #' @return A tibble parent "other_" recoded
 #'
@@ -328,7 +329,7 @@ count_occ <- function(.tbl, id_col, col){
 #' @param survey A survey sheet from Kobo (with column "type" split)
 #' @param choices A choices sheet from Kobo
 #' @param id_col Usually uuid... to count
-#' @param return Either "count" (a list of counts of select_multiple) or "updated" (the updated .tbl).
+#' @param output Either "count" (a list of counts of select_multiple) or "updated" (the updated .tbl).
 #'
 #' @return An updated tibble or a list of occurences
 #'
@@ -435,7 +436,8 @@ count_occ_all <- function(.tbl, survey, choices, id_col, output = "updated"){
 #' @param log A log, which contains a column "action".
 #' @param survey A survey sheet from Kobo (with column "type" split)
 #' @param choices A choices sheet from Kobo
-#' @param id_col Usually uuid... to count.
+#' @param id_col Usually uuid... to count
+#' @param other  A character vector of the start of all other column names. E.g., other = "other_"
 #'
 #' @details Apply all cleaning functions in the right order, modify character and double variables, recode others and other parents, remove duplicates, remove surveys, recount occurences. It uses default for count_occ_all.
 #'
