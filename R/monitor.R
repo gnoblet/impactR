@@ -1,69 +1,9 @@
+# To-do:.
+# - make_log_from_check_list: make it use pmap instead of exec
+
+
 # Since where is not exported from tidyselect's NAMESPACE
 utils::globalVariables("where")
-
-
-#' @title Calculate the duration of a survey
-#'
-#' @param .tbl A tibble
-#' @param start Start column name
-#' @param end End column name
-#'
-#' @details Note: it is necessary to have 'start' and 'end' columns
-#'
-#' @return A tibble with three new colums, including the duration of survey in minutes
-#'
-#' @export
-svy_duration <- function(.tbl, start, end){
-
-  duration <- .tbl  |>
-    dplyr::mutate(
-      start = lubridate::ymd_hms({{ start }}, truncated = 1),
-      end = lubridate::ymd_hms({{ end }}, truncated = 1),
-      survey_duration = round(difftime({{ end }},  start, units = "mins")) |>  as.double()
-    )
-
-  return(duration)
-}
-
-
-#' @title Check in-between surveys time
-#'
-#' @param .tbl A tibble
-#' @param start Start column (unquoted)
-#' @param end End column (unquoted)
-#' @param ... The columns to group by, usually a locality or an enumerator id
-#' @param new_colname The new column name of the time difference
-#' @details Note: it is necessary to have 'start' and 'end' columns with no NA
-#'
-#' @return A tibble with ... removed
-#'
-#' @export
-svy_difftime <- function(.tbl, start, end, ..., new_colname = "survey_difftime"){
-
-  #-------- Checks
-
-  # Check for start in .tbl
-  start_name <- rlang::enquo(start) |> rlang::as_name()
-  if_not_in_stop(.tbl, start_name, ".tbl", "start")
-
-  # Check for start in .tbl
-  end_name <- rlang::enquo(end()) |> rlang::as_name()
-  if_not_in_stop(.tbl, end_name, ".tbl", "end")
-
-  # Check for ... in .tbl
-  cols_to_keep <- purrr::map_chr(rlang::enquos(...), rlang::as_name)
-  if_not_in_stop(.tbl, cols_to_keep, ".tbl", arg = "...")
-
-  #-------- Add difftime column
-
-  diff_time <- .tbl |>
-    dplyr::arrange(..., {{ start }}) |>
-    dplyr::group_by(...) |>
-    dplyr::mutate("{new_colname}" := difftime({{ start }}, dplyr::lag({{ end }}), units = "mins") |> round() |> as.double()) |>
-    dplyr::ungroup()
-
-    return(diff_time)
-}
 
 
 #' @title Pull uuid from a logical test
@@ -192,58 +132,6 @@ make_log <- function(
   return(new_log)
 
 }
-
-
-
-#' @title  Check cleaning log against data
-#'
-#' @param check_list A check list (a tibble of a particular format)
-#' @param .tbl Data to clean
-#'
-#' @details Names should be the English version. Please use [impactR::log_names_fr_en] beforehand.
-#'
-#' @family functions to check logs and check lists
-#'
-#' @importFrom rlang .data
-#'
-#' @export
-check_check_list <- function(check_list, .tbl){
-  en_names <- c("id_check", "question_name", "why", "logical_test", "new_value", "action", "type")
-
-  # Check if the column names are the right names
-  if_not_in_stop(check_list, en_names, "check_list")
-
-  # Check if all id_check are there
-  if(rlang::is_na(check_list$id_check)) rlang::abort("There are missing `id_check` values")
-
-  # Check if all question_names are there
-  if(rlang::is_na(check_list$question_name)) rlang::abort("There are missing `question_name` values")
-
-  # Check if types are one of the right ones
-  types <- sum(stringr::str_count(check_list$type, pattern = "character|double"))
-  if(types < nrow(check_list)){
-    abort_bad_argument("type", "be either character or double")
-  }
-
-  # Check if the actions are one of the right ones
-  actions <- sum(stringr::str_count(check_list$action, pattern = "keep|modify|remove|check|duplicate"))
-
-  if(actions < nrow(check_list)){
-    abort_bad_argument("action", "be either 'keep', 'modify', 'remove', 'check' or 'duplicate")
-  }
-
-  # Check if question_name that needs a modification belongs to the rawdata
-  are_cols_in <- !(check_list |> dplyr::pull(.data$question_name) %in% colnames(.tbl))
-
-  if_not_in_stop(.tbl ,
-                 check_list |>
-                   dplyr::pull(.data$question_name),
-                 ".tbl",
-                 "question_name")
-
-  return(TRUE)
-}
-
 
 
 #' @title Apply `make_log` to a tibble of check_list (one logical test per row)
@@ -745,6 +633,3 @@ make_all_logs <- function(.tbl, survey, check_list, other, id_col, ...) {
     dplyr::bind_rows() |>
     readr::type_convert()
 }
-
-
-

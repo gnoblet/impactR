@@ -118,12 +118,12 @@ check_check_list(check_list, data)
 # following column/s from `question_name` is/are missing in `.tbl`: survey_duration, survey_duration, survey_duration
 ```
 
-On va donc jouter la colonne de durée d'enquête à l'aide de la fonction `svy_duration`. On en profite pour assi ajouter la différence de temps entre deux enquêtes par enquêteur.rice :
+On va donc jouter la colonne de durée d'enquête à l'aide de la fonction `survey_duration`. On en profite pour assi ajouter la différence de temps entre deux enquêtes par enquêteur.rice :
 ```{r survey-duration}
 data <- data |> 
-  svy_duration(start, end) #|>
+  survey_duration(start, end, new_colname = "survey_duration") #|>
   # NOT RUN!
-  # svy_difftime(start, end, new_colname = "survey_difftime", i_enum_id)
+  # survey_difftime(start, end, new_colname = "survey_difftime", i_enum_id)
 data$survey_duration
 ```
 

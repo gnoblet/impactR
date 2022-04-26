@@ -64,6 +64,9 @@
     <loc>https://gnoblet.github.io/impactR/reference/date_to_day_month.html</loc>
   </url>
   <url>
+    <loc>https://gnoblet.github.io/impactR/reference/deselect.html</loc>
+  </url>
+  <url>
     <loc>https://gnoblet.github.io/impactR/reference/diff_tibbles.html</loc>
   </url>
   <url>
@@ -73,16 +76,16 @@
     <loc>https://gnoblet.github.io/impactR/reference/get_choices.html</loc>
   </url>
   <url>
-    <loc>https://gnoblet.github.io/impactR/reference/get_multiple.html</loc>
-  </url>
-  <url>
-    <loc>https://gnoblet.github.io/impactR/reference/get_multiple_and_other_parent.html</loc>
-  </url>
-  <url>
-    <loc>https://gnoblet.github.io/impactR/reference/get_one.html</loc>
-  </url>
-  <url>
     <loc>https://gnoblet.github.io/impactR/reference/get_other_parent.html</loc>
+  </url>
+  <url>
+    <loc>https://gnoblet.github.io/impactR/reference/get_select_multiple.html</loc>
+  </url>
+  <url>
+    <loc>https://gnoblet.github.io/impactR/reference/get_select_multiple_and_other_parent.html</loc>
+  </url>
+  <url>
+    <loc>https://gnoblet.github.io/impactR/reference/get_select_one.html</loc>
   </url>
   <url>
     <loc>https://gnoblet.github.io/impactR/reference/if_not_in_stop.html</loc>
@@ -181,16 +184,16 @@
     <loc>https://gnoblet.github.io/impactR/reference/reach_pal.html</loc>
   </url>
   <url>
-    <loc>https://gnoblet.github.io/impactR/reference/rec_na.html</loc>
-  </url>
-  <url>
-    <loc>https://gnoblet.github.io/impactR/reference/rec_values.html</loc>
+    <loc>https://gnoblet.github.io/impactR/reference/recode_na.html</loc>
   </url>
   <url>
     <loc>https://gnoblet.github.io/impactR/reference/recode_other_from_log.html</loc>
   </url>
   <url>
     <loc>https://gnoblet.github.io/impactR/reference/recode_other_parent_from_log.html</loc>
+  </url>
+  <url>
+    <loc>https://gnoblet.github.io/impactR/reference/recode_values.html</loc>
   </url>
   <url>
     <loc>https://gnoblet.github.io/impactR/reference/remove_duplicate.html</loc>
@@ -200,9 +203,6 @@
   </url>
   <url>
     <loc>https://gnoblet.github.io/impactR/reference/rename_cols.html</loc>
-  </url>
-  <url>
-    <loc>https://gnoblet.github.io/impactR/reference/rm_cols.html</loc>
   </url>
   <url>
     <loc>https://gnoblet.github.io/impactR/reference/rowwise_optimum.html</loc>
@@ -232,10 +232,10 @@
     <loc>https://gnoblet.github.io/impactR/reference/survey.html</loc>
   </url>
   <url>
-    <loc>https://gnoblet.github.io/impactR/reference/svy_difftime.html</loc>
+    <loc>https://gnoblet.github.io/impactR/reference/survey_difftime.html</loc>
   </url>
   <url>
-    <loc>https://gnoblet.github.io/impactR/reference/svy_duration.html</loc>
+    <loc>https://gnoblet.github.io/impactR/reference/survey_duration.html</loc>
   </url>
   <url>
     <loc>https://gnoblet.github.io/impactR/reference/svy_interact.html</loc>
