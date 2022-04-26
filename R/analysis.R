@@ -241,7 +241,7 @@ make_analysis <- function(
   # TO DO:
   # - check the type of te column and whether svy function can be applied
   # - check the type of the question using survey
-  # - should we default to some automation if analysis is not provided
+  # - should we default to some automation if analysis is not provided?
 
   #-------- Make analysis
 
@@ -311,7 +311,9 @@ make_analysis <- function(
 
     #-------- Ratio checks
 
-    ratio_cols <- stringr::str_split(col_name, ",", simplify = F) |> purrr::flatten_chr()
+    ratio_cols <- stringr::str_split(col_name, ",", simplify = F) |>
+      purrr::flatten_chr() |>
+      stringr::str_squish()
 
     if (length(ratio_cols) != 2) {
       rlang::abort(c(
