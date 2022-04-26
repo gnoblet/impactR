@@ -88,28 +88,15 @@
 </h1>
 </div>
 <blockquote><p>Ease IMPACT’s data and database officers woRk</p></blockquote>
-<p><code>impactR</code> started as a simple project: mainly a reminder of totally-perfectible functions used and made on the go for the Burkina Faso mission in 2021.</p>
-<p>It became broader, aiming now to ease data teams daily R work as follows:</p>
-<ul>
-<li>
-<em>utils.R</em> - functions used on an everyday basis (import a xlsx file, recode NAs, get column names starting with a pattern)</li>
-<li>
-<em>monitor.R</em> - functions to produce logs and help monitoring data collection (logical tests, outliers, other answers)</li>
-<li>
-<em>clean.R</em> - functions that uses the same logs to clean the dataset</li>
-<li>
-<em>analysis.R</em> - functions to calculate optimums, weighted proportions and interactions, pivot tables reports</li>
-<li>
-<em>plots.R</em> - plot functions and REACH themes (colors, fonts)</li>
-<li>
-<em>maps.R</em> - some utils (e.g. ease bbox) and some themes (for <code>tmap</code>)</li>
-</ul>
+<p><code>impactR</code> started as a simple project: mainly a reminder of totally-perfectible functions used and made on the go for the Burkina Faso team in 2021. It became broader, aiming now to ease data teams daily R work and to cover most of the research cycle’s tasks.</p>
 <p>Documentation is on the edge of being written (French and English version)</p>
 <p>Specs:</p>
 <ul>
 <li>mainly using Kobo collection and the <code>tidyverse</code> for most, <code>srvyr</code> for survey data analysis, <code>janitor</code>, <code>tmap</code>
 </li>
-<li>it requires R 4.1+ (mostly for the native pipe <code>|&gt;</code>).</li>
+<li>data need to be importer with <code>import_*</code> function or <code>janitor::cleang_names()</code>
+</li>
+<li>it requires R 4.1+ (mostly for the native pipe <code>|&gt;</code>)</li>
 </ul>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
@@ -132,9 +119,9 @@
 <li>
 <input type="checkbox" disabled>write more documentaion</li>
 <li>
-<input type="checkbox" disabled>tidy eval to cleaning functions</li>
+<input type="checkbox" disabled checked>tidy eval to cleaning functions</li>
 <li>
-<input type="checkbox" disabled>dots not as the last arg, not always at least</li>
+<input type="checkbox" disabled checked>dots not as the last arg, not always at least</li>
 <li>
 <input type="checkbox" disabled>functions to create a small report of the values that effectively changed or were removed when cleaning thanks to a cleaning log</li>
 <li>
@@ -194,7 +181,7 @@
 <span class="co">#               i_enum_id)</span>
 
 <span class="co">## Recode parent "other" from a well-filled cleaning log</span>
-<span class="co"># recode_other_parent_from_log(data, log, id_col = "uuid")</span>
+<span class="co"># recode_other_parent_from_log(data, log, id_col = uuid)</span>
 
 <span class="co">## Calculate weigthed proportion for shelter type by group (e.g. administrative areas or population groups)</span>
 <span class="co"># svy_prop(design, s_shelter_type, c(admin1, group_pop), na.rm = T, stat_name = "prop", level = 0.95)</span></code></pre></div>
