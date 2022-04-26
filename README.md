@@ -7,20 +7,8 @@
 
 `impactR` started as a simple project: mainly a reminder of
 totally-perfectible functions used and made on the go for the Burkina
-Faso mission in 2021.
-
-It became broader, aiming now to ease data teams daily R work as
-follows:
-
--   *utils.R* - functions used on an everyday basis (import a xlsx file,
-    recode NAs, get column names starting with a pattern)
--   *monitor.R* - functions to produce logs and help monitoring data
-    collection (logical tests, outliers, other answers)
--   *clean.R* - functions that uses the same logs to clean the dataset
--   *analysis.R* - functions to calculate optimums, weighted proportions
-    and interactions, pivot tables reports
--   *plots.R* - plot functions and REACH themes (colors, fonts)
--   *maps.R* - some utils (e.g. ease bbox) and some themes (for `tmap`)
+Faso team in 2021. It became broader, aiming now to ease data teams
+daily R work and to cover most of the research cycle’s tasks.
 
 Documentation is on the edge of being written (French and English
 version)
@@ -29,7 +17,9 @@ Specs:
 
 -   mainly using Kobo collection and the `tidyverse` for most, `srvyr`
     for survey data analysis, `janitor`, `tmap`
--   it requires R 4.1+ (mostly for the native pipe `|>`).
+-   data need to be importer with `import_*` function or
+    `janitor::cleang_names()`
+-   it requires R 4.1+ (mostly for the native pipe `|>`)
 
 ## Installation
 
@@ -53,8 +43,8 @@ Roadmap is as follows:
 -   [x] add (re) count columns post-cleaning for multiple choices
     columns and simple choice’s other column
 -   [ ] write more documentaion
--   [ ] tidy eval to cleaning functions
--   [ ] dots not as the last arg, not always at least
+-   [x] tidy eval to cleaning functions
+-   [x] dots not as the last arg, not always at least
 -   [ ] functions to create a small report of the values that
     effectively changed or were removed when cleaning thanks to a
     cleaning log
@@ -118,7 +108,7 @@ box::use(impactR[...])
 #               i_enum_id)
 
 ## Recode parent "other" from a well-filled cleaning log
-# recode_other_parent_from_log(data, log, id_col = "uuid")
+# recode_other_parent_from_log(data, log, id_col = uuid)
 
 ## Calculate weigthed proportion for shelter type by group (e.g. administrative areas or population groups)
 # svy_prop(design, s_shelter_type, c(admin1, group_pop), na.rm = T, stat_name = "prop", level = 0.95)

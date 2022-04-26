@@ -1,4 +1,4 @@
-# impact 0.7.2 
+# impactR 0.7.2 
 
 ## New features
 
@@ -11,6 +11,7 @@
 * `get_one()` becomes `get_select_one()`; `get_multiple()` becomes `get_select_multiple()`; and, `get_multiple_and_other_parent()`becomes `get_select_multiple_and_other_parent()` (#35)
 * `svy_difftime()` and `svy_duration()` become `survey_difftime()` and `survey_duration()` to avoid confusion with survey analysis `svy_*` functions (#35)
 * `survey_duration()` gains a `new_colname` parameter that allows for deciding the new column name of the survey duration (#35)
+
 
 # impactR 0.7.1
 
