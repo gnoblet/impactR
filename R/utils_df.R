@@ -17,7 +17,7 @@
 #' @return A tibble with columns removed
 #'
 #' @export
-rm_cols <- function(.tbl, ...) {
+deselect <- function(.tbl, ...) {
 
   quoted_cols <- purrr::map_chr(rlang::enquos(...), rlang::as_name)
   if_not_in_stop(.tbl, quoted_cols, ".tbl", arg = "...")
@@ -40,7 +40,7 @@ rm_cols <- function(.tbl, ...) {
 #' @details If the column type is a character and the replacement a numeric, then the numeric is coerced to a character. If the column type is a numeric and the replacement is a character, then the column is coerced to character. NAs will remains NAs of the right type.
 #'
 #' @export
-rec_values <- function(.tbl, values, to_value, ...){
+recode_values <- function(.tbl, values, to_value, ...){
 
   quoted_cols <- purrr::map_chr(rlang::enquos(...), rlang::as_name)
   if_not_in_stop(.tbl, quoted_cols, ".tbl", arg = "...")
@@ -59,13 +59,13 @@ rec_values <- function(.tbl, values, to_value, ...){
 #' @return A tibble with one type of NAs
 #'
 #' @export
-rec_na <- function(.tbl, ...){
+recode_na <- function(.tbl, ...){
   nas <- c(NULL, "NULL", "N/A", "n/a", 999, 998, 888, " ", Inf, -Inf,
            9999, "(vide)", "(empty)", "d/m", "", "NA", "na", "", " ",
            NaN, "NaN", "Na", -999, -9999, -998, -888)
 
   .tbl |>
-    rec_values(nas, NA, ...)
+    recode_values(nas, NA, ...)
 }
 
 
@@ -184,19 +184,20 @@ named_group_split <- function (.tbl, group){
 #' @param .tbl A tibble
 #' @param start Start column name
 #' @param end End column name
-#'
+#' @param new_colname The new column name of the time duration
+#' 
 #' @details Note: it is necessary to have 'start' and 'end' columns
 #'
 #' @return A tibble with three new colums, including the duration of survey in minutes
 #'
 #' @export
-svy_duration <- function(.tbl, start, end){
+survey_duration <- function(.tbl, start, end, new_colname = "survey_duration"){
 
   duration <- .tbl  |>
     dplyr::mutate(
       start = lubridate::ymd_hms({{ start }}, truncated = 1),
       end = lubridate::ymd_hms({{ end }}, truncated = 1),
-      survey_duration = round(difftime({{ end }},  start, units = "mins")) |>  as.double()
+      "{new_colname}" := round(difftime({{ end }},  start, units = "mins")) |>  as.double()
     )
 
   return(duration)
@@ -215,7 +216,7 @@ svy_duration <- function(.tbl, start, end){
 #' @return A tibble with ... removed
 #'
 #' @export
-svy_difftime <- function(.tbl, start, end, ..., new_colname = "survey_difftime"){
+survey_difftime <- function(.tbl, start, end, ..., new_colname = "survey_difftime"){
 
   #-------- Checks
 

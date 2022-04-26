@@ -9,7 +9,7 @@ remove_from_log(.tbl, log, id_col)
 \arguments{
 \item{.tbl}{A tibble}
 
-\item{log}{A deletion log, which contains a column "action".}
+\item{log}{A deletion log, which contains a column "action"}
 
 \item{id_col}{The column id, usually "uuid"}
 }
@@ -17,5 +17,5 @@ remove_from_log(.tbl, log, id_col)
 A lot of removal
 }
 \description{
-Removes surveys from .tbl where column "action" in the log is set to "remove".
+Removes surveys from .tbl where column "action" in the log is set to "remove"
 }

@@ -282,7 +282,7 @@ count_occ_all <- function(.tbl, survey, choices, id_col, output = "updated"){
   # Prepare objects -----------------------------
 
   #  Get multiple questions
-  mult_question <- get_multiple(survey)
+  mult_question <- get_select_multiple(survey)
 
   # Get choices from multiple questions
   mult_choices<- mult_question |>

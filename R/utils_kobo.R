@@ -18,7 +18,7 @@
 #' @return A character vector of select_one questions
 #'
 #' @export
-get_simple <- function(survey){
+get_select_one <- function(survey){
 #
 #   if (typeof(rlang::enquo(type)) == "character"){
 #     type <- rlang::sym(type)
@@ -40,7 +40,7 @@ get_simple <- function(survey){
 #' @return A character vector of select_multiple questions
 #'
 #' @export
-get_multiple <- function(survey){
+get_select_multiple <- function(survey){
 
   select_multiple <- survey |>
     dplyr::filter(.data$type == "select_multiple") |>
@@ -87,11 +87,11 @@ get_other_parent <- function(.tbl, other){
 #' @return A character vector of select_multiple and other questions
 #'
 #' @export
-get_multiple_and_other_parent <- function(.tbl, survey, other){
+get_select_multiple_and_other_parent <- function(.tbl, survey, other){
 
   other_parent <- get_other_parent(.tbl, other)
 
-  select_multiple <- get_multiple(survey)
+  select_multiple <- get_select_multiple(survey)
 
   union(other_parent, select_multiple)
 }
@@ -158,16 +158,6 @@ split_survey <- function (survey, col_to_split, into = c("type", "list_name"),
                             sep = sep, fill = fill, ...)
   return(survey)
 }
-
-
-
-
-
-
-
-
-
-
 
 
 
