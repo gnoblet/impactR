@@ -1,4 +1,10 @@
-# impactR 0.7
+# impactR 0.7.2
+
+## Breaking changes
+
+* `rm_cols` becomes `deselect` (#35)
+
+# impactR 0.7.1
 
 ## Minor bug fixes
 
