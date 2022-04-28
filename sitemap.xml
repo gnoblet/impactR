@@ -10,10 +10,16 @@
     <loc>https://gnoblet.github.io/impactR/articles/base_de_travail.html</loc>
   </url>
   <url>
+    <loc>https://gnoblet.github.io/impactR/articles/cleaning_data.html</loc>
+  </url>
+  <url>
     <loc>https://gnoblet.github.io/impactR/articles/index.html</loc>
   </url>
   <url>
     <loc>https://gnoblet.github.io/impactR/articles/main_workflow.html</loc>
+  </url>
+  <url>
+    <loc>https://gnoblet.github.io/impactR/articles/nettoyage_de_donnees.html</loc>
   </url>
   <url>
     <loc>https://gnoblet.github.io/impactR/authors.html</loc>
@@ -47,6 +53,9 @@
   </url>
   <url>
     <loc>https://gnoblet.github.io/impactR/reference/clean_all.html</loc>
+  </url>
+  <url>
+    <loc>https://gnoblet.github.io/impactR/reference/cleaning_log.html</loc>
   </url>
   <url>
     <loc>https://gnoblet.github.io/impactR/reference/count_occ.html</loc>

@@ -25,7 +25,9 @@
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
     <a class="dropdown-item" href="../articles/base_de_travail.html">Base de travail avec impactR</a>
+    <a class="dropdown-item" href="../articles/cleaning_data.html">Cleaning data</a>
     <a class="dropdown-item" href="../articles/main_workflow.html">Some workflow</a>
+    <a class="dropdown-item" href="../articles/nettoyage_de_donnees.html">Nettoyage de données</a>
   </div>
 </li>
 <li class="active nav-item">
@@ -61,7 +63,7 @@
 <ul><li>
 <code>rm_cols()</code> becomes <code><a href="../reference/deselect.html">deselect()</a></code> (<a href="https://github.com/gnoblet/impactR/issues/35" class="external-link">#35</a>)</li>
 <li>
-<code>rec_na()</code> and <code>rec_values()</code> become <code><a href="../reference/recode_na.html">recode_na()</a></code> and <code>recode_values</code> (<a href="https://github.com/gnoblet/impactR/issues/35" class="external-link">#35</a>)</li>
+<code>rec_na()</code> and <code>rec_values()</code> become <code><a href="../reference/recode_na.html">recode_na()</a></code> and <code><a href="../reference/recode_values.html">recode_values()</a></code> (<a href="https://github.com/gnoblet/impactR/issues/35" class="external-link">#35</a>)</li>
 <li>
 <code>get_one()</code> becomes <code><a href="../reference/get_select_one.html">get_select_one()</a></code>; <code>get_multiple()</code> becomes <code><a href="../reference/get_select_multiple.html">get_select_multiple()</a></code>; and, <code>get_multiple_and_other_parent()</code>becomes <code><a href="../reference/get_select_multiple_and_other_parent.html">get_select_multiple_and_other_parent()</a></code> (<a href="https://github.com/gnoblet/impactR/issues/35" class="external-link">#35</a>)</li>
 <li>
@@ -75,7 +77,7 @@
 <div class="section level3">
 <h3 id="minor-bug-fixes-0-7-1">Minor bug fixes<a class="anchor" aria-label="anchor" href="#minor-bug-fixes-0-7-1"></a></h3>
 <ul><li>
-<code><a href="../reference/clean_all.html">clean_all()</a></code> and all internals functions now have tidy eval and take into acocunt the “other” string (<a href="https://github.com/gnoblet/impactR/issues/30" class="external-link">#30</a>)</li></ul></div>
+<code><a href="../reference/clean_all.html">clean_all()</a></code> and all internals functions now have tidy eval and take into account the “other” string (<a href="https://github.com/gnoblet/impactR/issues/30" class="external-link">#30</a>)</li></ul></div>
 </div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.7" id="impactr-07">impactR 0.7<a class="anchor" aria-label="anchor" href="#impactr-07"></a></h2>
@@ -90,7 +92,7 @@
 <div class="section level3">
 <h3 id="breaking-changes-0-7">Breaking changes<a class="anchor" aria-label="anchor" href="#breaking-changes-0-7"></a></h3>
 <ul><li>
-<code><a href="../reference/get_choices.html">get_choices()</a></code> now has a <code>label</code> paramater to get labelled choices, that takes precedence over the <code>conc</code> parameter (<a href="https://github.com/gnoblet/impactR/issues/28" class="external-link">#28</a>)</li></ul></div>
+<code><a href="../reference/get_choices.html">get_choices()</a></code> now has a <code>label</code> parameter to get labelled choices, that takes precedence over the <code>conc</code> parameter (<a href="https://github.com/gnoblet/impactR/issues/28" class="external-link">#28</a>)</li></ul></div>
 <div class="section level3">
 <h3 id="minor-bug-fixes-and-improvements-0-7">Minor bug fixes and improvements<a class="anchor" aria-label="anchor" href="#minor-bug-fixes-and-improvements-0-7"></a></h3>
 <ul><li>

@@ -3,8 +3,10 @@ pkgdown: 2.0.3
 pkgdown_sha: ~
 articles:
   base_de_travail: base_de_travail.html
+  cleaning_data: cleaning_data.html
   main_workflow: main_workflow.html
-last_built: 2022-04-26T22:37Z
+  nettoyage_de_donnees: nettoyage_de_donnees.html
+last_built: 2022-04-28T10:23Z
 urls:
   reference: https://gnoblet.github.io/impactR/reference
   article: https://gnoblet.github.io/impactR/articles
