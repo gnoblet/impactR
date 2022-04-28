@@ -7,7 +7,7 @@
 ## Breaking changes
 
 * `rm_cols()` becomes `deselect()` (#35)
-* `rec_na()` and `rec_values()` become `recode_na()` and `recode_values` (#35)
+* `rec_na()` and `rec_values()` become `recode_na()` and `recode_values()` (#35)
 * `get_one()` becomes `get_select_one()`; `get_multiple()` becomes `get_select_multiple()`; and, `get_multiple_and_other_parent()`becomes `get_select_multiple_and_other_parent()` (#35)
 * `svy_difftime()` and `svy_duration()` become `survey_difftime()` and `survey_duration()` to avoid confusion with survey analysis `svy_*` functions (#35)
 * `survey_duration()` gains a `new_colname` parameter that allows for deciding the new column name of the survey duration (#35)
@@ -17,7 +17,7 @@
 
 ## Minor bug fixes
 
-* `clean_all()` and all internals functions now have tidy eval and take into acocunt the "other" string (#30)
+* `clean_all()` and all internals functions now have tidy eval and take into account the "other" string (#30)
 
 
 # impactR 0.7
@@ -30,7 +30,7 @@
 
 ## Breaking changes
 
-* `get_choices()` now has a `label` paramater to get labelled choices, that takes precedence over the `conc` parameter (#28)
+* `get_choices()` now has a `label` parameter to get labelled choices, that takes precedence over the `conc` parameter (#28)
 
 
 ## Minor bug fixes and improvements

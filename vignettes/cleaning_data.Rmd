@@ -1,0 +1,91 @@
+---
+title: "Cleaning data"
+output:
+  rmarkdown::html_vignette:
+  number_sections: true
+
+vignette: >
+  %\VignetteIndexEntry{Cleaning data}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Why?
+
+The purpose of this vignette is to explain data cleaning using `impactR`. Note that the cleaning functions are linked to the data collection monitoring functions. So if one does not use the data collection monitoring functions, one will need to match the cleaning log to the functions shown below.
+
+
+```{r initiate-impactr}
+# If impactR is not yet installed
+# devtools::install_github("impactR)
+library(impactR)
+```
+
+
+
+Let's import the dataset to clean.
+```{r initiate-datas}
+# Load dataset in environment
+data(data)
+
+# Show the first lines and types of airports' tibble
+data <- data |> tibble::as_tibble()
+```
+
+Import the 'survey' sheet:
+
+```{r initiate-survey}
+data(survey)
+survey <- survey |> tibble::as_tibble()
+```
+
+The first thing to do with the 'survey' object, as it will be used elsewhere, is to split the 'type' column into two columns.
+```{r split-survey}
+# Except for the 'col_to_split' argument (the column to split), the other parameters are the default parameters
+survey <- survey |>
+  split_survey(
+    col_to_split = "type",
+    into = c("type", "list_name"),
+    sep = " ",
+    fill = "right")
+```
+Import the 'choices' sheet:
+```{r initiate-choices}
+data(choices)
+choices <- choices |> tibble::as_tibble()
+```
+
+Import the cleaning log:
+```{r initiate-cleaning-log}
+data(cleaning_log)
+cleaning_log <- cleaning_log |> tibble::as_tibble()
+```
+
+
+# Clean data
+
+It's as simple as two steps.
+
+1- Check if the cleaning log is minimally well filled:
+```{r check-cleaning-log}
+check_cleaning_log(cleaning_log, data)
+# If NULL, then ok
+```
+
+2 - Use the `clean_all()` function:
+```{r clean-all}
+cleaned_data <- clean_all(data, cleaning_log, survey, choices, uuid, "autre_")
+```
+
+The `cleaned_data` object is the cleaned dataset with :
+
+- the interviews to be deleted removed
+- the duplicated interviews removed
+- values to modify modified
+- other children and parent values to modify/recode modified
+- the multiple choices columns of 0 and 1 modified to take into account the recodings/modifications.
+
