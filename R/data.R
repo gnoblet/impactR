@@ -60,3 +60,16 @@
 #'   ...
 #' }
 "dap"
+
+
+
+#' Some random cleaning log
+#'
+#' A dataset (in French) containing a cleaning_log. Columns are necessary and comes from the `make_log` function
+#'
+#' @format A data frame with 17 rows and 17 variables:
+#' \describe{
+#'   \item{id_check}{The check id}
+#'   \item{name}{Tne choices's names}
+#'   ...
+"cleaning_log"

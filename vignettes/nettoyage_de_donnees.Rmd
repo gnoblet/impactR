@@ -1,0 +1,91 @@
+---
+title: "Nettoyage de données"
+output: 
+  rmarkdown::html_vignette:
+    number_sections: true
+
+vignette: >
+  %\VignetteIndexEntry{Nettoyage de données}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Pourquoi ?
+
+Cette vignette a pour but d'expliciter le nettoyage de données en utilisant `impactR`. A noter que les fonctions de nettoyage sont liées aux fonctions de suivi de collecte de données. Ainsi, si vous n'utilisez pas les fonctions de suivi de collecte de données, il vous faudra faire correspondre votre journal de nettoyage aux fonctions présentées ci-après.
+
+
+```{r initiate-impactr}
+# Si vous n'avez pas encore installé le package
+# devtools::install_github("impactR)
+library(impactR)
+```
+
+
+
+Ci-dessous, on peut importer des données collectées.
+```{r initiate-datas}
+# Load dataset in environment
+data(data)
+
+# Show the first lines and types of airports' tibble
+data <- data |> tibble::as_tibble()
+```
+
+On importe la feuille 'survey' :
+
+```{r initiate-survey}
+data(survey)
+survey <- survey |> tibble::as_tibble()
+```
+
+La première chose à faire avec l'objet 'survey', car il sera utilisé ailleurs : il faut séparer en deux la colonne 'type'.
+```{r split-survey}
+# Mis à part l'argument 'col_to_split' (la colonne à séparer), les autres paramètres sont les paramètres par défaut
+survey <- survey |>  
+  split_survey(
+    col_to_split = "type",
+    into = c("type", "list_name"),
+    sep = " ",
+    fill = "right")
+```
+On importe les choix :
+```{r initiate-choices}
+data(choices)
+choices <- choices |> tibble::as_tibble()
+```
+
+On importe le journal de nettoyage :
+```{r initiate-cleaning-log}
+data(cleaning_log)
+cleaning_log <- cleaning_log |> tibble::as_tibble()
+```
+
+
+# Nettoyer les données
+
+C'est aussi simple que deux étapes.
+
+1- Vérifier si le journal de nettoyage est minimalement bien rempli :
+```{r check-cleaning-log}
+check_cleaning_log(cleaning_log, data)
+# Si NULL, alors c'est ok
+```
+
+2 - Utiliser la fonction `clean_all()` :
+```{r clean-all}
+cleaned_data <- clean_all(data, cleaning_log, survey, choices, uuid, "autre_")
+```
+
+L'objet `cleaned_data` est le jeu de données nettoyé avec :
+
+- les entretiens à supprimer supprimés 
+- les entretiens dupliqués supprimés
+- les valeurs à modifier modifiées
+- les autres enfants et parents à modifier modifiées
+- les colonnes des choix multiples de 0 et 1 modifiées pour tenir compte des recodages/modifications.
+
