@@ -185,7 +185,7 @@ named_group_split <- function (.tbl, group){
 #' @param start Start column name
 #' @param end End column name
 #' @param new_colname The new column name of the time duration
-#' 
+#'
 #' @details Note: it is necessary to have 'start' and 'end' columns
 #'
 #' @return A tibble with three new colums, including the duration of survey in minutes
@@ -225,7 +225,7 @@ survey_difftime <- function(.tbl, start, end, ..., new_colname = "survey_difftim
   if_not_in_stop(.tbl, start_name, ".tbl", "start")
 
   # Check for start in .tbl
-  end_name <- rlang::enquo(end()) |> rlang::as_name()
+  end_name <- rlang::enquo(end) |> rlang::as_name()
   if_not_in_stop(.tbl, end_name, ".tbl", "end")
 
   # Check for ... in .tbl
