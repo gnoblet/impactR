@@ -1,3 +1,11 @@
+# impactR 0.7.3
+
+## Minor bug fixes
+
+* `survey_difftime()` got a fix for reading the `end` parameter
+
+--- 
+
 # impactR 0.7.2 
 
 ## New features
@@ -12,6 +20,7 @@
 * `svy_difftime()` and `svy_duration()` become `survey_difftime()` and `survey_duration()` to avoid confusion with survey analysis `svy_*` functions (#35)
 * `survey_duration()` gains a `new_colname` parameter that allows for deciding the new column name of the survey duration (#35)
 
+---
 
 # impactR 0.7.1
 
@@ -19,6 +28,7 @@
 
 * `clean_all()` and all internals functions now have tidy eval and take into account the "other" string (#30)
 
+---
 
 # impactR 0.7
 
