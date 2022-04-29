@@ -48,9 +48,9 @@ The first thing to do with the 'survey' object, as it will be used elsewhere, is
 # Except for the 'col_to_split' argument (the column to split), the other parameters are the default parameters
 survey <- survey |>
   split_survey(
-    col_to_split = "type",
+  col_to_split = "type",
     into = c("type", "list_name"),
-    sep = " ",
+  sep = " ",
     fill = "right")
 ```
 Import the 'choices' sheet:

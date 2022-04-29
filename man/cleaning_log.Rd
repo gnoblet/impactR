@@ -5,7 +5,12 @@
 \alias{cleaning_log}
 \title{Some random cleaning log}
 \format{
-
+A data frame with 17 rows and 17 variables:
+\describe{
+  \item{id_check}{The check id}
+  \item{name}{Tne choices's names}
+  ...
+}
 }
 \usage{
 cleaning_log

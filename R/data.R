@@ -72,4 +72,5 @@
 #'   \item{id_check}{The check id}
 #'   \item{name}{Tne choices's names}
 #'   ...
+#' }
 "cleaning_log"
