@@ -1,3 +1,9 @@
+# impactR 0.7.4.9000
+
+* Removed all viz functions, now included in package `visualizeR` (#43)
+
+--- 
+
 # impactR 0.7.3
 
 ## Minor bug fixes

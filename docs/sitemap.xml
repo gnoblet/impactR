@@ -4,9 +4,6 @@
     <loc>https://gnoblet.github.io/impactR/404.html</loc>
   </url>
   <url>
-    <loc>https://gnoblet.github.io/impactR/LICENSE.html</loc>
-  </url>
-  <url>
     <loc>https://gnoblet.github.io/impactR/articles/base_de_travail.html</loc>
   </url>
   <url>
@@ -28,6 +25,9 @@
     <loc>https://gnoblet.github.io/impactR/index.html</loc>
   </url>
   <url>
+    <loc>https://gnoblet.github.io/impactR/LICENSE.html</loc>
+  </url>
+  <url>
     <loc>https://gnoblet.github.io/impactR/news/index.html</loc>
   </url>
   <url>
@@ -35,9 +35,6 @@
   </url>
   <url>
     <loc>https://gnoblet.github.io/impactR/reference/bind_others.html</loc>
-  </url>
-  <url>
-    <loc>https://gnoblet.github.io/impactR/reference/buffer_bbox.html</loc>
   </url>
   <url>
     <loc>https://gnoblet.github.io/impactR/reference/check_check_list.html</loc>
@@ -52,10 +49,10 @@
     <loc>https://gnoblet.github.io/impactR/reference/choices.html</loc>
   </url>
   <url>
-    <loc>https://gnoblet.github.io/impactR/reference/clean_all.html</loc>
+    <loc>https://gnoblet.github.io/impactR/reference/cleaning_log.html</loc>
   </url>
   <url>
-    <loc>https://gnoblet.github.io/impactR/reference/cleaning_log.html</loc>
+    <loc>https://gnoblet.github.io/impactR/reference/clean_all.html</loc>
   </url>
   <url>
     <loc>https://gnoblet.github.io/impactR/reference/count_occ.html</loc>
@@ -181,18 +178,6 @@
     <loc>https://gnoblet.github.io/impactR/reference/pull_uuid.html</loc>
   </url>
   <url>
-    <loc>https://gnoblet.github.io/impactR/reference/reach_cols.html</loc>
-  </url>
-  <url>
-    <loc>https://gnoblet.github.io/impactR/reference/reach_flip_bar.html</loc>
-  </url>
-  <url>
-    <loc>https://gnoblet.github.io/impactR/reference/reach_hist_bar.html</loc>
-  </url>
-  <url>
-    <loc>https://gnoblet.github.io/impactR/reference/reach_pal.html</loc>
-  </url>
-  <url>
     <loc>https://gnoblet.github.io/impactR/reference/recode_na.html</loc>
   </url>
   <url>
@@ -215,12 +200,6 @@
   </url>
   <url>
     <loc>https://gnoblet.github.io/impactR/reference/rowwise_optimum.html</loc>
-  </url>
-  <url>
-    <loc>https://gnoblet.github.io/impactR/reference/scale_color_reach.html</loc>
-  </url>
-  <url>
-    <loc>https://gnoblet.github.io/impactR/reference/scale_fill_reach.html</loc>
   </url>
   <url>
     <loc>https://gnoblet.github.io/impactR/reference/severity_score_reach.html</loc>
@@ -269,18 +248,6 @@
   </url>
   <url>
     <loc>https://gnoblet.github.io/impactR/reference/tbl_col_start_end.html</loc>
-  </url>
-  <url>
-    <loc>https://gnoblet.github.io/impactR/reference/theme_flip_simple_reach.html</loc>
-  </url>
-  <url>
-    <loc>https://gnoblet.github.io/impactR/reference/theme_hist_simple_reach.html</loc>
-  </url>
-  <url>
-    <loc>https://gnoblet.github.io/impactR/reference/theme_reach.html</loc>
-  </url>
-  <url>
-    <loc>https://gnoblet.github.io/impactR/reference/tmap_options_reach.html</loc>
   </url>
   <url>
     <loc>https://gnoblet.github.io/impactR/reference/update_rows_from_list.html</loc>

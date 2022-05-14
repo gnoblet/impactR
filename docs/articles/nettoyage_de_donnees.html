@@ -33,7 +33,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">impactR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.7.3</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.7.4.9000</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -93,7 +93,12 @@
 <div class="section level2">
 <h2 id="pourquoi">Pourquoi ?<a class="anchor" aria-label="anchor" href="#pourquoi"></a>
 </h2>
-<p>Cette vignette a pour but d’expliciter le nettoyage de données en utilisant <code>impactR</code>. A noter que les fonctions de nettoyage sont liées aux fonctions de suivi de collecte de données. Ainsi, si vous n’utilisez pas les fonctions de suivi de collecte de données, il vous faudra faire correspondre votre journal de nettoyage aux fonctions présentées ci-après.</p>
+<p>Cette vignette a pour but d’expliciter le nettoyage de données en
+utilisant <code>impactR</code>. A noter que les fonctions de nettoyage
+sont liées aux fonctions de suivi de collecte de données. Ainsi, si vous
+n’utilisez pas les fonctions de suivi de collecte de données, il vous
+faudra faire correspondre votre journal de nettoyage aux fonctions
+présentées ci-après.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Si vous n'avez pas encore installé le package</span>
 <span class="co"># devtools::install_github("impactR)</span>
@@ -109,7 +114,8 @@
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/data.html">data</a></span><span class="op">(</span><span class="va">survey</span><span class="op">)</span>
 <span class="va">survey</span> <span class="op">&lt;-</span> <span class="va">survey</span> |&gt; <span class="fu">tibble</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/as_tibble.html" class="external-link">as_tibble</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
-<p>La première chose à faire avec l’objet ‘survey’, car il sera utilisé ailleurs : il faut séparer en deux la colonne ‘type’.</p>
+<p>La première chose à faire avec l’objet ‘survey’, car il sera utilisé
+ailleurs : il faut séparer en deux la colonne ‘type’.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Mis à part l'argument 'col_to_split' (la colonne à séparer), les autres paramètres sont les paramètres par défaut</span>
 <span class="va">survey</span> <span class="op">&lt;-</span> <span class="va">survey</span> |&gt;  
@@ -131,7 +137,8 @@
 <h2 id="nettoyer-les-données">Nettoyer les données<a class="anchor" aria-label="anchor" href="#nettoyer-les-donn%C3%A9es"></a>
 </h2>
 <p>C’est aussi simple que deux étapes.</p>
-<p>1- Vérifier si le journal de nettoyage est minimalement bien rempli :</p>
+<p>1- Vérifier si le journal de nettoyage est minimalement bien rempli
+:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/check_cleaning_log.html">check_cleaning_log</a></span><span class="op">(</span><span class="va">cleaning_log</span>, <span class="va">data</span><span class="op">)</span></code></pre></div>
 <pre><code><span class="co">## NULL</span></code></pre>
@@ -140,13 +147,17 @@
 <p>2 - Utiliser la fonction <code><a href="../reference/clean_all.html">clean_all()</a></code> :</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">cleaned_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/clean_all.html">clean_all</a></span><span class="op">(</span><span class="va">data</span>, <span class="va">cleaning_log</span>, <span class="va">survey</span>, <span class="va">choices</span>, <span class="va">uuid</span>, <span class="st">"autre_"</span><span class="op">)</span></code></pre></div>
-<p>L’objet <code>cleaned_data</code> est le jeu de données nettoyé avec :</p>
+<pre><code><span class="co">## Warning in Sys.timezone(): unable to identify current timezone 'H':</span>
+<span class="co">## please set environment variable 'TZ'</span></code></pre>
+<p>L’objet <code>cleaned_data</code> est le jeu de données nettoyé avec
+:</p>
 <ul>
 <li>les entretiens à supprimer supprimés</li>
 <li>les entretiens dupliqués supprimés</li>
 <li>les valeurs à modifier modifiées</li>
 <li>les autres enfants et parents à modifier modifiées</li>
-<li>les colonnes des choix multiples de 0 et 1 modifiées pour tenir compte des recodages/modifications.</li>
+<li>les colonnes des choix multiples de 0 et 1 modifiées pour tenir
+compte des recodages/modifications.</li>
 </ul>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
@@ -162,7 +173,7 @@
 
 <div class="pkgdown-footer-right">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
 </div>
 
     </footer>
