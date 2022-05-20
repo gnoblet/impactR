@@ -1,3 +1,11 @@
+# impactR 0.7.6.9000
+
+## Minor bug fixes
+
+* `numeric_cols()` now do not throw an error when a numeric variable from param `survey` is not in `.tbl` colnames. It knows keep only those that are in both (#47)
+
+--- 
+
 # impactR 0.7.5.9000
 
 ## Minor bug fixes

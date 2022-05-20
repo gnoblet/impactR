@@ -428,11 +428,9 @@ numeric_cols <- function(.tbl, survey = NULL) {
     # Check if there are numeric or decimal types in survey
     if (length(num_cols_survey) == 0) rlang::abort("no 'calculate', 'integer' or 'decimal' type in `survey`")
 
-    # Check if these columns from survey are in .tbl
-    if_not_in_stop(.tbl, num_cols_survey, ".tbl", "survey")
-
+    # Keep only columns from survey that are in .tbl
     .tbl <- .tbl |>
-      dplyr::select(dplyr::all_of(num_cols_survey))
+      dplyr::select(dplyr::any_of(num_cols_survey))
 
   }
   num_cols <- .tbl |>
