@@ -624,21 +624,11 @@ make_log_outlier <- function(.tbl, survey, id_col, ...) {
 #'
 #' @export
 make_all_logs <- function(.tbl, survey, check_list, other, id_col, ...) {
-
-  if (length(tbl_col_start(.tbl, other)) != 0) {
-    l <- list(
-      make_log_from_check_list(.tbl, survey, check_list, {{ id_col }}, ...),
-      make_log_other(.tbl, survey, other,  {{ id_col }}, ...),
-      make_log_outlier(.tbl, survey, {{ id_col }}, ...)
-    )
-  } else {
-    l <- list(
-      make_log_from_check_list(.tbl, survey, check_list, {{ id_col }}, ...),
-      make_log_outlier(.tbl, survey, {{ id_col }}, ...)
-    )
-  }
-
-  to_return <- l |>
+  list(
+    make_log_from_check_list(.tbl, survey, check_list, {{ id_col }}, ...),
+    make_log_other(.tbl, survey, other,  {{ id_col }}, ...),
+    make_log_outlier(.tbl, survey, {{ id_col }}, ...)
+  ) |>
     purrr::map(~ .x |> dplyr::mutate(dplyr::across(.fns = as.character))) |>
     dplyr::bind_rows() |>
     readr::type_convert()
