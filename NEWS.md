@@ -1,3 +1,11 @@
+# impactR 0.7.5.9000
+
+## Minor bug fixes
+
+* `make_all_logs()` now throws a warning when there is no column name that starts with the "other" pattern and skips using `make_log_other()` (#45)
+
+--- 
+
 # impactR 0.7.4.9000
 
 * Removed all viz functions, now included in package `visualizeR` (#43)
