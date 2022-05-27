@@ -72,7 +72,7 @@ It's as simple as two steps.
 
 1- Check if the cleaning log is minimally well filled:
 ```{r check-cleaning-log}
-check_cleaning_log(cleaning_log, data)
+check_cleaning_log(cleaning_log, data, uuid, "autre_")
 # If NULL, then ok
 ```
 
