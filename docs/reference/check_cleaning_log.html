@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">impactR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.7.7.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.7.8.9000</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -60,7 +60,7 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">check_cleaning_log</span><span class="op">(</span><span class="va">log</span>, <span class="va">.tbl</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">check_cleaning_log</span><span class="op">(</span><span class="va">log</span>, <span class="va">.tbl</span>, <span class="va">id_col</span>, <span class="va">other</span><span class="op">)</span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -69,6 +69,10 @@
 <dd><p>A cleaning log</p></dd>
 <dt>.tbl</dt>
 <dd><p>Data to clean</p></dd>
+<dt>id_col</dt>
+<dd><p>The column id, usually "uuid"</p></dd>
+<dt>other</dt>
+<dd><p>A character vector of the start of all other column names. E.g., other = "other_"</p></dd>
 </dl></div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>

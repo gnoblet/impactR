@@ -33,7 +33,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">impactR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.7.7.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.7.8.9000</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -108,11 +108,11 @@ to the functions shown below.</p>
 <span class="fu"><a href="../reference/data.html">data</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span>
 
 <span class="co"># Show the first lines and types of airports' tibble</span>
-<span class="va">data</span> <span class="op">&lt;-</span> <span class="va">data</span> |&gt; <span class="fu">tibble</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/tibble/man/as_tibble.html" class="external-link">as_tibble</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<span class="va">data</span> <span class="op">&lt;-</span> <span class="va">data</span> |&gt; <span class="fu">tibble</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/as_tibble.html" class="external-link">as_tibble</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <p>Import the ‘survey’ sheet:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/data.html">data</a></span><span class="op">(</span><span class="va">survey</span><span class="op">)</span>
-<span class="va">survey</span> <span class="op">&lt;-</span> <span class="va">survey</span> |&gt; <span class="fu">tibble</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/tibble/man/as_tibble.html" class="external-link">as_tibble</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<span class="va">survey</span> <span class="op">&lt;-</span> <span class="va">survey</span> |&gt; <span class="fu">tibble</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/as_tibble.html" class="external-link">as_tibble</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <p>The first thing to do with the ‘survey’ object, as it will be used
 elsewhere, is to split the ‘type’ column into two columns.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
@@ -126,11 +126,11 @@ elsewhere, is to split the ‘type’ column into two columns.</p>
 <p>Import the ‘choices’ sheet:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/data.html">data</a></span><span class="op">(</span><span class="va">choices</span><span class="op">)</span>
-<span class="va">choices</span> <span class="op">&lt;-</span> <span class="va">choices</span> |&gt; <span class="fu">tibble</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/tibble/man/as_tibble.html" class="external-link">as_tibble</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<span class="va">choices</span> <span class="op">&lt;-</span> <span class="va">choices</span> |&gt; <span class="fu">tibble</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/as_tibble.html" class="external-link">as_tibble</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <p>Import the cleaning log:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/data.html">data</a></span><span class="op">(</span><span class="va">cleaning_log</span><span class="op">)</span>
-<span class="va">cleaning_log</span> <span class="op">&lt;-</span> <span class="va">cleaning_log</span> |&gt; <span class="fu">tibble</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/tibble/man/as_tibble.html" class="external-link">as_tibble</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<span class="va">cleaning_log</span> <span class="op">&lt;-</span> <span class="va">cleaning_log</span> |&gt; <span class="fu">tibble</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/as_tibble.html" class="external-link">as_tibble</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="clean-data">Clean data<a class="anchor" aria-label="anchor" href="#clean-data"></a>
@@ -138,7 +138,7 @@ elsewhere, is to split the ‘type’ column into two columns.</p>
 <p>It’s as simple as two steps.</p>
 <p>1- Check if the cleaning log is minimally well filled:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/check_cleaning_log.html">check_cleaning_log</a></span><span class="op">(</span><span class="va">cleaning_log</span>, <span class="va">data</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="../reference/check_cleaning_log.html">check_cleaning_log</a></span><span class="op">(</span><span class="va">cleaning_log</span>, <span class="va">data</span>, <span class="va">uuid</span>, <span class="st">"autre_"</span><span class="op">)</span></code></pre></div>
 <pre><code><span class="co">## NULL</span></code></pre>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># If NULL, then ok</span></code></pre></div>

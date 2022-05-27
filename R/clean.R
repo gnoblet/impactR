@@ -374,12 +374,15 @@ count_occ_all <- function(.tbl, survey, choices, id_col, output = "updated"){
 #' @param id_col Usually uuid... to count
 #' @param other A character vector of the start of all other column names. E.g., other = "other_"
 #'
-#' @details Apply all cleaning functions in the right order, modify character and double variables, recode others and other parents, remove duplicates, remove surveys, recount occurences. It uses default for count_occ_all.
+#' @details Apply all cleaning functions, after checking the log, in the right order, modify character and double variables, recode others and other parents, remove duplicates, remove surveys, recount occurences. It uses default for count_occ_all.
 #'
 #' @return A cleaned tibble
 #'
 #' @export
 clean_all <- function(.tbl, log, survey, choices, id_col, other){
+
+  check_cleaning_log(log, .tbl, {{ id_col }}, other)
+
   .tbl <- modify_from_log(.tbl, log, {{ id_col }}, "character", other)
   .tbl <- modify_from_log(.tbl, log, {{ id_col }}, "double", other)
   .tbl <- recode_other_from_log(.tbl, log, {{ id_col }}, other)
