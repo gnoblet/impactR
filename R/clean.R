@@ -115,18 +115,20 @@ update_rows_from_list <- function(.tbl, .list, id_col){
 #' @param log A cleaning log
 #' @param id_col The column id, usually "uuid"
 #' @param type Either "character" or "double"
+#' @param other A character vector of the start of all other column names. E.g., other = "other_"
+#'
 #' @return A tibble with values modified
 #'
 #' @importFrom rlang .data
 #'
 #' @export
-modify_from_log <- function(.tbl, log, id_col, type){
+modify_from_log <- function(.tbl, log, id_col, type, other){
 
   id_col_name <- rlang::as_name(rlang::enquo(id_col))
   if_not_in_stop(.tbl, id_col_name, ".tbl", "id_col")
 
   to_modify <- log |>
-    dplyr::filter(.data$action == "modify" & .data$id_check != "other" & .data$type == type)
+    dplyr::filter(.data$action == "modify" & .data$id_check != other & .data$type == type)
   if (nrow(to_modify) > 0) {
     to_modify <- to_modify |>
       dplyr::select(.data$id_check, {{ id_col }}, .data$question_name, .data$new_value) |>
@@ -370,7 +372,7 @@ count_occ_all <- function(.tbl, survey, choices, id_col, output = "updated"){
 #' @param survey A survey sheet from Kobo (with column "type" split)
 #' @param choices A choices sheet from Kobo
 #' @param id_col Usually uuid... to count
-#' @param other  A character vector of the start of all other column names. E.g., other = "other_"
+#' @param other A character vector of the start of all other column names. E.g., other = "other_"
 #'
 #' @details Apply all cleaning functions in the right order, modify character and double variables, recode others and other parents, remove duplicates, remove surveys, recount occurences. It uses default for count_occ_all.
 #'
@@ -378,8 +380,8 @@ count_occ_all <- function(.tbl, survey, choices, id_col, output = "updated"){
 #'
 #' @export
 clean_all <- function(.tbl, log, survey, choices, id_col, other){
-  .tbl <- modify_from_log(.tbl, log, {{ id_col }}, "character")
-  .tbl <- modify_from_log(.tbl, log, {{ id_col }}, "double")
+  .tbl <- modify_from_log(.tbl, log, {{ id_col }}, "character", other)
+  .tbl <- modify_from_log(.tbl, log, {{ id_col }}, "double", other)
   .tbl <- recode_other_from_log(.tbl, log, {{ id_col }}, other)
   .tbl <- recode_other_parent_from_log(.tbl, log, {{ id_col }}, other)
   .tbl <- remove_duplicate(.tbl, log, {{ id_col }})

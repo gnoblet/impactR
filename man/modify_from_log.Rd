@@ -4,7 +4,7 @@
 \alias{modify_from_log}
 \title{Modify from log}
 \usage{
-modify_from_log(.tbl, log, id_col, type)
+modify_from_log(.tbl, log, id_col, type, other)
 }
 \arguments{
 \item{.tbl}{A tibble}
@@ -14,6 +14,8 @@ modify_from_log(.tbl, log, id_col, type)
 \item{id_col}{The column id, usually "uuid"}
 
 \item{type}{Either "character" or "double"}
+
+\item{other}{A character vector of the start of all other column names. E.g., other = "other_"}
 }
 \value{
 A tibble with values modified

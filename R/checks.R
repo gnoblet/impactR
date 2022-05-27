@@ -53,7 +53,7 @@ check_cleaning_log <- function(log, .tbl){
   actions <- sum(stringr::str_count(log$action, pattern = "keep|modify|remove|check|duplicate"))
 
   if(actions < nrow(log)){
-    stop("There are wrong actions in column 'action'. It should be either 'keep', 'modify', 'remove' or 'check'.")
+    stop("There are wrong actions in column 'action'. It should be either 'keep', 'modify', 'remove', 'duplicate' or 'check'.")
   }
 
   # Check if question_name that needs a modification belongs to the rawdata

@@ -1,3 +1,11 @@
+# impactR 0.7.7.9000
+
+## Minor bug fixes
+
+* `modify_from_log()` gains a `other` argument, it now only modify values if the id_check is different than the `other` pattern
+
+--- 
+
 # impactR 0.7.6.9000
 
 ## Minor bug fixes
