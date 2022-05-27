@@ -136,7 +136,9 @@ modify_from_log <- function(.tbl, log, id_col, type, other){
       purrr::map(~ .x |>
                    tidyr::pivot_wider(!!rlang::enquo(id_col),
                                       names_from = .data$question_name,
-                                      values_from = .data$new_value))
+                                      values_from = .data$new_value) |>
+                   readr::type_convert())
+
     # Finition
     .tbl <- .tbl |> update_rows_from_list(to_modify, {{ id_col }})
   }
