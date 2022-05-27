@@ -33,7 +33,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">impactR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.7.6.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.7.7.9000</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -106,7 +106,7 @@ through the use of <code>impactR</code>. Let’s load the package.</p>
 <span class="fu"><a href="../reference/data.html">data</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span>
 
 <span class="co"># Show the first lines and types of airports' tibble</span>
-<span class="va">data</span> <span class="op">&lt;-</span> <span class="va">data</span> |&gt; <span class="fu">tibble</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/as_tibble.html" class="external-link">as_tibble</a></span><span class="op">(</span><span class="op">)</span>
+<span class="va">data</span> <span class="op">&lt;-</span> <span class="va">data</span> |&gt; <span class="fu">tibble</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/tibble/man/as_tibble.html" class="external-link">as_tibble</a></span><span class="op">(</span><span class="op">)</span>
 <span class="va">data</span></code></pre></div>
 <pre><code><span class="co">## Warning in as.POSIXlt.POSIXct(x, tz): unable to identify current timezone 'H':</span>
 <span class="co">## please set environment variable 'TZ'</span></code></pre>
@@ -134,7 +134,7 @@ extensively use the tidyverse.</p>
 <p>Let’s sat we have a survey sheet composed as:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/data.html">data</a></span><span class="op">(</span><span class="va">survey</span><span class="op">)</span>
-<span class="va">survey</span> <span class="op">&lt;-</span> <span class="va">survey</span> |&gt; <span class="fu">tibble</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/as_tibble.html" class="external-link">as_tibble</a></span><span class="op">(</span><span class="va">survey</span><span class="op">)</span></code></pre></div>
+<span class="va">survey</span> <span class="op">&lt;-</span> <span class="va">survey</span> |&gt; <span class="fu">tibble</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/tibble/man/as_tibble.html" class="external-link">as_tibble</a></span><span class="op">(</span><span class="va">survey</span><span class="op">)</span></code></pre></div>
 <p>First thing to do with ‘survey’ as it will be used elsewhere:
 separate the type column.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
@@ -223,7 +223,7 @@ checks in advance, which can be modified during the collection
 process.</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/data.html">data</a></span><span class="op">(</span><span class="va">check_list</span><span class="op">)</span>
-<span class="va">check_list</span> <span class="op">&lt;-</span> <span class="va">check_list</span> |&gt; <span class="fu">tibble</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/as_tibble.html" class="external-link">as_tibble</a></span><span class="op">(</span><span class="op">)</span>
+<span class="va">check_list</span> <span class="op">&lt;-</span> <span class="va">check_list</span> |&gt; <span class="fu">tibble</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/tibble/man/as_tibble.html" class="external-link">as_tibble</a></span><span class="op">(</span><span class="op">)</span>
 <span class="va">check_list</span></code></pre></div>
 <pre><code><span class="co">## <span style="color: #949494;"># A tibble: 5 x 7</span></span>
 <span class="co">##   id_check question_name     why             logical_test new_value action type </span>
@@ -294,8 +294,8 @@ proceed with the production of the cleaning log.</p>
 can then export it to an excel file.</p>
 <div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">log</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">log_outliers</span>, <span class="va">log_check_list</span>, <span class="va">log_others</span><span class="op">)</span> |&gt; 
-  <span class="fu">purrr</span><span class="fu">::</span><span class="fu"><a href="https://purrr.tidyverse.org/reference/map.html" class="external-link">map</a></span><span class="op">(</span><span class="op">~</span> <span class="va">.x</span> |&gt; <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span><span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/across.html" class="external-link">across</a></span><span class="op">(</span>.fns <span class="op">=</span> <span class="va">as.character</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> |&gt; 
-  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind.html" class="external-link">bind_rows</a></span><span class="op">(</span><span class="op">)</span> |&gt; 
+  <span class="fu">purrr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/purrr/man/map.html" class="external-link">map</a></span><span class="op">(</span><span class="op">~</span> <span class="va">.x</span> |&gt; <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/dplyr/man/mutate.html" class="external-link">mutate</a></span><span class="op">(</span><span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/dplyr/man/across.html" class="external-link">across</a></span><span class="op">(</span>.fns <span class="op">=</span> <span class="va">as.character</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> |&gt; 
+  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/dplyr/man/bind.html" class="external-link">bind_rows</a></span><span class="op">(</span><span class="op">)</span> |&gt; 
   <span class="fu">readr</span><span class="fu">::</span><span class="fu"><a href="https://readr.tidyverse.org/reference/type_convert.html" class="external-link">type_convert</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <p>It is also possible to use the <code>make_all_logs</code> function
 which combines these three functions and outputs a single cleanup
