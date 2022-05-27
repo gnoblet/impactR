@@ -4,6 +4,7 @@
 
 * `check_cleaning_log()` gains many features (#51)
 * `clean_all()` now internally uses `check_cleaning_log()` before cleaning (#52)
+* `modify_from_log()` now internally uses `readr::type_convert()` to ensure type conversion of new values from cleaning log (#55)
 
 --- 
 
