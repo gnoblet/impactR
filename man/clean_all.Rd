@@ -26,5 +26,5 @@ A cleaned tibble
 Clean all
 }
 \details{
-Apply all cleaning functions in the right order, modify character and double variables, recode others and other parents, remove duplicates, remove surveys, recount occurences. It uses default for count_occ_all.
+Apply all cleaning functions, after checking the log, in the right order, modify character and double variables, recode others and other parents, remove duplicates, remove surveys, recount occurences. It uses default for count_occ_all.
 }

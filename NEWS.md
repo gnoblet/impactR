@@ -1,3 +1,13 @@
+# impactR 0.7.8.9000
+
+## New features
+
+* `check_cleaning_log()` gains many features (#51)
+* `clean_all()` now internally uses `check_cleaning_log()` before cleaning (#52)
+
+--- 
+
+
 # impactR 0.7.7.9000
 
 ## Minor bug fixes
