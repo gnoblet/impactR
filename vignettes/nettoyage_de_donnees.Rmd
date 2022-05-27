@@ -72,7 +72,7 @@ C'est aussi simple que deux étapes.
 
 1- Vérifier si le journal de nettoyage est minimalement bien rempli :
 ```{r check-cleaning-log}
-check_cleaning_log(cleaning_log, data)
+check_cleaning_log(cleaning_log, data, uuid, "autre_")
 # Si NULL, alors c'est ok
 ```
 

@@ -9,6 +9,8 @@
 #' @title  Check cleaning log
 #' @param log A cleaning log
 #' @param .tbl Data to clean
+#' @param id_col The column id, usually "uuid"
+#' @param other  A character vector of the start of all other column names. E.g., other = "other_"
 #'
 #' @details Names should be the English version. If necessary, please use [impactR::log_names_fr_en] beforehand.
 #'
@@ -17,8 +19,10 @@
 #' @importFrom rlang .data
 #'
 #' @export
-check_cleaning_log <- function(log, .tbl){
+check_cleaning_log <- function(log, .tbl, id_col, other){
   en_names <- c("id_check", "question_name", "question_label", "why", "feedback", "action", "old_value", "new_value", "type", "other_parent_question", "other_old_value", "other_new_value", "checkdate" )
+
+  id_col_name <- rlang::as_name(rlang::enquo(id_col))
 
   # Check if the column names are the right names
   are_cols_in <- !(en_names %in% colnames(log))
@@ -57,16 +61,91 @@ check_cleaning_log <- function(log, .tbl){
   }
 
   # Check if question_name that needs a modification belongs to the rawdata
-  are_cols_in <- !(log |> dplyr::filter(.data$action == "modify") |> dplyr::pull(.data$question_name) %in% colnames(.tbl))
+  question_names <- log |>
+    dplyr::filter(.data$action == "modify") |>
+    tidyr::drop_na(.data$question_name) |>
+    dplyr::pull(.data$question_name)
 
-  if(sum(are_cols_in) >= 1){
-    stop("The following 'question_name' values does not exist in the rawdata column names: ", paste(log$question_name[are_cols_in], collapse = ", "), ".")
+  are_cols_in <- question_names[!(question_names %in% colnames(.tbl))]
+
+  if(length(are_cols_in) >= 1){
+    stop("The following 'question_name' values does not exist in the rawdata column names:\n", paste(are_cols_in, collapse = "\n "))
   }
 
-  # To be added :
-  # - check types of the question name in the log against its type in the rawdata
-  # - check that new value is not the same as the old value
-  # - check that new value is not
+  # Check if other parent question_name that needs a modification belongs to the rawdata
+  other_parent_questions <- log |>
+    dplyr::filter(.data$action == "modify") |>
+    tidyr::drop_na(.data$other_parent_question) |>
+    dplyr::pull(.data$other_parent_question)
+
+  are_cols_in <- other_parent_questions[!(other_parent_questions %in% colnames(.tbl))]
+
+  if(length(are_cols_in) >= 1){
+    stop("The following 'other_parent_question' values does not exist in the rawdata column names:\n", paste(are_cols_in, collapse = "\n "))
+  }
+
+  # Check if there are duplicates
+  duplicates <- log |>
+    dplyr::filter(.data$action == "modify") |>
+    tidyr::drop_na(.data$question_name) |>
+    dplyr::mutate(dup = paste0({{ id_col }}, ": ", .data$question_name)) |>
+    dplyr::pull(.data$dup)
+
+  duplicates <- duplicates[duplicated(duplicates)]
+
+
+  if (length(duplicates) >= 1) {
+
+    stop("The following id_col and question_name are duplicates and to be modified:\n ", paste(duplicates, collapse = "\n "))
+  }
+
+  # Check if there are other parent duplicates
+  duplicates <- log |>
+    dplyr::filter(.data$action == "modify") |>
+    tidyr::drop_na(.data$other_parent_question) |>
+    dplyr::mutate(dup = paste0({{ id_col }}, ": ", .data$other_parent_question)) |>
+    dplyr::pull(.data$dup)
+
+  duplicates <- duplicates[duplicated(duplicates)]
+
+
+  if (length(duplicates) >= 1) {
+
+    stop("The following id_col and other_parent_question are duplicates and to be modified\n: ", paste(duplicates, collapse = "\n "))
+  }
+
+
+  # Check if there are old and new values to be modified that are identical
+  identical <- log |>
+    dplyr::filter(.data$action == "modify",
+                  .data$old_value == .data$new_value)
+
+
+  if(nrow(identical) >= 1) {
+
+    identical <- identical |>
+      dplyr::mutate(dup = paste0({{ id_col }}, ": ", .data$question_name)) |>
+      dplyr::pull(.data$dup)
+
+    warning("For the following id_col and question_name, old and new values are identical:\n ", paste(identical, collapse = "\n "))
+  }
+
+
+  # Check if there are old and new values to be modified that are identical
+  identical <- log |>
+    dplyr::filter(.data$action == "modify",
+                  .data$other_old_value == .data$other_new_value)
+
+
+  if(nrow(identical) >= 1) {
+
+    identical <- identical |>
+      dplyr::mutate(dup = paste0({{ id_col }}, ": ", .data$other_parent_question)) |>
+      dplyr::pull(.data$dup)
+
+    warning("For the following id_col and other_parent_question, old and new other parent values are identical:\n ", paste(identical, collapse = "\n "))
+  }
+
 
   return(NULL)
 }

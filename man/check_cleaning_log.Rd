@@ -4,12 +4,16 @@
 \alias{check_cleaning_log}
 \title{Check cleaning log}
 \usage{
-check_cleaning_log(log, .tbl)
+check_cleaning_log(log, .tbl, id_col, other)
 }
 \arguments{
 \item{log}{A cleaning log}
 
 \item{.tbl}{Data to clean}
+
+\item{id_col}{The column id, usually "uuid"}
+
+\item{other}{A character vector of the start of all other column names. E.g., other = "other_"}
 }
 \description{
 Check cleaning log
