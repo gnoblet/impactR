@@ -1,7 +1,7 @@
 Package: impactR
 Type: Package
 Title: Ease IMPACT's data and database officers woRk
-Version: 0.7.8.9000
+Version: 0.7.9.9000
 Authors@R: c(
         person(
             'Noblet', 'Guillaume',
@@ -12,11 +12,10 @@ Authors@R: c(
 URL: https://github.com/gnoblet/impactR,
     https://gnoblet.github.io/impactR/
 Maintainer: Guillaume Noblet <gnoblet@zaclys.net>
-Description: Mainly a reminder of totally-perfectible functions used and made on 
-    the go for the Burkina Faso mission in 2021. Some functions written as utils
-    (to never write them again) and to monitor, clean and analyze Kobo survey data,
-    mainly using the `srvyr` package and the tidyverse overall.
-    It requires R 4.1+ (mostly for the native pipe `|>`).
+Description: `impactR` started as a simple project: mainly a reminder of
+  totally-perfectible functions used and made on the go for the Burkina Faso 
+  team in 2021. It became broader, aiming now to ease data teams daily R work
+  and to cover most of the research cycle's tasks.
 Depends: R (>= 4.1.0)
 Encoding: UTF-8
 RoxygenNote: 7.1.2
@@ -44,10 +43,7 @@ Imports:
 Suggests:
     rmarkdown,
     knitr,
-    tmap,
-    sf,
-    grDevices,
-    ggplot2
+    openxlsx
 VignetteBuilder: knitr 
 LazyData: true
 License: GPL (>= 3)
