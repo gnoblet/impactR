@@ -33,6 +33,7 @@ get_select_one <- function(survey){
 
 
 #' @title Get all select multiple from survey sheet
+#'
 #' @param survey The survey sheet from Kobo (with column "type" split)
 #'
 #' @details survey should have a split type column with types of variables such as "select_one", "select_multiple", etc.
@@ -313,7 +314,7 @@ label_all_select_one <- function(data, survey, choices, id_col){
     dplyr::pull(.data$name)
 
   recoded <- purrr::map(
-      select_multiples, 
+      select_multiples,
       ~ label_select_one(data, survey, choices, {{ id_col }}, {{ .x }}, "id_col")) |>
     left_joints({{ id_col }})
 

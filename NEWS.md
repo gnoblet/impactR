@@ -1,3 +1,12 @@
+# impactR 0.7.9.9000
+
+## New features
+
+* Two new helpers to export nice excel workbooks using `openxlsx`: `clean_workbook_list()` to export a named list of dataframes and `clean_workbook_df()` to export one dataframe. (#57)
+* Updated README.
+
+--- 
+
 # impactR 0.7.8.9000
 
 ## New features

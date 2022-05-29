@@ -10,20 +10,27 @@ totally-perfectible functions used and made on the go for the Burkina
 Faso team in 2021. It became broader, aiming now to ease data teams
 daily R work and to cover most of the research cycle’s tasks.
 
-Documentation is on the edge of being written (French and English
-version)
+It is based on three spreadsheets that need to be filled in and
+coordinated by either assessment officers, data officers or field
+officers:
+
+1.  *To monitor data collection* and get a log to fill: a spreadsheet of
+    logical tests based on the questionnaire and the Kobo tool
+2.  *To clean data*: a cleaning log that has been (well-)filled
+3.  *To analyze data*: a data analysis plan
 
 Specs:
 
--   mainly using Kobo collection and the `tidyverse` for most, `srvyr`
-    for survey data analysis, `janitor`, `tmap`
--   data need to be importer with `import_*` function or
-    `janitor::cleang_names()`
+-   mainly, it is aimed at data collection with Kobo
+-   it extensively uses the `tidyverse`, and `srvyr` for survey data
+    analysis
+-   since version `0.7.8`, it is considered robust enough and has been
+    tested on 3 different
 -   it requires R 4.1+ (mostly for the native pipe `|>`)
 
 ## Installation
 
-You can install the last version of impactR from
+You can install the last version of `impactR` from
 [GitHub](https://github.com/) with:
 
 ``` r
@@ -39,19 +46,21 @@ Well, in practice, it isn’t much.
 
 Roadmap is as follows:
 
--   [x] (done ?) introduce tidy eval wherever it makes sense
+-   [x] introduce tidy eval wherever it makes sense
 -   [x] add (re) count columns post-cleaning for multiple choices
     columns and simple choice’s other column
--   [ ] write more documentaion
+-   [x] write more documentation
 -   [x] tidy eval to cleaning functions
 -   [x] dots not as the last arg, not always at least
 -   [ ] functions to create a small report of the values that
     effectively changed or were removed when cleaning thanks to a
     cleaning log
--   [ ] more plotting functions
+-   [x] more robust check cleaning log and check check list functions
+-   [x] export clean (open)-xlsx files
+-   [ ] add a grouping arg to `make_log_outlier()`
 -   [ ] (ongoing) MSNA analysis tools : roster (education, demography,
     WGI), weighting functions, analysis functions
--   [ ] (maybe) Split this big mess into several consolidated small
+-   [ ] (ongoing) Split this big mess into several consolidated small
     packages : a viz one, an analysis one and a cleaning one
 
 ## Side projects
@@ -65,9 +74,9 @@ and based on older versions of `impactR.`
 
 Youpi! some documentation:
 
--   [The main vignette for the main workflow (en
-    version)](https://gnoblet.github.io/impactR/articles/base_de_travail.html)
 -   [The main vignette for the main workflow (fr
+    version)](https://gnoblet.github.io/impactR/articles/base_de_travail.html)
+-   [The main vignette for the main workflow (en
     version)](https://gnoblet.github.io/impactR/articles/main_workflow.html)
 
 In R, use:
@@ -87,14 +96,17 @@ box::use(impactR[...])
 
 ## basic example codes and uses (not run!)
 
-## Import a csv file with clean names and clean types
+## Import a csv file with clean names and clean types, do guess types on the max number of linse
 # import_csv("data.csv")
 
 ## Get colnames for sector foodsec whose variables start with "f_"
 # tbl_col_start(data, "f_")
 
-## Bbox with a buffer (useful to add compass, scale_bar, legends to a map)
-# buffer_bbox(admin1_sf, buffer = 0.05)
+## Group split to a named list
+# named_group_split(data, admin2)
+
+## Left join many tibbles
+# left_joints(tibble_list, id_col)
 
 ## Make an outlier log for all numeric variables in the data.frame/tibble
 # make_log_outlier(rawdata, survey, id_col = uuid, i_enum_id)
@@ -107,8 +119,13 @@ box::use(impactR[...])
 #               id_col = uuid, 
 #               i_enum_id)
 
-## Recode parent "other" from a well-filled cleaning log
-# recode_other_parent_from_log(data, log, id_col = uuid)
+## Clean from log
+# make_all_logs(rawdata,
+#               log,
+#               survey, 
+#               choices,
+#               other = "other_", 
+#               id_col = uuid)
 
 ## Calculate weigthed proportion for shelter type by group (e.g. administrative areas or population groups)
 # svy_prop(design, s_shelter_type, c(admin1, group_pop), na.rm = T, stat_name = "prop", level = 0.95)
