@@ -82,6 +82,21 @@
     <loc>https://gnoblet.github.io/impactR/reference/encode.html</loc>
   </url>
   <url>
+    <loc>https://gnoblet.github.io/impactR/reference/fclcp.html</loc>
+  </url>
+  <url>
+    <loc>https://gnoblet.github.io/impactR/reference/fcm.html</loc>
+  </url>
+  <url>
+    <loc>https://gnoblet.github.io/impactR/reference/fcp.html</loc>
+  </url>
+  <url>
+    <loc>https://gnoblet.github.io/impactR/reference/fcs.html</loc>
+  </url>
+  <url>
+    <loc>https://gnoblet.github.io/impactR/reference/foodsec.html</loc>
+  </url>
+  <url>
     <loc>https://gnoblet.github.io/impactR/reference/get_choices.html</loc>
   </url>
   <url>
@@ -95,6 +110,9 @@
   </url>
   <url>
     <loc>https://gnoblet.github.io/impactR/reference/get_select_one.html</loc>
+  </url>
+  <url>
+    <loc>https://gnoblet.github.io/impactR/reference/hhs.html</loc>
   </url>
   <url>
     <loc>https://gnoblet.github.io/impactR/reference/if_not_in_stop.html</loc>
@@ -125,6 +143,9 @@
   </url>
   <url>
     <loc>https://gnoblet.github.io/impactR/reference/label_select_one.html</loc>
+  </url>
+  <url>
+    <loc>https://gnoblet.github.io/impactR/reference/lcsi.html</loc>
   </url>
   <url>
     <loc>https://gnoblet.github.io/impactR/reference/left_joints.html</loc>
@@ -179,6 +200,9 @@
   </url>
   <url>
     <loc>https://gnoblet.github.io/impactR/reference/pull_uuid.html</loc>
+  </url>
+  <url>
+    <loc>https://gnoblet.github.io/impactR/reference/rcsi.html</loc>
   </url>
   <url>
     <loc>https://gnoblet.github.io/impactR/reference/recode_na.html</loc>
