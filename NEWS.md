@@ -1,3 +1,14 @@
+# impactR 0.7.10.9000
+
+## New features
+
+* Four new foodsec indicators calculation: Food Consumption Score `fcs()`, reduce Coping Strategy Index `rcsi()`, Household Hunger Scale `hhs()`, Livelihood Coping Strategy Index `lcsi()`. (#59)
+* Fews net matrix and scores: FEWS NET Food Consumption Matrix's cell `fcm()`, Food Consumption phase according to the FCM `fcp()` and FEWS NET Food Consumption-Livelihood Coping phase `fclcp()`. (#59)
+* A general function that calculates all: `foodsec()`. (#59)
+* Thanks to [SaeedR1987/healthyr](https://github.com/SaeedR1987/healthyr).
+
+--- 
+
 # impactR 0.7.9.9000
 
 ## New features
