@@ -412,6 +412,7 @@ make_analysis <- function(
 #' @param survey The survey sheet from Kobo that contains at least column 'list_name' (split from 'type') and 'name'
 #' @param choices The choices sheet from Kobo contains at least column 'list_name' (split from 'type') and 'name'
 #' @param dap A data analysis plan, typically from an excel sheet
+#' @param bind Should it result in a list of a tibble? Default to list.
 #'
 #' @return A summarized analysis
 #'
@@ -436,7 +437,7 @@ make_analysis_from_dap <- function(
 
   mapped <- purrr::pmap(
     dap |>
-      dplyr::select(question_name, analysis, group, level, na_rm, vartype),
+      dplyr::select(.data$question_name, .data$analysis, .data$group, .data$level, .data$na_rm, .data$vartype),
     function(question_name, analysis, group, level, na_rm, vartype){
 
       if (na_rm == "TRUE") {na_rm_lgl <- TRUE} else { na_rm_lgl <- FALSE}
@@ -450,7 +451,7 @@ make_analysis_from_dap <- function(
     purrr::set_names(dap$id_analysis)
 
   if (bind) mapped <- dplyr::bind_rows(mapped, .id = "id_analysis") |>
-      dplyr::left_join(dap |> impactR::deselect(analysis, group), by = "id_analysis")
+      dplyr::left_join(dap |> impactR::deselect(.data$analysis, .data$group), by = "id_analysis")
 
 
   return(mapped)

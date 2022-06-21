@@ -1,3 +1,12 @@
+# impactR 0.7.11.9000
+
+## New features
+
+* `get_choices()` now returns a tibble when `label = TRUE`. Two columns, the name and the label. (#61)
+* `make_analysis()` and `make_analysis_from_dap()` gets a fresh look and can now be used while still under total development. (#62)
+
+---
+
 # impactR 0.7.10.9000
 
 ## New features

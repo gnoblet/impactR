@@ -4,7 +4,7 @@
 \alias{make_analysis_from_dap}
 \title{Make analysis from data analysis plan}
 \usage{
-make_analysis_from_dap(design, survey, choices, dap)
+make_analysis_from_dap(design, survey, choices, dap, bind = F)
 }
 \arguments{
 \item{design}{A design object}
@@ -14,6 +14,8 @@ make_analysis_from_dap(design, survey, choices, dap)
 \item{choices}{The choices sheet from Kobo contains at least column 'list_name' (split from 'type') and 'name'}
 
 \item{dap}{A data analysis plan, typically from an excel sheet}
+
+\item{bind}{Should it result in a list of a tibble? Default to list.}
 }
 \value{
 A summarized analysis

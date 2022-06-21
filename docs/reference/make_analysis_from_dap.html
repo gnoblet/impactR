@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">impactR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.7.10.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.7.11.9000</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -60,7 +60,7 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">make_analysis_from_dap</span><span class="op">(</span><span class="va">design</span>, <span class="va">survey</span>, <span class="va">choices</span>, <span class="va">dap</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">make_analysis_from_dap</span><span class="op">(</span><span class="va">design</span>, <span class="va">survey</span>, <span class="va">choices</span>, <span class="va">dap</span>, bind <span class="op">=</span> <span class="cn">F</span><span class="op">)</span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -73,6 +73,8 @@
 <dd><p>The choices sheet from Kobo contains at least column 'list_name' (split from 'type') and 'name'</p></dd>
 <dt>dap</dt>
 <dd><p>A data analysis plan, typically from an excel sheet</p></dd>
+<dt>bind</dt>
+<dd><p>Should it result in a list of a tibble? Default to list.</p></dd>
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
