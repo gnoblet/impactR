@@ -125,10 +125,10 @@ get_choices <- function(survey, choices, col, conc = T, label = F){
     to_return <- to_return |> dplyr::pull(.data$name)
 
     if (rlang::is_true(conc)) {
-      to_return <- stringr::str_c(col, to_return, sep = "_")
+      to_return <- stringr::str_c(col_name, to_return, sep = "_")
     }} else {
       to_return <- to_return |>
-        dplyr::pull(.data$label)
+        dplyr::select(.data$name, .data$label)
     }
 
 
@@ -179,8 +179,8 @@ label_select_multiple <- function(data, survey, choices, id_col, col, return_df 
   # to ensure quoted or unquoted columns can be passed
   col <- rlang::sym(rlang::ensym(col))
 
-  dict <- tibble::tibble(choices_name = get_choices(survey, choices, {{ col }}, conc = F),
-                         choices_label = get_choices(survey, choices, {{ col }}, label = T))
+  dict <-   dict <- get_choices(survey, choices, {{ col }}, label = T) |>
+    dplyr::rename(choices_label = .data$label, choices_name = .data$name)
 
   dict <- rlang::set_names(dict$choices_label, dict$choices_name)
 
@@ -264,8 +264,8 @@ label_select_one <- function(data, survey, choices, id_col, col, return_df = NUL
   # to ensure quoted or unquoted columns can be passed
   col <- rlang::sym(rlang::ensym(col))
 
-  dict <- tibble::tibble(choices_name = get_choices(survey, choices, {{ col }}, conc = F),
-                         choices_label = get_choices(survey, choices, {{ col }}, label = T))
+  dict <- get_choices(survey, choices, {{ col }}, label = T) |>
+    dplyr::rename(choices_label = .data$label, choices_name = .data$name)
 
   dict <- rlang::set_names(dict$choices_label, dict$choices_name)
 
