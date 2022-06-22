@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">impactR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.7.11.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.7.12.9000</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -65,13 +65,51 @@
 
     <div class="section level2">
     <h2 id="format">Format<a class="anchor" aria-label="anchor" href="#format"></a></h2>
-    <p>A data frame with 5 rows and 13 variables:</p><dl><dt>question_name</dt>
-<dd><p>The question_name or the ratio</p></dd>
+    <p>A data frame with 5 rows and 13 variables:</p><dl><dt>id_analysis</dt>
+<dd><p>The analysis id. Each line is a different one.</p></dd>
+
+  <dt>rq</dt>
+<dd><p>The topic/sector of the indicator.</p></dd>
+
+  <dt>sub_rq</dt>
+<dd><p>The sub-topic/sub-sector of the indicator.</p></dd>
+
+  <dt>indicator</dt>
+<dd><p>The label of the indicator, e.g. "% of HHs by type of shelter".</p></dd>
+
+  <dt>recall</dt>
+<dd><p>The recall period (not to be included in the indicator), e.g. "30 days prior to data collection".</p></dd>
+
+  <dt>question_name</dt>
+<dd><p>The name of the variable in the data or, for a ratio, the two names separated by a comma (no space).</p></dd>
+
+  <dt>subset</dt>
+<dd><p>If calculated on a subset, name it, e.g. "among households that received a humanitarian aid".</p></dd>
+
+  <dt>analysis_name</dt>
+<dd><p>The analysis type label, e.g. "Percentage" or "Mean".</p></dd>
 
   <dt>analysis</dt>
-<dd><p>Tne R type of analysis to pass to `make_analysis`</p></dd>
+<dd><p>The R type of analysis to pass to `make_analysis()`.</p></dd>
 
-  ...
+  <dt>none_label</dt>
+<dd><p>The label for all NA values if "prop_simple_overall" or "prop_multiple_overall", e.g. "None or missing data".</p></dd>
+
+  <dt>group_name</dt>
+<dd><p>The label of the grouping variable/column, e.g. "Household displacement status" with codes that may be labelled "IDP" or "Non IDP".</p></dd>
+
+  <dt>group</dt>
+<dd><p>The variable/column name to group by, e.g. "hh_status" that may be coded "idp" or non_idp".</p></dd>
+
+  <dt>level</dt>
+<dd><p>Level of confidence. Parameter to pass to `svy_*()` functions.</p></dd>
+
+  <dt>na_rm</dt>
+<dd><p>Should NAs be removed? Parameter to pass to `svy_*()` functions.</p></dd>
+
+  <dt>vartype</dt>
+<dd><p>Variance type in outputs. Parameter to pass to `svy_*()` functions.</p></dd>
+
 
 </dl></div>
 
