@@ -207,24 +207,20 @@ svy_ratio <- function(design, num, denom, group = NULL, na_rm = T, stat_name = "
 #' @param na_rm Should NAs be removed prior to calculation ?
 #' @param vartype Parameter from `srvyr` functions. Default to "ci"
 #'
-#' @details # General information
+#' @description This function still is experimental. `r lifecycle::badge("experimental")`
+#'
+#' @section General information:
 #'
 #'  * Survey and choices must be the final recoded versions of the data. For instance if you have recoded some "other" answers to new choices in the dataset. It must have been added to the choices sheet of the Kobo tool.
 #'
 #'  * Design is simply a design object mapped from the dataset thanks to `srvyr::as_survey_design()`.
 #'
-#'  # Types of analysis
+#' @section Types of analysis:
 #'   * Median: "median" computes the weighted median using `svy_median()` under the hood
 #'   * Mean : "mean" computes the weighted mean using `svy_mean()` under the hood
 #'   * Simple proportion : there are two different possible calculation. The first one "prop_simple" removes NA values and calculate the weighted proportion thanks to `svy_prop()`. The second one "prop_simple_overall" mutate NA values to "none_prop_simple_overall" and then calculates the weighted proportion.
 #'   * Multiple proportion : there are two different possible calculation. The first one "prop_multiple" removes NA values from each dummy 1/0 choice column and calculate the weighted proportion thanks to `svy_prop()`. The second one "prop_multiple_overall" mutate NA values to 0 for each dummy 1/0 choice column and then calculates the weighted proportion.
 #'   * Ratio: ratio is still under construction for managing NAs. For now it removes them and simply computes the ratio of numeric columns col1 over col2, when `col` is "col1,col2".
-#'
-#'
-#' @description
-#' `r lifecycle::badge("experimental")`
-#'
-#' This function still is experimental.
 #'
 #' @return A summarized analysis
 #'
