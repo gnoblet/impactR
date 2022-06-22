@@ -1,3 +1,11 @@
+# impactR 0.7.12.9000
+
+## New features
+
+* `make_analysis()` and `make_analysis_from_dap()` gets a lot fresher look and are totally usable. There's still the need for a `check_dap()` function.
+
+---
+
 # impactR 0.7.11.9000
 
 ## New features

@@ -200,15 +200,28 @@ svy_ratio <- function(design, num, denom, group = NULL, na_rm = T, stat_name = "
 #' @param survey The survey sheet from Kobo that contains at least column 'list_name' (split from 'type') and 'name'
 #' @param choices The choices sheet from Kobo contains at least column 'list_name' (split from 'type') and 'name'
 #' @param col Column to make analysis from
-#' @param analysis One of "median", "mean", "prop_simple", "prop_multiple", "prop_multiple_overall", "ratio"
+#' @param analysis One of "median", "mean", "prop_simple", "prop_simple_overall", "prop_multiple", "prop_multiple_overall", "ratio"
+#' @param none_label Label for recoding NA if "prop_simple_overall" is selected. If NULL, the code "none_prop_simple_overall" is used as a label.
 #' @param group Variable(s) to group by
 #' @param level Confidence level to pass to `svy_*` functions
 #' @param na_rm Should NAs be removed prior to calculation ?
 #' @param vartype Parameter from `srvyr` functions. Default to "ci"
 #'
-#' @details The design object must have had columns with underscores as choices separators, for instance they could have been imported either with `impactR::write_xlsx` or with `janitor::clean_names`
+#' @details # General information
 #'
-#' #' #' @description
+#'  * Survey and choices must be the final recoded versions of the data. For instance if you have recoded some "other" answers to new choices in the dataset. It must have been added to the choices sheet of the Kobo tool.
+#'
+#'  * Design is simply a design object mapped from the dataset thanks to `srvyr::as_survey_design()`.
+#'
+#'  # Types of analysis
+#'   * Median: "median" computes the weighted median using `svy_median()` under the hood
+#'   * Mean : "mean" computes the weighted mean using `svy_mean()` under the hood
+#'   * Simple proportion : there are two different possible calculation. The first one "prop_simple" removes NA values and calculate the weighted proportion thanks to `svy_prop()`. The second one "prop_simple_overall" mutate NA values to "none_prop_simple_overall" and then calculates the weighted proportion.
+#'   * Multiple proportion : there are two different possible calculation. The first one "prop_multiple" removes NA values from each dummy 1/0 choice column and calculate the weighted proportion thanks to `svy_prop()`. The second one "prop_multiple_overall" mutate NA values to 0 for each dummy 1/0 choice column and then calculates the weighted proportion.
+#'   * Ratio: ratio is still under construction for managing NAs. For now it removes them and simply computes the ratio of numeric columns col1 over col2, when `col` is "col1,col2".
+#'
+#'
+#' @description
 #' `r lifecycle::badge("experimental")`
 #'
 #' This function still is experimental.
@@ -222,6 +235,7 @@ make_analysis <- function(
   choices,
   col,
   analysis,
+  none_label = NULL,
   group = NULL,
   level = 0.9,
   na_rm = T,
@@ -233,7 +247,12 @@ make_analysis <- function(
 
   # Check for id_col in .tbl
   col_name <- rlang::enquo(col) |> rlang::as_name()
-  if (is.null(group)) {group_name <- NA_character_} else {group_name <- rlang::enquo(group) |> rlang::as_name()}
+
+  if (is.null(group)) {group_name <- NA_character_} else {
+    group_name <- rlang::enquo(group) |> rlang::as_name()
+    if_not_in_stop(design, group_name, "design", "group")}
+
+  none <- "none_prop_simple_overall"
 
   if (analysis != "ratio") {
     if_not_in_stop(design, col_name, "design", "col")
@@ -264,23 +283,51 @@ make_analysis <- function(
 
   } else if (analysis == "prop_simple") {
 
-      return <- design |>
-        svy_prop({{ col }}, {{ group }}, na_rm = na_rm, stat_name = stat_name, level = level, vartype = vartype) |>
-        dplyr::mutate(name = col_name,
-                      analysis = analysis) |>
-        dplyr::rename(choices = {{ col }}) |>
-        dplyr::left_join(get_choices(survey, choices, {{ col }}, label = T),
-                         by = c("choices" = "name")) |>
-        dplyr::rename(choices_label = label)
+    design <- design |>
+      srvyr::drop_na({{ col }})
 
-      if (is.null(group)) { return <- return |>
-          dplyr::mutate(group_disagg = NA_character_, group_disagg_label = NA_character_) } else
-          {
-            return <- return |>
-              dplyr::rename(group_disagg = {{ group }}) |>
-              dplyr::left_join(get_choices(survey, choices, {{ group }}, label = T), by = c("group_disagg" = "name")) |>
-              dplyr::rename(group_disagg_label = label)
-          }
+    return <- design |>
+      svy_prop({{ col }}, {{ group }}, na_rm = na_rm, stat_name = stat_name, level = level, vartype = vartype) |>
+      dplyr::mutate(name = col_name,
+                    analysis = analysis) |>
+      dplyr::rename(choices = {{ col }}) |>
+      dplyr::left_join(get_choices(survey, choices, {{ col }}, label = T),
+                       by = c("choices" = "name")) |>
+      dplyr::rename(choices_label = label)
+
+    if (is.null(group)) { return <- return |>
+        dplyr::mutate(group_disagg = NA_character_, group_disagg_label = NA_character_) } else
+        {
+          return <- return |>
+            dplyr::rename(group_disagg = {{ group }}) |>
+            dplyr::left_join(get_choices(survey, choices, {{ group }}, label = T), by = c("group_disagg" = "name")) |>
+            dplyr::rename(group_disagg_label = label)
+        }
+
+
+  } else if (analysis == "prop_simple_overall") {
+
+    if (is.null(none)) {rlang::abort("Missing 'none' arg, while analysis 'prop_simple_overall' is selected.") }
+
+    return <- design |>
+      dplyr::mutate(!!rlang::sym(rlang::ensym(col)) := ifelse(is.na(!!rlang::sym(rlang::ensym(col))), none, !!rlang::sym(rlang::ensym(col)))) |>
+      svy_prop({{ col }}, {{ group }}, na_rm = F, stat_name = stat_name, level = level, vartype = vartype) |>
+      dplyr::mutate(name = col_name,
+                    analysis = analysis) |>
+      dplyr::rename(choices = {{ col }}) |>
+      dplyr::left_join(get_choices(survey, choices, {{ col }}, label = T),
+                       by = c("choices" = "name")) |>
+      dplyr::rename(choices_label = label) |>
+      dplyr::mutate(choices_label = replace(.data$choices_label, choices == none, ifelse(is.null(none_label), none, none_label)))
+
+    if (is.null(group)) { return <- return |>
+      dplyr::mutate(group_disagg = NA_character_, group_disagg_label = NA_character_) } else
+      {
+        return <- return |>
+          dplyr::rename(group_disagg = {{ group }}) |>
+          dplyr::left_join(get_choices(survey, choices, {{ group }}, label = T), by = c("group_disagg" = "name")) |>
+          dplyr::rename(group_disagg_label = label)
+      }
 
 
   } else if (analysis == "prop_multiple") {
@@ -437,21 +484,26 @@ make_analysis_from_dap <- function(
 
   mapped <- purrr::pmap(
     dap |>
-      dplyr::select(.data$question_name, .data$analysis, .data$group, .data$level, .data$na_rm, .data$vartype),
-    function(question_name, analysis, group, level, na_rm, vartype){
+      dplyr::select(.data$question_name, .data$analysis, .data$none_label, .data$group, .data$level, .data$na_rm, .data$vartype),
+    function(question_name, analysis, none_label, group, level, na_rm, vartype){
 
       if (na_rm == "TRUE") {na_rm_lgl <- TRUE} else { na_rm_lgl <- FALSE}
 
       if (is.na(group)) {group_lgl <- NULL} else {group_lgl <- group}
 
-      analysis <- make_analysis(design, survey, choices, {{ question_name }}, {{ analysis }}, group_lgl, level, na_rm_lgl, vartype)
+      if (is.na(none_label)) {none_label_lgl <- NULL} else {none_label_lgl <- none_label}
+
+      analysis <- make_analysis(design, survey, choices, {{ question_name }}, {{ analysis }}, none_label_lgl, group_lgl, level, na_rm_lgl, vartype)
+
       return(analysis)
-      }
+    }
     ) |>
     purrr::set_names(dap$id_analysis)
 
-  if (bind) mapped <- dplyr::bind_rows(mapped, .id = "id_analysis") |>
-      dplyr::left_join(dap |> impactR::deselect(.data$analysis, .data$group), by = "id_analysis")
+  if (bind) {
+    mapped <- dplyr::bind_rows(mapped, .id = "id_analysis") |>
+      dplyr::left_join(dap |> impactR::deselect("analysis", "group"), by = "id_analysis")
+  }
 
 
   return(mapped)

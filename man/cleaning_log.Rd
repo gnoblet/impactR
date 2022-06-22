@@ -16,6 +16,6 @@ A data frame with 17 rows and 17 variables:
 cleaning_log
 }
 \description{
-A dataset (in French) containing a cleaning_log. Columns are necessary and comes from the `make_log` function
+A dataset (in French) containing a cleaning_log. Columns are necessary and comes from the `make_log()` function
 }
 \keyword{datasets}

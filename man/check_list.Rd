@@ -16,6 +16,6 @@ A data frame with a few rows and variables:
 check_list
 }
 \description{
-A dataset (in French) containing a list of checks to pass to `make_log`
+A dataset (in French) containing a list of checks to pass to `make_log()`
 }
 \keyword{datasets}

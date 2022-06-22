@@ -10,6 +10,7 @@ make_analysis(
   choices,
   col,
   analysis,
+  none_label = NULL,
   group = NULL,
   level = 0.9,
   na_rm = T,
@@ -25,7 +26,9 @@ make_analysis(
 
 \item{col}{Column to make analysis from}
 
-\item{analysis}{One of "median", "mean", "prop_simple", "prop_multiple", "prop_multiple_overall", "ratio"}
+\item{analysis}{One of "median", "mean", "prop_simple", "prop_simple_overall", "prop_multiple", "prop_multiple_overall", "ratio"}
+
+\item{none_label}{Label for recoding NA if "prop_simple_overall" is selected. If NULL, the code "none_prop_simple_overall" is used as a label.}
 
 \item{group}{Variable(s) to group by}
 
@@ -39,13 +42,21 @@ make_analysis(
 A summarized analysis
 }
 \description{
-Make analysis
-}
-\details{
-The design object must have had columns with underscores as choices separators, for instance they could have been imported either with `impactR::write_xlsx` or with `janitor::clean_names`
-
-#' #' @description
 `r lifecycle::badge("experimental")`
 
 This function still is experimental.
+}
+\details{
+# General information
+
+ * Survey and choices must be the final recoded versions of the data. For instance if you have recoded some "other" answers to new choices in the dataset. It must have been added to the choices sheet of the Kobo tool.
+
+ * Design is simply a design object mapped from the dataset thanks to `srvyr::as_survey_design()`.
+
+ # Types of analysis
+  * Median: "median" computes the weighted median using `svy_median()` under the hood
+  * Mean : "mean" computes the weighted mean using `svy_mean()` under the hood
+  * Simple proportion : there are two different possible calculation. The first one "prop_simple" removes NA values and calculate the weighted proportion thanks to `svy_prop()`. The second one "prop_simple_overall" mutate NA values to "none_prop_simple_overall" and then calculates the weighted proportion.
+  * Multiple proportion : there are two different possible calculation. The first one "prop_multiple" removes NA values from each dummy 1/0 choice column and calculate the weighted proportion thanks to `svy_prop()`. The second one "prop_multiple_overall" mutate NA values to 0 for each dummy 1/0 choice column and then calculates the weighted proportion.
+  * Ratio: ratio is still under construction for managing NAs. For now it removes them and simply computes the ratio of numeric columns col1 over col2, when `col` is "col1,col2".
 }
