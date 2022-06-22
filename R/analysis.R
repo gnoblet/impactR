@@ -211,9 +211,9 @@ svy_ratio <- function(design, num, denom, group = NULL, na_rm = T, stat_name = "
 #'
 #' @section General information:
 #'
-#'  * Survey and choices must be the final recoded versions of the data. For instance if you have recoded some "other" answers to new choices in the dataset. It must have been added to the choices sheet of the Kobo tool.
+#'   * Survey and choices must be the final recoded versions of the data. For instance if you have recoded some "other" answers to new choices in the dataset. It must have been added to the choices sheet of the Kobo tool.
 #'
-#'  * Design is simply a design object mapped from the dataset thanks to `srvyr::as_survey_design()`.
+#'   * Design is simply a design object mapped from the dataset thanks to `srvyr::as_survey_design()`.
 #'
 #' @section Types of analysis:
 #'   * Median: "median" computes the weighted median using `svy_median()` under the hood
