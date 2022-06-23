@@ -364,7 +364,7 @@ make_analysis <- function(
 
     design_colnames <- colnames(design$variables)
 
-    choices_conc <- get_choices(survey, choices, {{ col }}, label = T) |>
+    choices_conc <- get_choices(survey, choices, {{ col }}) |>
       subvec_in(design_colnames)
 
     choices_not_conc <- stringr::str_remove(choices_conc, stringr::str_c(col_name, "_"))
@@ -377,7 +377,7 @@ make_analysis <- function(
         svy_mean(!!rlang::sym(rlang::ensym(.x)), {{ group }}, na_rm = na_rm, stat_name = stat_name, level = level, vartype = vartype) |>
         dplyr::mutate(name = col_name,
                       analysis = analysis,
-                      choices = .y)) |>
+                      choices =  {{ .y }})) |>
       dplyr::bind_rows() |>
       dplyr::left_join(get_choices(survey, choices, {{ col }}, label = T),
                        by = c("choices" = "name")) |>
