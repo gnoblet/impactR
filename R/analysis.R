@@ -364,7 +364,7 @@ make_analysis <- function(
 
     design_colnames <- colnames(design$variables)
 
-    choices_conc <- get_choices(survey, choices, {{ col }}, conc = T) |>
+    choices_conc <- get_choices(survey, choices, {{ col }}, label = T) |>
       subvec_in(design_colnames)
 
     choices_not_conc <- stringr::str_remove(choices_conc, stringr::str_c(col_name, "_"))
