@@ -124,6 +124,37 @@ svy_median <- function(design, col, group = NULL, na_rm = T, stat_name = "median
 
 
 
+#' @title Survey count for numeric variables
+#'
+#' @param design A srvyr::design object
+#' @param col A column to count from
+#' @param group A quoted or unquoted vector of columns to group by. Default to NULL for no group
+#' @param na_rm Should NAs from `col` be removed? Default to TRUE. na.rm does not work anymore within srvyr functions (workaround for now). It should work for `survey_prop`, matter of precaution
+#' @param stat_name What should the statistic's column be named? Default to "count_numeric"
+#' @param ... Parameters to pass to `srvyr::survey_median()`
+#'
+#' @return A survey-summarized-proportion tibble
+#'
+#' @export
+svy_count_numeric <- function(design, col, group = NULL, na_rm = T, stat_name = "count_numeric", ...){
+
+  if (rlang::is_true(na_rm)) {
+    design <- design |>
+      srvyr::drop_na({{ col }})
+  }
+
+  to_return <- design |>
+    srvyr::mutate("{{ col }}" := as.character({{ col }})) |>
+    srvyr::group_by(dplyr::across({{ group }}), dplyr::across({{ col }})) |>
+    srvyr::summarize("{stat_name}" := srvyr::survey_prop(...)) |>
+    srvyr::ungroup()
+
+  return(to_return)
+}
+
+
+
+
 
 #' @title Survey interaction means
 #'
@@ -226,16 +257,16 @@ svy_ratio <- function(design, num, denom, group = NULL, na_rm = T, stat_name = "
 #'
 #' @export
 make_analysis <- function(
-  design,
-  survey,
-  choices,
-  col,
-  analysis,
-  none_label = NULL,
-  group = NULL,
-  level = 0.9,
-  na_rm = T,
-  vartype = "ci"
+    design,
+    survey,
+    choices,
+    col,
+    analysis,
+    none_label = NULL,
+    group = NULL,
+    level = 0.9,
+    na_rm = T,
+    vartype = "ci"
 ){
 
 
@@ -265,17 +296,64 @@ make_analysis <- function(
 
   if (analysis == "median") {
 
+    design <- design |>
+      srvyr::drop_na({{ col }})
+
     return <- design |>
       svy_median(!!rlang::sym(rlang::ensym(col)), {{ group }}, na_rm = na_rm, stat_name = stat_name, level = level, vartype = vartype) |>
       dplyr::mutate(name = col_name,
                     analysis = analysis)
 
+    if (is.null(group)) { return <- return |>
+      dplyr::mutate(group_disagg = NA_character_, group_disagg_label = NA_character_) } else
+      {
+        return <- return |>
+          dplyr::rename(group_disagg = {{ group }}) |>
+          dplyr::left_join(get_choices(survey, choices, {{ group }}, label = T), by = c("group_disagg" = "name")) |>
+          dplyr::rename(group_disagg_label = label)
+      }
+
   } else if (analysis == "mean") {
 
-      return <- design |>
-        svy_mean(!!rlang::sym(rlang::ensym(col)), {{ group }}, na_rm = na_rm, stat_name = stat_name, level = level, vartype = vartype) |>
-        dplyr::mutate(name = col_name,
-                      analysis = analysis)
+    design <- design |>
+      srvyr::drop_na({{ col }})
+
+    return <- design |>
+      svy_mean(!!rlang::sym(rlang::ensym(col)), {{ group }}, na_rm = na_rm, stat_name = stat_name, level = level, vartype = vartype) |>
+      dplyr::mutate(name = col_name,
+                    analysis = analysis)
+
+    if (is.null(group)) { return <- return |>
+      dplyr::mutate(group_disagg = NA_character_, group_disagg_label = NA_character_) } else
+      {
+        return <- return |>
+          dplyr::rename(group_disagg = {{ group }}) |>
+          dplyr::left_join(get_choices(survey, choices, {{ group }}, label = T), by = c("group_disagg" = "name")) |>
+          dplyr::rename(group_disagg_label = label)
+      }
+
+
+  } else if (analysis == "count_numeric") {
+
+    design <- design |>
+      srvyr::drop_na({{ col }})
+
+    return <- design |>
+      svy_count_numeric(!!rlang::sym(rlang::ensym(col)), {{ group }}, na_rm = na_rm, stat_name = stat_name, level = level, vartype = vartype) |>
+      dplyr::mutate(name = col_name,
+                    analysis = analysis) |>
+      dplyr::rename(choices = {{ col }}) |>
+      dplyr::mutate(choices_label = choices)
+
+    if (is.null(group)) { return <- return |>
+      dplyr::mutate(group_disagg = NA_character_, group_disagg_label = NA_character_) } else
+      {
+        return <- return |>
+          dplyr::rename(group_disagg = {{ group }}) |>
+          dplyr::left_join(get_choices(survey, choices, {{ group }}, label = T), by = c("group_disagg" = "name")) |>
+          dplyr::rename(group_disagg_label = label)
+      }
+
 
   } else if (analysis == "prop_simple") {
 
@@ -286,19 +364,27 @@ make_analysis <- function(
       svy_prop({{ col }}, {{ group }}, na_rm = na_rm, stat_name = stat_name, level = level, vartype = vartype) |>
       dplyr::mutate(name = col_name,
                     analysis = analysis) |>
-      dplyr::rename(choices = {{ col }}) |>
-      dplyr::left_join(get_choices(survey, choices, {{ col }}, label = T),
-                       by = c("choices" = "name")) |>
-      dplyr::rename(choices_label = label)
+      dplyr::rename(choices = {{ col }})
+
+    if (!(col_name %in% survey$name)) {
+      return <- return |>
+        dplyr::mutate(choices_label = choices)
+    } else {
+      return <- return |>
+        dplyr::left_join(get_choices(survey, choices, {{ col }}, label = T),
+                         by = c("choices" = "name")) |>
+        dplyr::rename(choices_label = label)
+    }
+
 
     if (is.null(group)) { return <- return |>
-        dplyr::mutate(group_disagg = NA_character_, group_disagg_label = NA_character_) } else
-        {
-          return <- return |>
-            dplyr::rename(group_disagg = {{ group }}) |>
-            dplyr::left_join(get_choices(survey, choices, {{ group }}, label = T), by = c("group_disagg" = "name")) |>
-            dplyr::rename(group_disagg_label = label)
-        }
+      dplyr::mutate(group_disagg = NA_character_, group_disagg_label = NA_character_) } else
+      {
+        return <- return |>
+          dplyr::rename(group_disagg = {{ group }}) |>
+          dplyr::left_join(get_choices(survey, choices, {{ group }}, label = T), by = c("group_disagg" = "name")) |>
+          dplyr::rename(group_disagg_label = label)
+      }
 
 
   } else if (analysis == "prop_simple_overall") {
@@ -310,11 +396,20 @@ make_analysis <- function(
       svy_prop({{ col }}, {{ group }}, na_rm = F, stat_name = stat_name, level = level, vartype = vartype) |>
       dplyr::mutate(name = col_name,
                     analysis = analysis) |>
-      dplyr::rename(choices = {{ col }}) |>
-      dplyr::left_join(get_choices(survey, choices, {{ col }}, label = T),
-                       by = c("choices" = "name")) |>
-      dplyr::rename(choices_label = label) |>
-      dplyr::mutate(choices_label = replace(.data$choices_label, choices == none, ifelse(is.null(none_label), none, none_label)))
+      dplyr::rename(choices = {{ col }})
+
+      if (!(col_name %in% survey$name)) {
+        return <- return |>
+          dplyr::mutate(choices_label = choices)
+      } else {
+        return <- return |>
+          dplyr::left_join(get_choices(survey, choices, {{ col }}, label = T),
+                           by = c("choices" = "name")) |>
+          dplyr::rename(choices_label = label)
+      }
+
+      return <- return |>
+        dplyr::mutate(choices_label = replace(.data$choices_label, choices == none, ifelse(is.null(none_label), none, none_label)))
 
     if (is.null(group)) { return <- return |>
       dplyr::mutate(group_disagg = NA_character_, group_disagg_label = NA_character_) } else
@@ -328,36 +423,36 @@ make_analysis <- function(
 
   } else if (analysis == "prop_multiple") {
 
-      design_colnames <- colnames(design$variables)
+    design_colnames <- colnames(design$variables)
 
-      design <- design |>
-        srvyr::drop_na({{ col }})
+    design <- design |>
+      srvyr::drop_na({{ col }})
 
-      choices_conc <- get_choices(survey, choices, {{ col }}, conc = T) |>
-        subvec_in(design_colnames)
+    choices_conc <- get_choices(survey, choices, {{ col }}, conc = T) |>
+      subvec_in(design_colnames)
 
-      choices_not_conc <- stringr::str_remove(choices_conc, stringr::str_c(col_name, "_"))
+    choices_not_conc <- stringr::str_remove(choices_conc, stringr::str_c(col_name, "_"))
 
-      return <- purrr::map2(
-        choices_conc,
-        choices_not_conc,
-        ~ svy_mean(design, !!rlang::sym(rlang::ensym(.x)), {{ group }}, na_rm = na_rm, stat_name = stat_name, level = level, vartype = vartype) |>
-          dplyr::mutate(name = col_name,
-                        analysis = analysis,
-                        choices = .y)) |>
-        dplyr::bind_rows() |>
-        dplyr::left_join(get_choices(survey, choices, {{ col }}, label = T),
-                         by = c("choices" = "name")) |>
-        dplyr::rename(choices_label = label)
+    return <- purrr::map2(
+      choices_conc,
+      choices_not_conc,
+      ~ svy_mean(design, !!rlang::sym(rlang::ensym(.x)), {{ group }}, na_rm = na_rm, stat_name = stat_name, level = level, vartype = vartype) |>
+        dplyr::mutate(name = col_name,
+                      analysis = analysis,
+                      choices = .y)) |>
+      dplyr::bind_rows() |>
+      dplyr::left_join(get_choices(survey, choices, {{ col }}, label = T),
+                       by = c("choices" = "name")) |>
+      dplyr::rename(choices_label = label)
 
-      if (is.null(group)) { return <- return |>
-        dplyr::mutate(group_disagg = NA_character_, group_disagg_label = NA_character_) } else
-        {
-          return <- return |>
-            dplyr::rename(group_disagg = {{ group }}) |>
-            dplyr::left_join(get_choices(survey, choices, {{ group }}, label = T), by = c("group_disagg" = "name")) |>
-            dplyr::rename(group_disagg_label = label)
-        }
+    if (is.null(group)) { return <- return |>
+      dplyr::mutate(group_disagg = NA_character_, group_disagg_label = NA_character_) } else
+      {
+        return <- return |>
+          dplyr::rename(group_disagg = {{ group }}) |>
+          dplyr::left_join(get_choices(survey, choices, {{ group }}, label = T), by = c("group_disagg" = "name")) |>
+          dplyr::rename(group_disagg_label = label)
+      }
 
 
   }  else if (analysis == "prop_multiple_overall") {
@@ -471,11 +566,11 @@ make_analysis <- function(
 #'
 #' @export
 make_analysis_from_dap <- function(
-  design,
-  survey,
-  choices,
-  dap,
-  bind = F
+    design,
+    survey,
+    choices,
+    dap,
+    bind = F
 ){
 
   mapped <- purrr::pmap(
@@ -493,7 +588,7 @@ make_analysis_from_dap <- function(
 
       return(analysis)
     }
-    ) |>
+  ) |>
     purrr::set_names(dap$id_analysis)
 
   if (bind) {
