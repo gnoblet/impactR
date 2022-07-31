@@ -242,3 +242,33 @@ survey_difftime <- function(.tbl, start, end, ..., new_colname = "survey_difftim
 
     return(diff_time)
 }
+
+
+#' Mutate with replacement if NULL or NA values
+#'
+#' @param .tbl A data.frame.
+#' @param col A column from .tbl.
+#' @param replacement A replacement of the same type as col.
+#'
+#' @return A mutated tibble.
+#' @export
+mutate_if_nulla <- function(.tbl, col, replacement){
+
+  #---- Checks
+
+  # is .tbl a data.frame or coercible to one?
+  if (!is.data.frame(.tbl)) rlang::abort(".tbl must have 'data.frame' among its classes.")
+
+  # col in .tbl
+  col_name <- rlang::as_name(rlang::enquo(col))
+  if_not_in_stop(.tbl, col_name, ".tbl", "col")
+
+  # replacement type string
+  if (typeof(.tbl[[col_name]]) != typeof(replacement)) {abort_bad_argument("replacement", "be the same type as `col`", not = replacement, arg2 = "col", .tbl[[col_name]])}
+
+  mutated <- .tbl |>
+    dplyr::mutate("{{ col }}" := ifelse(is.na({{ col }}) | is.null({{ col }}), replacement, {{ col }}))
+
+  return(mutated)
+}
+
