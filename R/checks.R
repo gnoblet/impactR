@@ -83,7 +83,7 @@ check_cleaning_log <- function(log, .tbl, id_col, other){
 
   if (length(remaining_bits) >= 1) {
 
-    warning("The following id_col and question_name have remaining bits from the template such as 'Fill in' in column 'feedback' and needs to be modified before they get cleaned:\n ", paste(remaining_bits, collapse = "\n "))
+    warning("The following id_col and question_name have remaining bits from the template such as 'Fill in' in column 'feedback', please check:\n ", paste(remaining_bits, collapse = "\n "))
   }
 
   # Check for remaining bits from template in "new_value"
@@ -97,7 +97,22 @@ check_cleaning_log <- function(log, .tbl, id_col, other){
 
   if (length(remaining_bits) >= 1) {
 
-    warning("The following id_col and question_name have remaining bits from the template such as 'Fill in' in column 'new_value' and needs to be modified before they get cleaned:\n ", paste(remaining_bits, collapse = "\n "))
+    warning("The following id_col and question_name have remaining bits from the template such as 'Fill in' in column 'new_value', please check:\n ", paste(remaining_bits, collapse = "\n "))
+  }
+
+  # Check if 'other_new_value' contains no value anymore and 'other_old_value' contains two or more
+  onv <- log |>
+    dplyr::filter(
+      .data$action %in% c("modify") &
+        stringr::str_count(.data$other_old_value, " ") >= 1 &
+        is.na(.data$other_new_value)
+      ) |>
+    dplyr::mutate(onv = paste0({{ id_col }}, ": ", .data$question_name)) |>
+    dplyr::pull(.data$onv)
+
+  if (length(onv) >= 1) {
+
+    warning("The following id_col and question_name had two other values and no value anymore in 'other_new_value', please check:\n ", paste(remaining_bits, collapse = "\n "))
   }
 
   # Check if other parent question_name that needs a modification belongs to the rawdata
