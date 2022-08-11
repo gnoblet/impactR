@@ -90,7 +90,7 @@ check_cleaning_log <- function(log, .tbl, id_col, other){
   remaining_bits <- log |>
     dplyr::filter(
       .data$action %in% c("modify", "check", "remove", "duplicate"),
-      stringr::str_count(.data$new_value, "Fill in if necessary")
+      stringr::str_count(.data$new_value, "Fill in if necessary") >= 1
     ) |>
     dplyr::mutate(rem = paste0({{ id_col }}, ": ", .data$question_name)) |>
     dplyr::pull(.data$rem)
