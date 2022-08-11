@@ -1,3 +1,9 @@
+# impactR 0.8.1.9000
+
+* Update: `check_cleaning_log()` now throw a warning if there are missing 'other_new_value' but 'other_old_value' contained more than 2 values and if there are remaining strings from the template in 'feedback' and 'new_value'.
+
+---
+
 # impactR 0.8.9000
 
 * Breaking: `date_to_day_month()` loses the useless `locale` parameter. It now follows the system env locale.

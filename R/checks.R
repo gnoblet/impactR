@@ -62,7 +62,7 @@ check_cleaning_log <- function(log, .tbl, id_col, other){
 
   # Check if question_name that needs a modification belongs to the rawdata
   question_names <- log |>
-    dplyr::filter(.data$action == "modify") |>
+    dplyr::filter(.data$action == "modify" & .data$id_check == other) |>
     tidyr::drop_na(.data$question_name) |>
     dplyr::pull(.data$question_name)
 
@@ -72,9 +72,52 @@ check_cleaning_log <- function(log, .tbl, id_col, other){
     stop("The following 'question_name' values does not exist in the rawdata column names:\n", paste(are_cols_in, collapse = "\n "))
   }
 
+  # Check for remaining bits from template in "feedback"
+  remaining_bits <- log |>
+    dplyr::filter(
+      .data$action %in% c("modify", "check", "remove", "duplicate"),
+      stringr::str_count(.data$feedback, "Verified in check list|Fill in") >= 1
+    ) |>
+    dplyr::mutate(rem = paste0({{ id_col }}, ": ", .data$question_name)) |>
+    dplyr::pull(.data$rem)
+
+  if (length(remaining_bits) >= 1) {
+
+    warning("The following id_col and question_name have remaining bits from the template such as 'Fill in' in column 'feedback', please check:\n ", paste(remaining_bits, collapse = "\n "))
+  }
+
+  # Check for remaining bits from template in "new_value"
+  remaining_bits <- log |>
+    dplyr::filter(
+      .data$action %in% c("modify", "check", "remove", "duplicate"),
+      stringr::str_count(.data$new_value, "Fill in if necessary") >= 1
+    ) |>
+    dplyr::mutate(rem = paste0({{ id_col }}, ": ", .data$question_name)) |>
+    dplyr::pull(.data$rem)
+
+  if (length(remaining_bits) >= 1) {
+
+    warning("The following id_col and question_name have remaining bits from the template such as 'Fill in' in column 'new_value', please check:\n ", paste(remaining_bits, collapse = "\n "))
+  }
+
+  # Check if 'other_new_value' contains no value anymore and 'other_old_value' contains two or more
+  onv <- log |>
+    dplyr::filter(
+      .data$action %in% c("modify") &
+        stringr::str_count(.data$other_old_value, " ") >= 1 &
+        is.na(.data$other_new_value)
+      ) |>
+    dplyr::mutate(onv = paste0({{ id_col }}, ": ", .data$question_name)) |>
+    dplyr::pull(.data$onv)
+
+  if (length(onv) >= 1) {
+
+    warning("The following id_col and question_name had two other values and no value anymore in 'other_new_value', please check:\n ", paste(remaining_bits, collapse = "\n "))
+  }
+
   # Check if other parent question_name that needs a modification belongs to the rawdata
   other_parent_questions <- log |>
-    dplyr::filter(.data$action == "modify") |>
+    dplyr::filter(.data$action == "modify" & .data$id_check == other) |>
     tidyr::drop_na(.data$other_parent_question) |>
     dplyr::pull(.data$other_parent_question)
 
