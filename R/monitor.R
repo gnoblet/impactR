@@ -525,7 +525,6 @@ outliers_iqr <- function(.tbl, col, times = 1.5, id_col) {
 
 #' @title Make outlier log
 #'
-#'
 #' @param .tbl A tibble of data
 #' @param survey The survey sheet from Kobo
 #' @param id_col Survey id, usually uuid
