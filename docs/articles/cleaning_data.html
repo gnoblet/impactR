@@ -33,7 +33,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">impactR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.8.1.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.8.2.9000</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -139,12 +139,54 @@ elsewhere, is to split the ‘type’ column into two columns.</p>
 <p>1- Check if the cleaning log is minimally well filled:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/check_cleaning_log.html">check_cleaning_log</a></span><span class="op">(</span><span class="va">cleaning_log</span>, <span class="va">data</span>, <span class="va">uuid</span>, <span class="st">"autre_"</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## Warning in check_cleaning_log(cleaning_log, data, uuid, "autre_"): The following id_col and question_name have remaining bits from the template such as 'Fill in' in column 'feedback', please check:</span></span>
+<span><span class="co">##  x7: i_consensus</span></span>
+<span><span class="co">##  x8: i_consensus</span></span>
+<span><span class="co">##  x1: survey_duration</span></span>
+<span><span class="co">##  x2: survey_duration</span></span>
+<span><span class="co">##  x3: survey_duration</span></span>
+<span><span class="co">##  x4: survey_duration</span></span>
+<span><span class="co">##  x5: survey_duration</span></span>
+<span><span class="co">##  x6: survey_duration</span></span>
+<span><span class="co">##  x7: survey_duration</span></span>
+<span><span class="co">##  x8: survey_duration</span></span>
+<span><span class="co">##  x2: c_chef_menage_age</span></span>
+<span><span class="co">##  x2: i_enquete_age</span></span>
+<span><span class="co">##  x1: c_n_chef_menage_age</span></span>
+<span><span class="co">##  x2: c_n_chef_menage_age</span></span>
+<span><span class="co">##  x1: c_chef_menage_age</span></span></code></pre>
+<pre><code><span><span class="co">## Warning in check_cleaning_log(cleaning_log, data, uuid, "autre_"): The following id_col and question_name have remaining bits from the template such as 'Fill in' in column 'new_value', please check:</span></span>
+<span><span class="co">##  x7: autre_r_besoin_assistance</span></span>
+<span><span class="co">##  x2: i_enquete_age</span></span>
+<span><span class="co">##  x2: c_n_chef_menage_age</span></span>
+<span><span class="co">##  x1: c_chef_menage_age</span></span></code></pre>
 <pre><code><span><span class="co">## NULL</span></span></code></pre>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># If NULL, then ok</span></span></code></pre></div>
 <p>2 - Use the <code><a href="../reference/clean_all.html">clean_all()</a></code> function:</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">cleaned_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/clean_all.html">clean_all</a></span><span class="op">(</span><span class="va">data</span>, <span class="va">cleaning_log</span>, <span class="va">survey</span>, <span class="va">choices</span>, <span class="va">uuid</span>, <span class="st">"autre_"</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## Warning in check_cleaning_log(log, .tbl, {: The following id_col and question_name have remaining bits from the template such as 'Fill in' in column 'feedback', please check:</span></span>
+<span><span class="co">##  x7: i_consensus</span></span>
+<span><span class="co">##  x8: i_consensus</span></span>
+<span><span class="co">##  x1: survey_duration</span></span>
+<span><span class="co">##  x2: survey_duration</span></span>
+<span><span class="co">##  x3: survey_duration</span></span>
+<span><span class="co">##  x4: survey_duration</span></span>
+<span><span class="co">##  x5: survey_duration</span></span>
+<span><span class="co">##  x6: survey_duration</span></span>
+<span><span class="co">##  x7: survey_duration</span></span>
+<span><span class="co">##  x8: survey_duration</span></span>
+<span><span class="co">##  x2: c_chef_menage_age</span></span>
+<span><span class="co">##  x2: i_enquete_age</span></span>
+<span><span class="co">##  x1: c_n_chef_menage_age</span></span>
+<span><span class="co">##  x2: c_n_chef_menage_age</span></span>
+<span><span class="co">##  x1: c_chef_menage_age</span></span></code></pre>
+<pre><code><span><span class="co">## Warning in check_cleaning_log(log, .tbl, {: The following id_col and question_name have remaining bits from the template such as 'Fill in' in column 'new_value', please check:</span></span>
+<span><span class="co">##  x7: autre_r_besoin_assistance</span></span>
+<span><span class="co">##  x2: i_enquete_age</span></span>
+<span><span class="co">##  x2: c_n_chef_menage_age</span></span>
+<span><span class="co">##  x1: c_chef_menage_age</span></span></code></pre>
 <pre><code><span><span class="co">## Warning in Sys.timezone(): unable to identify current timezone 'H':</span></span>
 <span><span class="co">## please set environment variable 'TZ'</span></span></code></pre>
 <p>The <code>cleaned_data</code> object is the cleaned dataset with
