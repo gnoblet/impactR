@@ -243,7 +243,6 @@ survey_difftime <- function(.tbl, start, end, ..., new_colname = "survey_difftim
     return(diff_time)
 }
 
-
 #' Mutate with replacement if NULL or NA values
 #'
 #' @param .tbl A data.frame.
@@ -272,3 +271,20 @@ mutate_if_nulla <- function(.tbl, col, replacement){
   return(mutated)
 }
 
+#' Count the number of occurrences of a string over a data frame
+#'
+#' @param df A dataframe
+#' @param pattern A pattern to pass to `stringr::str_count()`. Default to "".
+#' @param new_colname The newly-mutated colname. Default to "count".
+#'
+#' @return A mutated dataframe
+#'
+#' @export
+string_count <- function(df, pattern = "", new_colname = "count"){
+  df <- df |>
+    dplyr::mutate("{new_colname}" := purrr::pmap_int(
+      df |> purrr::keep(\(x) is.character(x)),
+      ~ stringr::str_count(c(...), pattern) |> sum(na.rm = T)))
+
+  return(df)
+}
