@@ -181,6 +181,9 @@
     <loc>https://gnoblet.github.io/impactR/reference/modify_from_log.html</loc>
   </url>
   <url>
+    <loc>https://gnoblet.github.io/impactR/reference/mutate_if_nulla.html</loc>
+  </url>
+  <url>
     <loc>https://gnoblet.github.io/impactR/reference/named_group_split.html</loc>
   </url>
   <url>
@@ -235,6 +238,9 @@
     <loc>https://gnoblet.github.io/impactR/reference/split_survey.html</loc>
   </url>
   <url>
+    <loc>https://gnoblet.github.io/impactR/reference/string_count.html</loc>
+  </url>
+  <url>
     <loc>https://gnoblet.github.io/impactR/reference/sublist_start.html</loc>
   </url>
   <url>
@@ -251,6 +257,9 @@
   </url>
   <url>
     <loc>https://gnoblet.github.io/impactR/reference/survey_duration.html</loc>
+  </url>
+  <url>
+    <loc>https://gnoblet.github.io/impactR/reference/svy_count_numeric.html</loc>
   </url>
   <url>
     <loc>https://gnoblet.github.io/impactR/reference/svy_interact.html</loc>
