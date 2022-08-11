@@ -62,7 +62,7 @@ check_cleaning_log <- function(log, .tbl, id_col, other){
 
   # Check if question_name that needs a modification belongs to the rawdata
   question_names <- log |>
-    dplyr::filter(.data$action == "modify" & id_check == other) |>
+    dplyr::filter(.data$action == "modify" & .data$id_check == other) |>
     tidyr::drop_na(.data$question_name) |>
     dplyr::pull(.data$question_name)
 
@@ -117,7 +117,7 @@ check_cleaning_log <- function(log, .tbl, id_col, other){
 
   # Check if other parent question_name that needs a modification belongs to the rawdata
   other_parent_questions <- log |>
-    dplyr::filter(.data$action == "modify" & id_check == other) |>
+    dplyr::filter(.data$action == "modify" & .data$id_check == other) |>
     tidyr::drop_na(.data$other_parent_question) |>
     dplyr::pull(.data$other_parent_question)
 
