@@ -1,3 +1,10 @@
+# impactR 0.8.9000
+
+* Breaking: `date_to_day_month()` loses the useless `locale` parameter. It now follows the system env locale.
+* New: `string_count()` adds a column with the counts of the string pattern per row over the character columns.
+
+---
+
 # impactR 0.7.12.9000
 
 ## New features
