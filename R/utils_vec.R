@@ -37,15 +37,14 @@ subvec_not_in <- function(vector, set){
 
 #' @title Date to day and month ("fr" locale)
 #'
-#' @param .vec A vector of type POSIXct
-#' @param locale The locale to pass to base `format`, default is "fr"
+#' @param .vec A vector of type POSIXct"
 #'
-#' @return The same vector with only the day and month.
+#' @return The same vector with only the day and month in the env locale.
 #'
 #' @export
-date_to_day_month <- function(.vec, locale = "fr"){
+date_to_day_month <- function(.vec){
   .vec |>
-    format(format = "%d %b", locale = locale)
+    format(format = "%d %b")
 }
 
 

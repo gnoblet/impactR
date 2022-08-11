@@ -57,8 +57,8 @@ The clean_workbook functions exports a list or a dataframe/tibble to nice xlsx f
 }
 \section{Functions}{
 \itemize{
-\item \code{clean_workbook_list}: Export a clean workbook from a named list of dataframes
+\item \code{clean_workbook_list()}: Export a clean workbook from a named list of dataframes
 
-\item \code{clean_workbook_df}: Export a clean workbook from a single dataframe
+\item \code{clean_workbook_df()}: Export a clean workbook from a single dataframe
+
 }}
-

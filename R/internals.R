@@ -7,18 +7,25 @@
 #' @param not Optional. What arg must not be.
 #'
 #' @return A stop statement
-abort_bad_argument <- function(arg, must, not = NULL) {
-  msg <- glue::glue("`{arg}` must {must}")
+abort_bad_argument <- function(arg1, must, not = NULL, arg2 = NULL, same = NULL) {
+  msg <- glue::glue("`{arg1}` must {must}")
   if (!is.null(not)) {
     not <- typeof(not)
     msg <- glue::glue("{msg}; not {not}.")
   }
 
+  if (!is.null(same) & !is.null(arg2)) {
+    same <- typeof(same)
+    msg_i <- glue::glue("`{arg2}` is {same}.")
+  }
+
   rlang::abort("error_bad_argument",
-        message = msg,
-        arg = arg,
-        must = must,
-        not = not
+               message = c(msg, "i" = msg_i),
+               arg1 = arg1,
+               must = must,
+               not = not,
+               arg2 = arg2,
+               same = same
   )
 }
 

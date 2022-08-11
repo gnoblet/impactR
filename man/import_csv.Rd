@@ -31,10 +31,10 @@ Import a dataset from a CSV or a XLSX file. It ensures that the right type of co
 }
 \section{Functions}{
 \itemize{
-\item \code{import_csv}: Import a .csv file
+\item \code{import_csv()}: Import a .csv file
 
-\item \code{import_xlsx}: Import one sheet from a .xlsx
+\item \code{import_xlsx()}: Import one sheet from a .xlsx
 
-\item \code{import_full_xlsx}: Import all sheets from a .xlsx
+\item \code{import_full_xlsx()}: Import all sheets from a .xlsx
+
 }}
-

@@ -4,15 +4,13 @@
 \alias{date_to_day_month}
 \title{Date to day and month ("fr" locale)}
 \usage{
-date_to_day_month(.vec, locale = "fr")
+date_to_day_month(.vec)
 }
 \arguments{
-\item{.vec}{A vector of type POSIXct}
-
-\item{locale}{The locale to pass to base `format`, default is "fr"}
+\item{.vec}{A vector of type POSIXct"}
 }
 \value{
-The same vector with only the day and month.
+The same vector with only the day and month in the env locale.
 }
 \description{
 Date to day and month ("fr" locale)
