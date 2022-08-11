@@ -76,7 +76,7 @@ check_cleaning_log <- function(log, .tbl, id_col, other){
   remaining_bits <- log |>
     dplyr::filter(
       .data$action %in% c("modify", "check", "remove", "duplicate"),
-      stringr::str_count(.data$feedback, "Verified in check list|Fill in")
+      stringr::str_count(.data$feedback, "Verified in check list|Fill in") >= 1
     ) |>
     dplyr::mutate(rem = paste0({{ id_col }}, ": ", .data$question_name)) |>
     dplyr::pull(.data$rem)
