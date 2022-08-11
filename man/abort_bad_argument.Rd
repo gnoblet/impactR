@@ -4,14 +4,14 @@
 \alias{abort_bad_argument}
 \title{Abord bad argument}
 \usage{
-abort_bad_argument(arg, must, not = NULL)
+abort_bad_argument(arg1, must, not = NULL, arg2 = NULL, same = NULL)
 }
 \arguments{
-\item{arg}{An argument}
-
 \item{must}{What arg must be}
 
 \item{not}{Optional. What arg must not be.}
+
+\item{arg}{An argument}
 }
 \value{
 A stop statement
