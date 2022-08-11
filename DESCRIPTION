@@ -1,7 +1,7 @@
 Package: impactR
 Type: Package
 Title: Ease IMPACT's data and database officers woRk
-Version: 0.8.1.9000
+Version: 0.8.2.9000
 Authors@R: c(
         person(
             'Noblet', 'Guillaume',
