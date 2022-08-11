@@ -104,6 +104,7 @@ check_cleaning_log <- function(log, .tbl, id_col, other){
   onv <- log |>
     dplyr::filter(
       .data$action %in% c("modify") &
+        .data$id_check == other &
         stringr::str_count(.data$other_old_value, " ") >= 1 &
         is.na(.data$other_new_value)
       ) |>
@@ -112,7 +113,7 @@ check_cleaning_log <- function(log, .tbl, id_col, other){
 
   if (length(onv) >= 1) {
 
-    warning("The following id_col and question_name had two other values and no value anymore in 'other_new_value', please check:\n ", paste(remaining_bits, collapse = "\n "))
+    warning("The following id_col and question_name had two other values and no value anymore in 'other_new_value', please check:\n ", paste(onv, collapse = "\n "))
   }
 
   # Check if other parent question_name that needs a modification belongs to the rawdata
