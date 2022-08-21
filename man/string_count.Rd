@@ -2,7 +2,7 @@
 % Please edit documentation in R/utils_df.R
 \name{string_count}
 \alias{string_count}
-\title{Count the number of occurrences of a string over a data frame}
+\title{Count the number of occurrences of a string over a data frame row-wise}
 \usage{
 string_count(df, pattern = "", new_colname = "count")
 }
@@ -17,5 +17,5 @@ string_count(df, pattern = "", new_colname = "count")
 A mutated dataframe
 }
 \description{
-Count the number of occurrences of a string over a data frame
+Count the number of occurrences of a string over a data frame row-wise
 }

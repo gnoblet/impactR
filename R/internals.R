@@ -1,10 +1,10 @@
-
-
 #' @title Abord bad argument
 #'
-#' @param arg An argument
+#' @param arg1 An argument
 #' @param must What arg must be
 #' @param not Optional. What arg must not be.
+#' @param arg2 Another argument
+#' @param same The same type as arg1
 #'
 #' @return A stop statement
 abort_bad_argument <- function(arg1, must, not = NULL, arg2 = NULL, same = NULL) {

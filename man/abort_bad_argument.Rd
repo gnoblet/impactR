@@ -7,11 +7,15 @@
 abort_bad_argument(arg1, must, not = NULL, arg2 = NULL, same = NULL)
 }
 \arguments{
+\item{arg1}{An argument}
+
 \item{must}{What arg must be}
 
 \item{not}{Optional. What arg must not be.}
 
-\item{arg}{An argument}
+\item{arg2}{Another argument}
+
+\item{same}{The same type as arg1}
 }
 \value{
 A stop statement
