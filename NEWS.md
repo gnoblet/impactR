@@ -1,3 +1,11 @@
+# impactR 0.8.3.9000
+
+* New feature: `check_cleaning_log()` now checks whether the identification column for each survey `id_col` exists in the cleaning log. It also checks whether all ids from the cleaning log exists in data. (#69)
+* New: `na_count()` adds a column with the counts of NAs row-wise over the character columns.
+
+---
+
+
 # impactR 0.8.2.9000
 
 * Bug fix: for `check_cleaning_log()`.
