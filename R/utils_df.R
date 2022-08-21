@@ -271,7 +271,7 @@ mutate_if_nulla <- function(.tbl, col, replacement){
   return(mutated)
 }
 
-#' Count the number of occurrences of a string over a data frame
+#' Count the number of occurrences of a string over a data frame row-wise
 #'
 #' @param df A dataframe
 #' @param pattern A pattern to pass to `stringr::str_count()`. Default to "".
@@ -288,3 +288,23 @@ string_count <- function(df, pattern = "", new_colname = "count"){
 
   return(df)
 }
+
+
+#' Count the number of occurrences of NAs over a data frame row-wise
+#'
+#' @param df A dataframe
+#' @param pattern A pattern to pass to `stringr::str_count()`. Default to "".
+#' @param new_colname The newly-mutated colname. Default to "count".
+#'
+#' @return A mutated dataframe
+#'
+#' @export
+na_count <- function(df, new_colname = "count_na"){
+  df <- df |>
+    dplyr::mutate("{new_colname}" := purrr::pmap_int(
+      df,
+      ~ is.na(c(...)) |> sum(na.rm = T)))
+
+  return(df)
+}
+
