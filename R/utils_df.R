@@ -293,7 +293,6 @@ string_count <- function(df, pattern = "", new_colname = "count"){
 #' Count the number of occurrences of NAs over a data frame row-wise
 #'
 #' @param df A dataframe
-#' @param pattern A pattern to pass to `stringr::str_count()`. Default to "".
 #' @param new_colname The newly-mutated colname. Default to "count".
 #'
 #' @return A mutated dataframe
