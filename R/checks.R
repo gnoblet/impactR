@@ -36,9 +36,13 @@ check_cleaning_log <- function(log, .tbl, id_col, other){
     stop("The 'id_col' column is missing in log.")
   }
 
+  # Check if id_col is a column of log and .tbl
+  if_not_in_stop(.tbl, id_col_name, ".tbl", "id_col")
+  if_not_in_stop(log, id_col_name, ".tbl", "id_col")
+
   # Check if id_col is present in data
 
-  id_col_nin_data <- subvec_not_in(log$id_col_name, .tbl$id_col_name)
+  id_col_nin_data <- subvec_not_in(dplyr::pull(log, {{ id_col }}), dplyr::pull(.tbl, {{ id_col }}))
   if(length(id_col_nin_data) > 0){
     stop("The following 'id_col' values does not exist in data:\n", paste(id_col_nin_data, collapse = "\n "))
   }
