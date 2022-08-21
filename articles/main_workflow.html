@@ -33,7 +33,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">impactR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.8.2.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.8.3.9000</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -122,8 +122,7 @@
 <span><span class="co">## <span style="color: #949494;">#   i_enquete_age &lt;dbl&gt;, i_enquete_genre &lt;chr&gt;, i_statut &lt;chr&gt;,</span></span></span>
 <span><span class="co">## <span style="color: #949494;">#   i_note_statut &lt;lgl&gt;, i_statut_1 &lt;chr&gt;, c_note &lt;lgl&gt;, c_chef_menage &lt;chr&gt;,</span></span></span>
 <span><span class="co">## <span style="color: #949494;">#   c_n_chef_menage_genre &lt;chr&gt;, c_n_chef_menage_age &lt;dbl&gt;,</span></span></span>
-<span><span class="co">## <span style="color: #949494;">#   c_chef_menage_age &lt;dbl&gt;, c_chef_menage_genre &lt;chr&gt;, …</span></span></span>
-<span><span class="co">## <span style="color: #949494;"># ℹ Use `colnames()` to see all variable names</span></span></span></code></pre>
+<span><span class="co">## <span style="color: #949494;">#   c_chef_menage_age &lt;dbl&gt;, c_chef_menage_genre &lt;chr&gt;, …</span></span></span></code></pre>
 <p>Most of <code>impactR</code>’s functions are written with the assumption that the provided data may be coerced to a tibble, since it extensively use the tidyverse.</p>
 <p>Let’s sat we have a survey sheet composed as:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
@@ -170,8 +169,7 @@
 <span><span class="co">## <span style="color: #949494;"># … with 7 more variables: action &lt;chr&gt;, old_value &lt;dbl&gt;, new_value &lt;chr&gt;,</span></span></span>
 <span><span class="co">## <span style="color: #949494;">#   type &lt;chr&gt;, other_parent_question &lt;chr&gt;, other_new_value &lt;chr&gt;,</span></span></span>
 <span><span class="co">## <span style="color: #949494;">#   checkdate &lt;chr&gt;, and abbreviated variable names ¹​i_enum_id, ²​question_name,</span></span></span>
-<span><span class="co">## <span style="color: #949494;">#   ³​question_label, ⁴​feedback</span></span></span>
-<span><span class="co">## <span style="color: #949494;"># ℹ Use `colnames()` to see all variable names</span></span></span></code></pre>
+<span><span class="co">## <span style="color: #949494;">#   ³​question_label, ⁴​feedback</span></span></span></code></pre>
 </div>
 <div class="section level3">
 <h3 id="check-for-others">Check for others<a class="anchor" aria-label="anchor" href="#check-for-others"></a>
@@ -200,8 +198,7 @@
 <span><span class="co">## <span style="color: #949494;"># … with 6 more variables: new_value &lt;chr&gt;, type &lt;chr&gt;,</span></span></span>
 <span><span class="co">## <span style="color: #949494;">#   other_parent_question &lt;chr&gt;, other_old_value &lt;chr&gt;, other_new_value &lt;chr&gt;,</span></span></span>
 <span><span class="co">## <span style="color: #949494;">#   checkdate &lt;chr&gt;, and abbreviated variable names ¹​question_name,</span></span></span>
-<span><span class="co">## <span style="color: #949494;">#   ²​question_label, ³​feedback, ⁴​old_value</span></span></span>
-<span><span class="co">## <span style="color: #949494;"># ℹ Use `colnames()` to see all variable names</span></span></span></code></pre>
+<span><span class="co">## <span style="color: #949494;">#   ²​question_label, ³​feedback, ⁴​old_value</span></span></span></code></pre>
 </div>
 </div>
 <div class="section level2">
@@ -260,8 +257,7 @@
 <span><span class="co">## <span style="color: #949494;"># … with 8 more variables: action &lt;chr&gt;, old_value &lt;chr&gt;, new_value &lt;lgl&gt;,</span></span></span>
 <span><span class="co">## <span style="color: #949494;">#   type &lt;chr&gt;, other_parent_question &lt;chr&gt;, other_old_value &lt;chr&gt;,</span></span></span>
 <span><span class="co">## <span style="color: #949494;">#   other_new_value &lt;chr&gt;, checkdate &lt;chr&gt;, and abbreviated variable names</span></span></span>
-<span><span class="co">## <span style="color: #949494;">#   ¹​id_check, ²​i_enum_id, ³​question_name, ⁴​question_label, ⁵​feedback</span></span></span>
-<span><span class="co">## <span style="color: #949494;"># ℹ Use `colnames()` to see all variable names</span></span></span></code></pre>
+<span><span class="co">## <span style="color: #949494;">#   ¹​id_check, ²​i_enum_id, ³​question_name, ⁴​question_label, ⁵​feedback</span></span></span></code></pre>
 </div>
 <div class="section level2">
 <h2 id="full-cleaning-log-and-export">Full cleaning log and export<a class="anchor" aria-label="anchor" href="#full-cleaning-log-and-export"></a>
@@ -299,8 +295,7 @@
 <span><span class="co">## <span style="color: #949494;"># … with 7 more variables: old_value &lt;chr&gt;, new_value &lt;chr&gt;, type &lt;chr&gt;,</span></span></span>
 <span><span class="co">## <span style="color: #949494;">#   other_parent_question &lt;chr&gt;, other_old_value &lt;chr&gt;, other_new_value &lt;lgl&gt;,</span></span></span>
 <span><span class="co">## <span style="color: #949494;">#   checkdate &lt;chr&gt;, and abbreviated variable names ¹​i_enum_id, ²​question_name,</span></span></span>
-<span><span class="co">## <span style="color: #949494;">#   ³​question_label, ⁴​feedback</span></span></span>
-<span><span class="co">## <span style="color: #949494;"># ℹ Use `colnames()` to see all variable names</span></span></span></code></pre>
+<span><span class="co">## <span style="color: #949494;">#   ³​question_label, ⁴​feedback</span></span></span></code></pre>
 <p>Finally, there are several ways to export. Here we give the example with the package <code>writexl</code>:</p>
 <div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Not run! The simplest one</span></span>
