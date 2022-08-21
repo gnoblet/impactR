@@ -31,6 +31,18 @@ check_cleaning_log <- function(log, .tbl, id_col, other){
     stop("The following columns are missing and required: ", paste(en_names[are_cols_in], collapse = ", "), ".")
   }
 
+  # Check if id_col is a column of log
+  if(length(subvec_not_in(id_col_name, colnames(log))) > 0) {
+    stop("The 'id_col' column is missing in log.")
+  }
+
+  # Check if id_col is present in data
+
+  id_col_nin_data <- subvec_not_in(log$id_col_name, .tbl$id_col_name)
+  if(length(id_col_nin_data) > 0){
+    stop("The following 'id_col' values does not exist in data:\n", paste(id_col_nin_data, collapse = "\n "))
+  }
+
   # Check if all id_check are there
   if(sum(is.na(log$id_check)) >= 1){
     stop("There are missing 'id_check' values.")
