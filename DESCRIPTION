@@ -31,15 +31,8 @@ Imports:
     stringr,
     tibble,
     lubridate,
-    httr,
-    jsonlite,
     stats,
-    utils,
-    tidyselect,
-    glue,
-    scales,
-    gt,
-    gtsummary
+    glue
 Suggests:
     rmarkdown,
     knitr,
