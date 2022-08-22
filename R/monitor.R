@@ -166,7 +166,7 @@ make_log_from_check_list <- function(.tbl, survey, check_list, id_col, ...) {
   cols_to_keep <- purrr::map_chr(rlang::enquos(...), rlang::as_name)
   if_not_in_stop(.tbl, cols_to_keep, ".tbl", arg = "...")
 
-  new_log <- pmap(check_list,
+  new_log <- purrr::pmap(check_list,
                   function(id_check, question_name, why, logical_test, new_value, action, type) {
                     make_log(
                       .tbl,
