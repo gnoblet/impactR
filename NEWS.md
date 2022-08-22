@@ -1,3 +1,9 @@
+# impactR 0.8.5.9000
+
+* New feature: welcome to `filter2_equalt()` and `filter2_nequal()`.
+
+---
+
 # impactR 0.8.4.9000
 
 * Rewrite: `make_log_from_check_list()` uses `purrr::pmap()` instead of `purrr::exec()`.

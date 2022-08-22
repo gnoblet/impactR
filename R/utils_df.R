@@ -307,3 +307,93 @@ na_count <- function(df, new_colname = "count_na"){
   return(df)
 }
 
+
+#' Extract a subset with one equal_to_value filter or two
+#'
+#' @param df A data frame.
+#' @param col A column.
+#' @param value A value.
+#' @param col2 A second column. Default to NULL.
+#' @param value2 A second value. Default to NULL.
+#' @param ... cols to keep, if none, return all columns
+#'
+#' @return A filtered data frame
+filter2_equal <- function(df, col, value, ...,  col2 = NULL, value2 = NULL){
+
+  #-------- Checks
+
+  # Check for col in df
+  col_name <- rlang::enquo(col) |> rlang::as_name()
+  if_not_in_stop(df, col_name, "df", "col")
+
+  # Check for col2 in df
+  if(!is.null(rlang::enquo(col2))) {
+    col2_name <- rlang::enquo(col) |> rlang::as_name()
+    if_not_in_stop(df, col2_name, "df", "col2")
+  }
+
+  # Check for ... in df
+  cols_to_keep <- purrr::map_chr(rlang::enquos(...), rlang::as_name)
+  if_not_in_stop(df, cols_to_keep, "df", arg = "...")
+
+  #-------- Filter value
+  sub_df <- dplyr::filter(df, {{ col }} == value)
+
+  #-------- Filter value2
+  if(!is.null(rlang::enquo(col2)) & !is.null(value2)) {
+    sub_df <- dplyr::filter(sub_df, {{ col2 }} == value2)
+  }
+
+  if(length(cols_to_keep) == 0){
+    return(sub_df)
+  } else{
+    sub_df <- dplyr::select(sub_df, dplyr::all_of(cols_to_keep))
+
+    return(sub_df)
+  }
+}
+
+
+#' Extract a subset with one unequal_to_value filter or two
+#'
+#' @param df A data frame.
+#' @param col A column.
+#' @param value A value.
+#' @param col2 A second column. Default to NULL.
+#' @param value2 A second value. Default to NULL.
+#' @param ... cols to keep, if none, return all columns
+#'
+#' @return A filtered data frame
+filter2_nequal <- function(df, col, value, col2 = NULL, value2 = NULL, ...){
+
+
+  # Check for col in df
+  col_name <- rlang::enquo(col) |> rlang::as_name()
+  if_not_in_stop(df, col_name, "df", "col")
+
+  # Check for col2 in df
+  if(!is.null(rlang::enquo(col2))) {
+    col2_name <- rlang::enquo(col) |> rlang::as_name()
+    if_not_in_stop(df, col2_name, "df", "col2")
+  }
+
+  # Check for ... in df
+  cols_to_keep <- purrr::map_chr(rlang::enquos(...), rlang::as_name)
+  if_not_in_stop(df, cols_to_keep, "df", arg = "...")
+
+  #-------- Filter value
+  sub_df <- dplyr::filter(df, {{ col }} != value)
+
+  #-------- Filter value2
+  if(!is.null(rlang::enquo(col2)) & !is.null(value2)) {
+    sub_df <- dplyr::filter(sub_df, {{ col2 }} != value2)
+  }
+
+  if(length(cols_to_keep) == 0){
+    return(sub_df)
+  } else{
+    sub_df <- dplyr::select(sub_df, dplyr::all_of(cols_to_keep))
+
+    return(sub_df)
+  }
+}
