@@ -155,6 +155,8 @@ make_log_from_check_list <- function(.tbl, survey, check_list, id_col, ...) {
 
   check_check_list(check_list, .tbl)
 
+  # Relocate in the right order check_list's columns
+  check_list <- dplyr::relocate(check_list, .data$id_check, .data$question_name, .data$why, .data$logical_test, .data$new_value, .data$action, .data$type)
 
   # Check for id_col in .tbl
   id_col_name <- rlang::enquo(id_col) |> rlang::as_name()
@@ -164,19 +166,21 @@ make_log_from_check_list <- function(.tbl, survey, check_list, id_col, ...) {
   cols_to_keep <- purrr::map_chr(rlang::enquos(...), rlang::as_name)
   if_not_in_stop(.tbl, cols_to_keep, ".tbl", arg = "...")
 
-  new_log <- check_list |>
-    dplyr::select(.data$id_check, .data$question_name, .data$why, .data$logical_test, .data$new_value, .data$action, .data$type) |>
-    dplyr::group_split(.data$id_check) |>
-    purrr::map(~ as.list(.x))|>
-    purrr::map(~ purrr::exec(make_log, !!!(c(.tbl = list(.tbl),
-                                             survey = list(survey),
-                                             id_col = list(id_col_name),
-                                             .x,
-                                             cols_to_keep = list(cols_to_keep)
-                                             )
-                                           )
-                             )
-               ) |>
+  new_log <- purrr::pmap(check_list,
+                  function(id_check, question_name, why, logical_test, new_value, action, type) {
+                    make_log(
+                      .tbl,
+                      survey,
+                      {{ id_col }},
+                      {{ id_check }},
+                      {{ question_name }},
+                      {{ why }},
+                      {{ logical_test }},
+                      {{ new_value }},
+                      {{ action }},
+                      {{ type }},
+                      cols_to_keep)
+                  }) |>
     purrr::map(~ .x |> dplyr::mutate(dplyr::across(c(.data$question_label, .data$old_value), as.character))) |>
     dplyr::bind_rows()
 

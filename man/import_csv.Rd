@@ -10,7 +10,7 @@ import_csv(path, delim = ",", uuid = NULL, ...)
 
 import_xlsx(path, sheet = 1, uuid = NULL, ...)
 
-import_full_xlsx(path = NULL, uuid = NULL, ...)
+import_full_xlsx(path = NULL, uuid = NULL)
 }
 \arguments{
 \item{path}{The project relative path to the csv file}

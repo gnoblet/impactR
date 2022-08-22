@@ -76,12 +76,11 @@ import_xlsx <- function(path, sheet = 1, uuid = NULL, ...){
 #'
 #' @param path The project relative path to the csv file
 #' @param uuid Character string. Should we rename "submission_uuid" to "uuid"
-#' @param ... Parameters to pass to readxl::read_xlsx or readr::read_delim
 #'
 #' @describeIn import_csv Import all sheets from a .xlsx
 #'
 #' @export
-import_full_xlsx <- function(path = NULL, uuid = NULL, ...){
+import_full_xlsx <- function(path = NULL, uuid = NULL){
 
   # Is path provided?
   if (rlang::is_missing(path)) {rlang::abort("Please provide the path to the CSV file")}
@@ -92,8 +91,7 @@ import_full_xlsx <- function(path = NULL, uuid = NULL, ...){
   sheet_names <- readxl::excel_sheets(path)
 
   # Map xlsx_import
-  sheets <- sheet_names |>
-    purrr::map(~ import_xlsx(path, sheet = .x, uuid = uuid, ...))
+  sheets <- purrr::map(sheet_names, \(x) import_xlsx(path, sheet = x, uuid = uuid))
 
   # Name sheets
   sheets <- purrr::set_names(sheets, sheet_names)
