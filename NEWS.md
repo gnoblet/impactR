@@ -1,3 +1,9 @@
+# impactR 0.8.4.9000
+
+* Rewrite: `make_log_from_check_list()` uses `purrr::pmap()` instead of `purrr::exec()`.
+
+---
+
 # impactR 0.8.3.9000
 
 * New feature: `check_cleaning_log()` now checks whether the identification column for each survey `id_col` exists in the cleaning log. It also checks whether all ids from the cleaning log exists in data. (#69)
