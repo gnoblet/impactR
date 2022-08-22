@@ -318,6 +318,8 @@ na_count <- function(df, new_colname = "count_na"){
 #' @param ... cols to keep, if none, return all columns
 #'
 #' @return A filtered data frame
+#'
+#' @export
 filter2_equal <- function(df, col, value, ...,  col2 = NULL, value2 = NULL){
 
   #-------- Checks
@@ -364,6 +366,8 @@ filter2_equal <- function(df, col, value, ...,  col2 = NULL, value2 = NULL){
 #' @param ... cols to keep, if none, return all columns
 #'
 #' @return A filtered data frame
+#'
+#' @export
 filter2_nequal <- function(df, col, value, col2 = NULL, value2 = NULL, ...){
 
 
