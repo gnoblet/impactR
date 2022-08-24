@@ -194,6 +194,7 @@ check_cleaning_log <- function(log, .tbl, id_col, other){
   # Check if there are old and new values to be modified that are identical
   identical <- log |>
     dplyr::filter(.data$action == "modify",
+                  .data$id_check == other,
                   .data$other_old_value == .data$other_new_value)
 
 
