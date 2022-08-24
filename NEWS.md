@@ -1,3 +1,10 @@
+# impactR 0.8.6.9000
+
+* Bux fix: bug fix to `check_cleaning_log()` for checking identifcal other old and new values.
+
+---
+
+
 # impactR 0.8.5.9000
 
 * New feature: welcome to `filter2_equalt()` and `filter2_nequal()`.
