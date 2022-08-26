@@ -2,7 +2,7 @@
 % Please edit documentation in R/monitor.R
 \name{make_log_from_check_list}
 \alias{make_log_from_check_list}
-\title{Apply `make_log` to a tibble of check_list (one logical test per row)}
+\title{Apply \code{make_log} to a tibble of check_list (one logical test per row)}
 \usage{
 make_log_from_check_list(.tbl, survey, check_list, id_col, ...)
 }
@@ -18,16 +18,16 @@ make_log_from_check_list(.tbl, survey, check_list, id_col, ...)
 \item{...}{Columns to keep in the log, e.g. today, i_enum_id}
 }
 \description{
-Apply `make_log` to a tibble of check_list (one logical test per row)
+Apply \code{make_log} to a tibble of check_list (one logical test per row)
 }
 \seealso{
-[make_log] for a log based on a logical test
+\link{make_log} for a log based on a logical test
 
-[make_log_outlier()] for a log based on outliers
+\code{\link[=make_log_outlier]{make_log_outlier()}} for a log based on outliers
 
-[make_log_other()] for a log of others
+\code{\link[=make_log_other]{make_log_other()}} for a log of others
 
-[make_all_logs()] for all logs: outliers, others, logical tests
+\code{\link[=make_all_logs]{make_all_logs()}} for all logs: outliers, others, logical tests
 
 Other functions to make logs: 
 \code{\link{make_all_logs}()},

@@ -16,7 +16,7 @@ split_survey(
 \arguments{
 \item{survey}{A survey sheet from Kobo}
 
-\item{col_to_split}{Usually `type`}
+\item{col_to_split}{Usually \code{type}}
 
 \item{into}{Vector of columns names to split to. Default to c("type", "list_name" )}
 
@@ -24,7 +24,7 @@ split_survey(
 
 \item{fill}{How to fill. Default to NA on the right.}
 
-\item{...}{Params to pass to `tidyr::separate`}
+\item{...}{Params to pass to \code{tidyr::separate}}
 }
 \value{
 A survey tibble, split

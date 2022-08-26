@@ -7,9 +7,9 @@
 \format{
 A data frame with 43 rows and 12 variables:
 \describe{
-  \item{type}{The type of the question (to split)}
-  \item{name}{The name of the question}
-  ...
+\item{type}{The type of the question (to split)}
+\item{name}{The name of the question}
+...
 }
 }
 \usage{

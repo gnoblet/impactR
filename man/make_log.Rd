@@ -48,13 +48,13 @@ A tibble with a log for one question and one logical test
 Make log
 }
 \seealso{
-[make_log_from_check_list()] for a log based on many logical tests
+\code{\link[=make_log_from_check_list]{make_log_from_check_list()}} for a log based on many logical tests
 
-[make_log_outlier()] for a log based on outliers
+\code{\link[=make_log_outlier]{make_log_outlier()}} for a log based on outliers
 
-[make_log_other()] for a log of others
+\code{\link[=make_log_other]{make_log_other()}} for a log of others
 
-[make_all_logs()] for all logs: outliers, others, logical tests
+\code{\link[=make_all_logs]{make_all_logs()}} for all logs: outliers, others, logical tests
 
 Other functions to make logs: 
 \code{\link{make_all_logs}()},

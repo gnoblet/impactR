@@ -7,15 +7,15 @@
 \format{
 A data frame with a few rows and variables:
 \describe{
-  \item{id_check}{The check id}
-  \item{question_name}{Tne Kobo survey question name}
-  ...
+\item{id_check}{The check id}
+\item{question_name}{Tne Kobo survey question name}
+...
 }
 }
 \usage{
 check_list
 }
 \description{
-A dataset (in French) containing a list of checks to pass to `make_log()`
+A dataset (in French) containing a list of checks to pass to \code{make_log()}
 }
 \keyword{datasets}

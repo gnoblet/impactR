@@ -18,5 +18,5 @@ A character vector of other questions
 Get all select multiple and parent other questions
 }
 \details{
-This function has a tibble and the associated survey sheet as inputs, as well as the beginning of the "other" character string. It returns all columns that exist in the tibble and are either a multiple choice or a parent other question. This allows then to compute these columns with `impactR::count_occ` after parent question may have been recoded.
+This function has a tibble and the associated survey sheet as inputs, as well as the beginning of the "other" character string. It returns all columns that exist in the tibble and are either a multiple choice or a parent other question. This allows then to compute these columns with \code{impactR::count_occ} after parent question may have been recoded.
 }

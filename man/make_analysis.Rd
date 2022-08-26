@@ -32,32 +32,34 @@ make_analysis(
 
 \item{group}{Variable(s) to group by}
 
-\item{level}{Confidence level to pass to `svy_*` functions}
+\item{level}{Confidence level to pass to \verb{svy_*} functions}
 
 \item{na_rm}{Should NAs be removed prior to calculation ?}
 
-\item{vartype}{Parameter from `srvyr` functions. Default to "ci"}
+\item{vartype}{Parameter from \code{srvyr} functions. Default to "ci"}
 }
 \value{
 A summarized analysis
 }
 \description{
-This function still is experimental. `r lifecycle::badge("experimental")`
+This function still is experimental. \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 }
 \section{General information}{
 
-
-  * Survey and choices must be the final recoded versions of the data. For instance if you have recoded some "other" answers to new choices in the dataset. It must have been added to the choices sheet of the Kobo tool.
-
-  * Design is simply a design object mapped from the dataset thanks to `srvyr::as_survey_design()`.
+\itemize{
+\item Survey and choices must be the final recoded versions of the data. For instance if you have recoded some "other" answers to new choices in the dataset. It must have been added to the choices sheet of the Kobo tool.
+\item Design is simply a design object mapped from the dataset thanks to \code{srvyr::as_survey_design()}.
+}
 }
 
 \section{Types of analysis}{
 
-  * Median: "median" computes the weighted median using `svy_median()` under the hood
-  * Mean : "mean" computes the weighted mean using `svy_mean()` under the hood
-  * Simple proportion : there are two different possible calculation. The first one "prop_simple" removes NA values and calculate the weighted proportion thanks to `svy_prop()`. The second one "prop_simple_overall" mutate NA values to "none_prop_simple_overall" and then calculates the weighted proportion.
-  * Multiple proportion : there are two different possible calculation. The first one "prop_multiple" removes NA values from each dummy 1/0 choice column and calculate the weighted proportion thanks to `svy_prop()`. The second one "prop_multiple_overall" mutate NA values to 0 for each dummy 1/0 choice column and then calculates the weighted proportion.
-  * Ratio: ratio is still under construction for managing NAs. For now it removes them and simply computes the ratio of numeric columns col1 over col2, when `col` is "col1,col2".
+\itemize{
+\item Median: "median" computes the weighted median using \code{svy_median()} under the hood
+\item Mean : "mean" computes the weighted mean using \code{svy_mean()} under the hood
+\item Simple proportion : there are two different possible calculation. The first one "prop_simple" removes NA values and calculate the weighted proportion thanks to \code{svy_prop()}. The second one "prop_simple_overall" mutate NA values to "none_prop_simple_overall" and then calculates the weighted proportion.
+\item Multiple proportion : there are two different possible calculation. The first one "prop_multiple" removes NA values from each dummy 1/0 choice column and calculate the weighted proportion thanks to \code{svy_prop()}. The second one "prop_multiple_overall" mutate NA values to 0 for each dummy 1/0 choice column and then calculates the weighted proportion.
+\item Ratio: ratio is still under construction for managing NAs. For now it removes them and simply computes the ratio of numeric columns col1 over col2, when \code{col} is "col1,col2".
+}
 }
 

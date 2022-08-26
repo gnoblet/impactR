@@ -26,13 +26,13 @@ A full log as a tibble
 Make all logs
 }
 \seealso{
-[make_log] for a log based on a logical test
+\link{make_log} for a log based on a logical test
 
-[make_log_from_check_list()] for a log based on many logical tests
+\code{\link[=make_log_from_check_list]{make_log_from_check_list()}} for a log based on many logical tests
 
-[make_log_outlier()] for a log based on outliers
+\code{\link[=make_log_outlier]{make_log_outlier()}} for a log based on outliers
 
-[make_log_other()] for a log of others
+\code{\link[=make_log_other]{make_log_other()}} for a log of others
 
 Other functions to make logs: 
 \code{\link{make_log_from_check_list}()},

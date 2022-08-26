@@ -7,15 +7,15 @@
 \format{
 A data frame with 17 rows and 17 variables:
 \describe{
-  \item{id_check}{The check id}
-  \item{name}{Tne choices's names}
-  ...
+\item{id_check}{The check id}
+\item{name}{Tne choices's names}
+...
 }
 }
 \usage{
 cleaning_log
 }
 \description{
-A dataset (in French) containing a cleaning_log. Columns are necessary and comes from the `make_log()` function
+A dataset (in French) containing a cleaning_log. Columns are necessary and comes from the \code{make_log()} function
 }
 \keyword{datasets}

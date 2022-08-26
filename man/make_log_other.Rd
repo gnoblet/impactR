@@ -25,16 +25,16 @@ Make "other questions" log
 }
 \details{
 It assumes that a parent question and its children "other" are coded as follows
-    within the kobo tool : e.g., parent_question, other_parent_question.
+within the kobo tool : e.g., parent_question, other_parent_question.
 }
 \seealso{
-[make_log] for a log based on a logical test
+\link{make_log} for a log based on a logical test
 
-[make_log_from_check_list()] for a log based on many logical tests
+\code{\link[=make_log_from_check_list]{make_log_from_check_list()}} for a log based on many logical tests
 
-[make_log_outlier()] for a log based on outliers
+\code{\link[=make_log_outlier]{make_log_outlier()}} for a log based on outliers
 
-[make_all_logs()] for all logs: outliers, others, logical tests
+\code{\link[=make_all_logs]{make_all_logs()}} for all logs: outliers, others, logical tests
 
 Other functions to make logs: 
 \code{\link{make_all_logs}()},
