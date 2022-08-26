@@ -18,7 +18,7 @@ get_choices(survey, choices, col, conc = T, label = F)
 \item{label}{Should the labels be returned?}
 }
 \value{
-A character vector of choices or pasted to `col` choices with sep "_"
+A character vector of choices or pasted to \code{col} choices with sep "_"
 }
 \description{
 Get choices from survey name (and paste them if you want!)

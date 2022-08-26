@@ -19,7 +19,7 @@ check_cleaning_log(log, .tbl, id_col, other)
 Check cleaning log
 }
 \details{
-Names should be the English version. If necessary, please use [impactR::log_names_fr_en] beforehand.
+Names should be the English version. If necessary, please use \link{log_names_fr_en} beforehand.
 }
 \seealso{
 Other functions to check logs and check lists: 

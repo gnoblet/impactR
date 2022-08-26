@@ -25,13 +25,13 @@ Make outlier log
 It uses both interquartile range (1.5 rule) and standard deviation from mean (3 times rule) to look for outliers
 }
 \seealso{
-[make_log] for a log based on a logical test
+\link{make_log} for a log based on a logical test
 
-[make_log_from_check_list()] for a log based on many logical tests
+\code{\link[=make_log_from_check_list]{make_log_from_check_list()}} for a log based on many logical tests
 
-[make_log_other()] for a log of others
+\code{\link[=make_log_other]{make_log_other()}} for a log of others
 
-[make_all_logs()] for all logs: outliers, others, logical tests
+\code{\link[=make_all_logs]{make_all_logs()}} for all logs: outliers, others, logical tests
 
 Other functions to make logs: 
 \code{\link{make_all_logs}()},

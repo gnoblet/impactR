@@ -45,7 +45,7 @@ lcsi(
 \item{level_codes}{Character vector of at responses codes, in the following order: ""Yes", "No, exhausted", "No, no need", "No, not applicable", e.g. c("yes", "exhausted", "no_need", "not_applicable")}
 }
 \value{
-Fourteen new columns: each strategy recoded (lcs_stress_*, lcs_crisis_*, lcs_emergency_*), a dummy for each category (lcs_stress, lcs_crisis, lcs_emergency), and the category (lcs_cat).
+Fourteen new columns: each strategy recoded (lcs_stress_\emph{, lcs_crisis_}, lcs_emergency_*), a dummy for each category (lcs_stress, lcs_crisis, lcs_emergency), and the category (lcs_cat).
 }
 \description{
 LCSI - Livelihood Coping Strategy Index

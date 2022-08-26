@@ -9,7 +9,7 @@ string_count(df, pattern = "", new_colname = "count")
 \arguments{
 \item{df}{A dataframe}
 
-\item{pattern}{A pattern to pass to `stringr::str_count()`. Default to "".}
+\item{pattern}{A pattern to pass to \code{stringr::str_count()}. Default to "".}
 
 \item{new_colname}{The newly-mutated colname. Default to "count".}
 }

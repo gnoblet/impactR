@@ -1,3 +1,9 @@
+# impactR 0.8.7.9000
+
+* Bux fix: bug fix to `make_analysis_from_dap()` when binding if choices for one analysis are numeric a,d for another one are character.
+
+---
+
 # impactR 0.8.6.9000
 
 * Bux fix: bug fix to `check_cleaning_log()` for checking identifcal other old and new values.

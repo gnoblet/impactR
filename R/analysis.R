@@ -247,11 +247,11 @@ svy_ratio <- function(design, num, denom, group = NULL, na_rm = T, stat_name = "
 #'   * Design is simply a design object mapped from the dataset thanks to `srvyr::as_survey_design()`.
 #'
 #' @section Types of analysis:
-#'   * Median: "median" computes the weighted median using `svy_median()` under the hood
-#'   * Mean : "mean" computes the weighted mean using `svy_mean()` under the hood
-#'   * Simple proportion : there are two different possible calculation. The first one "prop_simple" removes NA values and calculate the weighted proportion thanks to `svy_prop()`. The second one "prop_simple_overall" mutate NA values to "none_prop_simple_overall" and then calculates the weighted proportion.
-#'   * Multiple proportion : there are two different possible calculation. The first one "prop_multiple" removes NA values from each dummy 1/0 choice column and calculate the weighted proportion thanks to `svy_prop()`. The second one "prop_multiple_overall" mutate NA values to 0 for each dummy 1/0 choice column and then calculates the weighted proportion.
-#'   * Ratio: ratio is still under construction for managing NAs. For now it removes them and simply computes the ratio of numeric columns col1 over col2, when `col` is "col1,col2".
+#' * Median: "median" computes the weighted median using `svy_median()` under the hood
+#' * Mean : "mean" computes the weighted mean using `svy_mean()` under the hood
+#' * Simple proportion : there are two different possible calculation. The first one "prop_simple" removes NA values and calculate the weighted proportion thanks to `svy_prop()`. The second one "prop_simple_overall" mutate NA values to "none_prop_simple_overall" and then calculates the weighted proportion.
+#' * Multiple proportion : there are two different possible calculation. The first one "prop_multiple" removes NA values from each dummy 1/0 choice column and calculate the weighted proportion thanks to `svy_prop()`. The second one "prop_multiple_overall" mutate NA values to 0 for each dummy 1/0 choice column and then calculates the weighted proportion.
+#' * Ratio: ratio is still under construction for managing NAs. For now it removes them and simply computes the ratio of numeric columns col1 over col2, when `col` is "col1,col2".
 #'
 #' @return A summarized analysis
 #'
@@ -592,7 +592,9 @@ make_analysis_from_dap <- function(
     purrr::set_names(dap$id_analysis)
 
   if (bind) {
-    mapped <- dplyr::bind_rows(mapped, .id = "id_analysis") |>
+    mapped <- mapped |>
+      purrr::map(\(x) x |> dplyr::mutate(dplyr::across(dplyr::starts_with("choices"), as.character))) |>
+      dplyr::bind_rows(.id = "id_analysis") |>
       dplyr::left_join(dap |> impactR::deselect("analysis", "group"), by = "id_analysis")
   }
 

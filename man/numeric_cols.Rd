@@ -18,5 +18,5 @@ A characater vector of numeric columns names
 Get numeric colum names
 }
 \details{
-If the survey sheet is provided, it returns numeric columns from `.tbl` that are coded as decimal or numeric in the `type` column of `survey`. Otherwise, it returns all numeric columns from `.tbl`.
+If the survey sheet is provided, it returns numeric columns from \code{.tbl} that are coded as decimal or numeric in the \code{type} column of \code{survey}. Otherwise, it returns all numeric columns from \code{.tbl}.
 }

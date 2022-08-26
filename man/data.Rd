@@ -7,9 +7,9 @@
 \format{
 A data frame with 8 rows and 36 variables:
 \describe{
-  \item{start}{The starting time of the survey}
-  \item{end}{The end time of the survey}
-  ...
+\item{start}{The starting time of the survey}
+\item{end}{The end time of the survey}
+...
 }
 }
 \usage{

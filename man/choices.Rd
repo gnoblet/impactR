@@ -7,9 +7,9 @@
 \format{
 A data frame with 55 rows and 7 variables:
 \describe{
-  \item{list_name}{The list name}
-  \item{name}{Tne choices's names}
-  ...
+\item{list_name}{The list name}
+\item{name}{Tne choices's names}
+...
 }
 }
 \usage{
