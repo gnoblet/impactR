@@ -20,11 +20,11 @@ svy_count_numeric(
 
 \item{group}{A quoted or unquoted vector of columns to group by. Default to NULL for no group}
 
-\item{na_rm}{Should NAs from `col` be removed? Default to TRUE. na.rm does not work anymore within srvyr functions (workaround for now). It should work for `survey_prop`, matter of precaution}
+\item{na_rm}{Should NAs from \code{col} be removed? Default to TRUE. na.rm does not work anymore within srvyr functions (workaround for now). It should work for \code{survey_prop}, matter of precaution}
 
 \item{stat_name}{What should the statistic's column be named? Default to "count_numeric"}
 
-\item{...}{Parameters to pass to `srvyr::survey_median()`}
+\item{...}{Parameters to pass to \code{srvyr::survey_median()}}
 }
 \value{
 A survey-summarized-proportion tibble

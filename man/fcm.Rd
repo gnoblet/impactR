@@ -9,11 +9,11 @@ fcm(.tbl, fcs_cat, hhs_cat, rcsi_cat)
 \arguments{
 \item{.tbl}{Data}
 
-\item{fcs_cat}{Column produced by `impactR::fcs()`}
+\item{fcs_cat}{Column produced by \code{impactR::fcs()}}
 
-\item{hhs_cat}{Column produced by `impactR::hhs()`}
+\item{hhs_cat}{Column produced by \code{impactR::hhs()}}
 
-\item{rcsi_cat}{Column produced by `impactR::rcsi()`}
+\item{rcsi_cat}{Column produced by \code{impactR::rcsi()}}
 }
 \value{
 The FEWS NET Food Consumption Cell number.

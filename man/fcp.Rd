@@ -9,7 +9,7 @@ fcp(.tbl, fcm_cell)
 \arguments{
 \item{.tbl}{Data}
 
-\item{fcm_cell}{Column produced by `impactR::fcm()`}
+\item{fcm_cell}{Column produced by \code{impactR::fcm()}}
 }
 \value{
 Two columns: the food consumption phase number (fcp) and the category (fcp_cat)

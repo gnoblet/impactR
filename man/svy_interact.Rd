@@ -23,7 +23,7 @@ svy_interact(
 
 \item{unnest_interaction}{Should interaction be unnested? Default to TRUE}
 
-\item{na_rm}{Should NAs from `interact_cols` be removed? Default to TRUE}
+\item{na_rm}{Should NAs from \code{interact_cols} be removed? Default to TRUE}
 
 \item{stat_name}{What should the statistic's column be named? Default to "prop"}
 

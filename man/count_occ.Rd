@@ -17,5 +17,5 @@ count_occ(.tbl, id_col, col)
 Count occurences of variables
 }
 \details{
-This is solely written to mimic variables names produced by Kobo after use of `janitor::clean_names()`. Example : *variable* is a multiple choice variable and *variable_choice1* is its count variable of choice 1.
+This is solely written to mimic variables names produced by Kobo after use of \code{janitor::clean_names()}. Example : \emph{variable} is a multiple choice variable and \emph{variable_choice1} is its count variable of choice 1.
 }

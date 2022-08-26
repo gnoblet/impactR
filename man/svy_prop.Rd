@@ -13,11 +13,11 @@ svy_prop(design, col, group = NULL, na_rm = T, stat_name = "prop", ...)
 
 \item{group}{A quoted or unquoted vector of columns to group by. Default to NULL for no group.}
 
-\item{na_rm}{Should NAs from `col` be removed? Default to TRUE. na.rm does not work anymore within srvyr functions (workaround for now)}
+\item{na_rm}{Should NAs from \code{col} be removed? Default to TRUE. na.rm does not work anymore within srvyr functions (workaround for now)}
 
 \item{stat_name}{What should the statistic's column be named? Default to "prop"}
 
-\item{...}{Parameters to pass to `srvyr::survey_prop()`}
+\item{...}{Parameters to pass to \code{srvyr::survey_prop()}}
 }
 \value{
 A survey-summarized-proportion tibble

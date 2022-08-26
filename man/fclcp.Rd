@@ -9,9 +9,9 @@ fclcp(.tbl, fcp, lcs_cat)
 \arguments{
 \item{.tbl}{Data}
 
-\item{fcp}{The food consumption phase column produced by `impactR::fcp()`}
+\item{fcp}{The food consumption phase column produced by \code{impactR::fcp()}}
 
-\item{lcs_cat}{The Livelihood Coping Strategies categories produced by `impactR::lcs()`}
+\item{lcs_cat}{The Livelihood Coping Strategies categories produced by \code{impactR::lcs()}}
 }
 \value{
 Two new columns with the FEWS NET Food Consumption-Livelihood Coping matrix phases: numbers (fclp) and categories (fclp_cat).

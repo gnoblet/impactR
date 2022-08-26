@@ -9,7 +9,7 @@ other_parent_cols(.tbl, other_cols, other, id_col)
 \arguments{
 \item{.tbl}{A tibble of data}
 
-\item{other_cols}{A tibble produced by `other_cols`}
+\item{other_cols}{A tibble produced by \code{other_cols}}
 
 \item{other}{A character vector of the start of all other column names. E.g., other = "other_"}
 

@@ -50,10 +50,10 @@ A written xlsx file
 }
 \description{
 The clean_workbook functions exports a list or a dataframe/tibble to nice xlsx file using openxlsx.
-
-* `clean_workbook_list()` takes a named_list as main arg and writes a xlsx file where each list item is a tab.
-
-* `clean_workbook_df()` takes a dataframe as main arg and writes a single-tabbed xlsx file.
+\itemize{
+\item \code{clean_workbook_list()} takes a named_list as main arg and writes a xlsx file where each list item is a tab.
+\item \code{clean_workbook_df()} takes a dataframe as main arg and writes a single-tabbed xlsx file.
+}
 }
 \section{Functions}{
 \itemize{

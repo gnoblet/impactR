@@ -9,7 +9,7 @@ label_all_select_multiple(data, survey, choices, id_col)
 \arguments{
 \item{data}{Some kobo data}
 
-\item{survey}{Some survey sheet, with a split 'type' column, e.g. with `split_survey(type)`. It must have columns 'list_name' and 'name'}
+\item{survey}{Some survey sheet, with a split 'type' column, e.g. with \code{split_survey(type)}. It must have columns 'list_name' and 'name'}
 
 \item{choices}{The corresponding choices sheet; it must have columns name and label}
 

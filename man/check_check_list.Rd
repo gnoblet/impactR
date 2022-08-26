@@ -15,7 +15,7 @@ check_check_list(check_list, .tbl)
 Check cleaning log against data
 }
 \details{
-Names should be the English version. Please use [impactR::log_names_fr_en] beforehand.
+Names should be the English version. Please use \link{log_names_fr_en} beforehand.
 }
 \seealso{
 Other functions to check logs and check lists: 
