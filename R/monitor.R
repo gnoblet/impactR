@@ -355,6 +355,10 @@ make_log_other <- function(
   survey <- survey |>
     rename_cols("label", "question_label")
 
+  # If not "other" columns are character
+  .tbl <- .tbl |>
+    dplyr::mutate(dplyr::across(dplyr::starts_with(other), \(x) as.character(x)))
+
   # Prepare data
   .old_tbl <- .tbl |>
     dplyr::select({{ id_col }}, ...)
