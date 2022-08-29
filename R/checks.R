@@ -161,7 +161,9 @@ check_cleaning_log <- function(log, .tbl, id_col, other){
 
   # Check if there are other parent duplicates
   duplicates <- log |>
-    dplyr::filter(.data$action == "modify") |>
+    dplyr::filter(
+      .data$action == "modify",
+      .data$id_check == other) |>
     tidyr::drop_na(.data$other_parent_question) |>
     dplyr::mutate(dup = paste0({{ id_col }}, ": ", .data$other_parent_question)) |>
     dplyr::pull(.data$dup)

@@ -1,12 +1,19 @@
+# impactR 0.8.8.9000
+
+* Bug fix: bug fix to `make_log_other()` when binding others: make sure all "other" columns are of type character.
+* Bug fix: bug fix to `check_cleaning_log()` for identical other_parent_question that are allowed.
+
+---
+
 # impactR 0.8.7.9000
 
-* Bux fix: bug fix to `make_analysis_from_dap()` when binding if choices for one analysis are numeric a,d for another one are character.
+* Bug fix: bug fix to `make_analysis_from_dap()` when binding if choices for one analysis are numeric and for another one are character.
 
 ---
 
 # impactR 0.8.6.9000
 
-* Bux fix: bug fix to `check_cleaning_log()` for checking identifcal other old and new values.
+* Bug fix: bug fix to `check_cleaning_log()` for checking identical other old and new values.
 
 ---
 
@@ -26,7 +33,7 @@
 # impactR 0.8.3.9000
 
 * New feature: `check_cleaning_log()` now checks whether the identification column for each survey `id_col` exists in the cleaning log. It also checks whether all ids from the cleaning log exists in data. (#69)
-* New: `na_count()` adds a column with the counts of NAs row-wise over the character columns.
+* New feature: `na_count()` adds a column with the counts of NAs row-wise over the character columns.
 
 ---
 
