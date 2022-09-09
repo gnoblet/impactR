@@ -1,3 +1,9 @@
+# impactR 0.8.9.9000
+
+* Bug fix: bug fix to `label_select_one()` and `label_select_multiple()` when there are logical columns.
+
+---
+
 # impactR 0.8.8.9000
 
 * Bug fix: bug fix to `make_log_other()` when binding others: make sure all "other" columns are of type character.

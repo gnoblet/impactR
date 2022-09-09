@@ -192,13 +192,20 @@ label_select_multiple <- function(data, survey, choices, id_col, col, return_df 
       rlang::as_name(rlang::enquo(col))
     ))
   } else {
-    recoded <- data |>
-      tidyr::separate_rows({{ col }}, sep = " ") |>
-      dplyr::mutate("{{ col }}" := dplyr::recode({{ col }}, !!!dict)) |>
-      dplyr::group_by({{ id_col }}) |>
-      dplyr::mutate("{{ col }}" := paste0({{ col }}, collapse = " "))  |>
-      dplyr::distinct() |>
-      dplyr::ungroup()
+
+     if (sum(is.na(data |> dplyr::pull({{ col }})) == nrow(data))) {
+      recoded <- data
+     } else {
+
+      recoded <- data |>
+        tidyr::separate_rows({{ col }}, sep = " ") |>
+        dplyr::mutate("{{ col }}" := as.character({{ col }})) |>
+        dplyr::mutate("{{ col }}" := dplyr::recode({{ col }}, !!!dict)) |>
+        dplyr::group_by({{ id_col }}) |>
+        dplyr::mutate("{{ col }}" := paste0({{ col }}, collapse = " "))  |>
+        dplyr::distinct() |>
+        dplyr::ungroup()
+     }
   }
 
   if (!rlang::is_null(return_df)) {
@@ -277,8 +284,15 @@ label_select_one <- function(data, survey, choices, id_col, col, return_df = NUL
       rlang::as_name(rlang::enquo(col))
     ))
   } else {
-    recoded <- data |>
-      dplyr::mutate("{{ col }}" := dplyr::recode({{ col }}, !!!dict))
+
+    if (sum(is.na(data |> dplyr::pull({{ col }})) == nrow(data))) {
+      recoded <- data
+    } else {
+      recoded <- data |>
+        dplyr::mutate("{{ col }}" := as.character({{ col }})) |>
+        dplyr::mutate("{{ col }}" := dplyr::recode({{ col }}, !!!dict))
+    }
+
   }
 
   if (!rlang::is_null(return_df)) {
