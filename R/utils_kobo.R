@@ -350,7 +350,7 @@ label_all_select_one <- function(data, survey, choices, id_col){
 #' @param choices The corresponding choices sheet; it must have columns name and label
 #' @param id_col The id column; usually uuid
 #'
-#' @return Select-multiple labelled dataframe
+#' @return Select multiples and select ones labelled dataframe
 #'
 #' @export
 label <- function(data, survey, choices, id_col) {
@@ -359,4 +359,49 @@ label <- function(data, survey, choices, id_col) {
     label_all_select_multiple(survey, choices, {{ id_col }}) |>
     label_all_select_one(survey, choices, {{ id_col }})
 
+}
+
+
+
+#' @title Label data columns from survey sheet
+#'
+#' @param data Some Kobo data.
+#' @param survey Some survey sheet, with a split 'type' column, e.g. with `split_survey(type)`. It must have columns 'list_name' and 'name'.
+#'
+#' @return A dictionary or some labelled column names data
+#'
+#' @export
+label_columns <- function(data, survey){
+
+  if_not_in_stop(survey, c("label", "name"), "data")
+
+  survey <- survey |>
+    tidyr::drop_na(.data$name) |>
+    tidyr::drop_na(.data$label)
+
+  var_labels <- purrr::set_names(survey$label, survey$name) |>  as.list()
+
+  data <- data |>
+    labelled::set_variable_labels(.labels = var_labels, .strict = FALSE)
+
+  return(data)
+
+}
+
+
+#' @title Get dictionary from survey sheet
+#'
+#' @param data Some Kobo data.
+#' @param survey Some survey sheet, with a split 'type' column, e.g. with `split_survey(type)`. It must have columns 'list_name' and 'name'.
+#'
+#' @return
+#'
+#' @export
+get_dictionary <- function(data, survey){
+
+  labelled_columns_data <- label_columns(data, survey)
+
+  dictionary <- labelled::look_for(labelled_columns_data, var_labels)
+
+  return(dictionary)
 }
