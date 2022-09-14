@@ -263,3 +263,139 @@ check_check_list <- function(check_list, .tbl){
 
   return(TRUE)
 }
+
+
+
+
+
+
+#' @title Check analysis
+#' @param design A `srvyr` design
+#' @param survey The survey sheet
+#' @param choices The choices sheet
+#' @param analysis Some analysis
+#' @param col A variable from design
+#' @param group A grouping variable from design
+#' @param level Some confidence level
+#'
+#' @family functions to check logs and check lists
+#'
+#' @importFrom rlang .data
+#'
+#' @export
+check_analysis <- function(design, survey, choices, analysis, col, group, level){
+
+  des <- design$variables
+
+  # Check for allowed analysis --------
+  if (!(analysis %in% c("interact", "ratio", "prop_simple", "prop_simple_overall", "prop_multiple", "prop_multiple_overall", "mean", "median"))) rlang::abort("Not one of the allowed analysis. Did you mean the right type of analysis?")
+
+
+
+  # Check for column in design --------
+  if (analysis != "ratio") {
+
+    col_name <- rlang::enquo(col) |> rlang::as_name()
+    if_not_in_stop(design, col_name, "design", "col")
+
+  }
+
+  # Check for ratio columns in design --------
+  if (analysis == "ratio"){
+
+    ratio_cols <- stringr::str_split(col_name, ",", simplify = F) |>
+      purrr::flatten_chr() |>
+      stringr::str_squish()
+
+    if (length(ratio_cols) != 2) {
+      rlang::abort(c(
+        "Erreur pour le calcul du ratio",
+        "*" = "Il ne contient pas deux vecteurs",
+        "i" = paste0("Revoir l'argument col: ", col_name)))
+    }
+
+    if_not_in_stop(design, ratio_cols, "design", "col")
+
+  }
+
+  # Check if numeric cols for mean and median --------
+  type_col <- des |> srvyr::pull({{ col }})
+  if (analysis %in% c("median", "mean", "count_numeric") & !is.numeric(type_col)) abort_bad_argument("col", "be numeric", not = type_col)
+
+  # Check if for level --------
+  if (level < 0.9) rlang::warn(glue::glue("The confidence level used for analysis '{analysis}' for column '{col_name}' is below 90%."))
+
+  # Check if data colnames have "." or
+
+  # Check if col is in survey names --------
+  survey_names <- na.omit(survey$name)
+  is_col_in <- col_name %in% survey_names
+
+  if(!is_col_in) rlang::abort(glue::glue("{col_name} is not in the Survey sheet names; please check."))
+
+
+  # Check for group in design --------
+  col_name <- rlang::enquo(col) |> rlang::as_name()
+  if (missing(group)) {group_name <- NA_character_} else {
+
+    group_name <- rlang::enquo(group) |> rlang::as_name()
+    if_not_in_stop(design, group_name, "design", "group")
+
+    type_group <- design |> srvyr::pull({{ group }})
+    if (!is.character(type_group)) abort_bad_argument("group", "be character", not = type_group)
+
+    is_col_in <- group_name %in% survey_names
+
+    if(!is_col_in) rlang::abort(glue::glue("{group_name} is not in the Survey sheet names; please check."))
+
+  }
+
+  # Check if column and group are the same in design --------
+  if (!missing(group) & (group_name == col_name)) {
+    rlang::abort("`group` must not be the same as `col`")
+  }
+
+
+  return(TRUE)
+
+}
+
+
+
+#' @title Check analysis
+#' @param design A `srvyr` design
+#' @param survey The survey sheet
+#' @param choices The choices sheet
+#' @param dap Some dap
+#' @param bind Some T or F parameter for binding results
+#'
+#' @param
+#'
+#' @family functions to check logs and check lists
+#'
+#' @importFrom rlang .data
+#'
+#' @export
+check_analysis_dap <- function(dap, design, survey, choices){
+
+  dap_names <- c("id_analysis", "rq", "sub_rq", "indicator", "recall", "question_name", "subset", "analysis_name", "none_label", "group_name", "group", "level", "na_rm", "vartype")
+
+  # Check if the column names are the right names
+  if_not_in_stop(dap, dap_names, "dap")
+
+  # Check if all id_check are there
+  if(rlang::is_na(dap$id_analysis)) rlang::abort("There are missing `id_analysis` values")
+
+  # Check if all question_names are there
+  if(rlang::is_na(dap$question_name)) rlang::abort("There are missing `question_name` values")
+
+  # Check if all id_analysis
+  if (length(unique(dap$id_analysis)) < nrow(dap)) rlang::warn(" ")
+  # Check if different levels in DAP
+  if (length(unique(dap$level)) > 1) rlang::warn("There are different confidence levels in this DAP.")
+
+  # Check if different levels in DAP
+  if (length(unique(dap$vartype)) > 1) rlang::warn("There are different confidence levels in this DAP.")
+
+
+}

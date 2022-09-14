@@ -272,27 +272,18 @@ make_analysis <- function(
 
   #-------- Checks
 
-  # Check for id_col in .tbl
-  col_name <- rlang::enquo(col) |> rlang::as_name()
-
-  if (is.null(group)) {group_name <- NA_character_} else {
-    group_name <- rlang::enquo(group) |> rlang::as_name()
-    if_not_in_stop(design, group_name, "design", "group")}
-
-  none <- "none_prop_simple_overall"
-
-  if (analysis != "ratio") {
-    if_not_in_stop(design, col_name, "design", "col")
-  }
+  check_analysis(design, survey, choices, analysis, col, group, level)
 
   # TO DO:
-  # - check the type of te column and whether svy function can be applied
   # - check the type of the question using survey
   # - should we default to some automation if analysis is not provided?
 
   #-------- Make analysis
 
   stat_name = "stat"
+
+  none <- "none_prop_simple_overall"
+
 
   if (analysis == "median") {
 
@@ -388,8 +379,6 @@ make_analysis <- function(
 
 
   } else if (analysis == "prop_simple_overall") {
-
-    if (is.null(none)) {rlang::abort("Missing 'none' arg, while analysis 'prop_simple_overall' is selected.") }
 
     return <- design |>
       dplyr::mutate(!!rlang::sym(rlang::ensym(col)) := ifelse(is.na(!!rlang::sym(rlang::ensym(col))), none, !!rlang::sym(rlang::ensym(col)))) |>
@@ -495,14 +484,6 @@ make_analysis <- function(
       purrr::flatten_chr() |>
       stringr::str_squish()
 
-    if (length(ratio_cols) != 2) {
-      rlang::abort(c(
-        "Erreur pour le calcul du ratio",
-        "*" = "Il ne contient pas deux vecteurs",
-        "i" = paste0("Revoir l'argument col: ", col_name)))}
-
-    if_not_in_stop(design, ratio_cols, "design", "col")
-
     num <- ratio_cols[1]
     denom <- ratio_cols[2]
 
@@ -572,6 +553,8 @@ make_analysis_from_dap <- function(
     dap,
     bind = F
 ){
+
+  check_analysis_dap(dap, design, survey, choices)
 
   mapped <- purrr::pmap(
     dap |>
