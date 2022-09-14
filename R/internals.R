@@ -17,10 +17,11 @@ abort_bad_argument <- function(arg1, must, not = NULL, arg2 = NULL, same = NULL)
   if (!is.null(same) & !is.null(arg2)) {
     same <- typeof(same)
     msg_i <- glue::glue("`{arg2}` is {same}.")
+    msng <- c(msg, "i" = msg_i)
   }
 
   rlang::abort("error_bad_argument",
-               message = c(msg, "i" = msg_i),
+               message = msg,
                arg1 = arg1,
                must = must,
                not = not,
