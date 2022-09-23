@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">impactR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.8.9.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.8.10.9000</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -69,8 +69,9 @@
 <span>  none_label <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  group <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  level <span class="op">=</span> <span class="fl">0.9</span>,</span>
-<span>  na_rm <span class="op">=</span> <span class="cn">T</span>,</span>
-<span>  vartype <span class="op">=</span> <span class="st">"ci"</span></span>
+<span>  na_rm <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  vartype <span class="op">=</span> <span class="st">"ci"</span>,</span>
+<span>  get_label <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -115,6 +116,10 @@
 <dt>vartype</dt>
 <dd><p>Parameter from <code>srvyr</code> functions. Default to "ci"</p></dd>
 
+
+<dt>get_label</dt>
+<dd><p>Should label(s) be joined? Default to <code>TRUE</code></p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
@@ -128,6 +133,7 @@
 
 <ul><li><p>Survey and choices must be the final recoded versions of the data. For instance if you have recoded some "other" answers to new choices in the dataset. It must have been added to the choices sheet of the Kobo tool.</p></li>
 <li><p>Design is simply a design object mapped from the dataset thanks to <code><a href="http://gdfe.co/srvyr/reference/as_survey_design.html" class="external-link">srvyr::as_survey_design()</a></code>.</p></li>
+<li><p>Variables colnames must follow the following pattern in order for</p></li>
 </ul></div>
     <div class="section level2">
     <h2 id="types-of-analysis">Types of analysis<a class="anchor" aria-label="anchor" href="#types-of-analysis"></a></h2>
