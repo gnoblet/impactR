@@ -13,8 +13,9 @@ make_analysis(
   none_label = NULL,
   group = NULL,
   level = 0.9,
-  na_rm = T,
-  vartype = "ci"
+  na_rm = TRUE,
+  vartype = "ci",
+  get_label = TRUE
 )
 }
 \arguments{
@@ -37,6 +38,8 @@ make_analysis(
 \item{na_rm}{Should NAs be removed prior to calculation ?}
 
 \item{vartype}{Parameter from \code{srvyr} functions. Default to "ci"}
+
+\item{get_label}{Should label(s) be joined? Default to \code{TRUE}}
 }
 \value{
 A summarized analysis
@@ -49,6 +52,7 @@ This function still is experimental. \ifelse{html}{\href{https://lifecycle.r-lib
 \itemize{
 \item Survey and choices must be the final recoded versions of the data. For instance if you have recoded some "other" answers to new choices in the dataset. It must have been added to the choices sheet of the Kobo tool.
 \item Design is simply a design object mapped from the dataset thanks to \code{srvyr::as_survey_design()}.
+\item Variables colnames must follow the following pattern in order for
 }
 }
 

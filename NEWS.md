@@ -1,3 +1,11 @@
+# impactR 0.8.10.9000
+
+* New feature: it is now possible to label columns (`label_columns()`) and to get a dictionary of variables from the Kobo survey sheet (`get_dictionary()`).
+* New functions: experimental check functions `check_analysis()` and `check_analysis_dap()`
+* Add some documentation to `make_analysis()`
+
+---
+
 # impactR 0.8.9.9000
 
 * Bug fix: bug fix to `label_select_one()` and `label_select_multiple()` when there are logical columns.

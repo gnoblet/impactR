@@ -1,7 +1,7 @@
 Package: impactR
 Type: Package
 Title: Ease IMPACT's data and database officers woRk
-Version: 0.8.9.9000
+Version: 0.8.10.9000
 Authors@R: c(
         person(
             'Noblet', 'Guillaume',
@@ -37,7 +37,8 @@ Imports:
 Suggests:
     rmarkdown,
     knitr,
-    openxlsx
+    openxlsx,
+    labelled
 VignetteBuilder: knitr 
 LazyData: true
 License: GPL (>= 3)

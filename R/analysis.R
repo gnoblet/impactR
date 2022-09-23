@@ -237,6 +237,7 @@ svy_ratio <- function(design, num, denom, group = NULL, na_rm = T, stat_name = "
 #' @param level Confidence level to pass to `svy_*` functions
 #' @param na_rm Should NAs be removed prior to calculation ?
 #' @param vartype Parameter from `srvyr` functions. Default to "ci"
+#' @param get_label Should label(s) be joined? Default to `TRUE`
 #'
 #' @description This function still is experimental. `r lifecycle::badge("experimental")`
 #'
@@ -245,6 +246,7 @@ svy_ratio <- function(design, num, denom, group = NULL, na_rm = T, stat_name = "
 #'   * Survey and choices must be the final recoded versions of the data. For instance if you have recoded some "other" answers to new choices in the dataset. It must have been added to the choices sheet of the Kobo tool.
 #'
 #'   * Design is simply a design object mapped from the dataset thanks to `srvyr::as_survey_design()`.
+#'   * Variables colnames must follow the following pattern in order for
 #'
 #' @section Types of analysis:
 #' * Median: "median" computes the weighted median using `svy_median()` under the hood
@@ -265,34 +267,31 @@ make_analysis <- function(
     none_label = NULL,
     group = NULL,
     level = 0.9,
-    na_rm = T,
-    vartype = "ci"
+    na_rm = TRUE,
+    vartype = "ci",
+    get_label = TRUE
 ){
 
 
   #-------- Checks
 
-  # Check for id_col in .tbl
+  check_analysis(design, survey, choices, analysis, col, group, level)
+
   col_name <- rlang::enquo(col) |> rlang::as_name()
+  if (missing(group)) {group_name <- NA_character_} else {
 
-  if (is.null(group)) {group_name <- NA_character_} else {
-    group_name <- rlang::enquo(group) |> rlang::as_name()
-    if_not_in_stop(design, group_name, "design", "group")}
-
-  none <- "none_prop_simple_overall"
-
-  if (analysis != "ratio") {
-    if_not_in_stop(design, col_name, "design", "col")
-  }
+    group_name <- rlang::enquo(group) |> rlang::as_name()}
 
   # TO DO:
-  # - check the type of te column and whether svy function can be applied
   # - check the type of the question using survey
   # - should we default to some automation if analysis is not provided?
 
   #-------- Make analysis
 
   stat_name = "stat"
+
+  none <- "none_prop_simple_overall"
+
 
   if (analysis == "median") {
 
@@ -304,14 +303,6 @@ make_analysis <- function(
       dplyr::mutate(name = col_name,
                     analysis = analysis)
 
-    if (is.null(group)) { return <- return |>
-      dplyr::mutate(group_disagg = NA_character_, group_disagg_label = NA_character_) } else
-      {
-        return <- return |>
-          dplyr::rename(group_disagg = {{ group }}) |>
-          dplyr::left_join(get_choices(survey, choices, {{ group }}, label = T), by = c("group_disagg" = "name")) |>
-          dplyr::rename(group_disagg_label = label)
-      }
 
   } else if (analysis == "mean") {
 
@@ -323,14 +314,6 @@ make_analysis <- function(
       dplyr::mutate(name = col_name,
                     analysis = analysis)
 
-    if (is.null(group)) { return <- return |>
-      dplyr::mutate(group_disagg = NA_character_, group_disagg_label = NA_character_) } else
-      {
-        return <- return |>
-          dplyr::rename(group_disagg = {{ group }}) |>
-          dplyr::left_join(get_choices(survey, choices, {{ group }}, label = T), by = c("group_disagg" = "name")) |>
-          dplyr::rename(group_disagg_label = label)
-      }
 
 
   } else if (analysis == "count_numeric") {
@@ -345,15 +328,6 @@ make_analysis <- function(
       dplyr::rename(choices = {{ col }}) |>
       dplyr::mutate(choices_label = choices)
 
-    if (is.null(group)) { return <- return |>
-      dplyr::mutate(group_disagg = NA_character_, group_disagg_label = NA_character_) } else
-      {
-        return <- return |>
-          dplyr::rename(group_disagg = {{ group }}) |>
-          dplyr::left_join(get_choices(survey, choices, {{ group }}, label = T), by = c("group_disagg" = "name")) |>
-          dplyr::rename(group_disagg_label = label)
-      }
-
 
   } else if (analysis == "prop_simple") {
 
@@ -366,30 +340,18 @@ make_analysis <- function(
                     analysis = analysis) |>
       dplyr::rename(choices = {{ col }})
 
-    if (!(col_name %in% survey$name)) {
-      return <- return |>
-        dplyr::mutate(choices_label = choices)
-    } else {
+    if (get_label) {
       return <- return |>
         dplyr::left_join(get_choices(survey, choices, {{ col }}, label = T),
                          by = c("choices" = "name")) |>
         dplyr::rename(choices_label = label)
+    } else {
+
+      return <- return |>
+        dplyr::rename(choices_label = choices)
+
     }
-
-
-    if (is.null(group)) { return <- return |>
-      dplyr::mutate(group_disagg = NA_character_, group_disagg_label = NA_character_) } else
-      {
-        return <- return |>
-          dplyr::rename(group_disagg = {{ group }}) |>
-          dplyr::left_join(get_choices(survey, choices, {{ group }}, label = T), by = c("group_disagg" = "name")) |>
-          dplyr::rename(group_disagg_label = label)
-      }
-
-
   } else if (analysis == "prop_simple_overall") {
-
-    if (is.null(none)) {rlang::abort("Missing 'none' arg, while analysis 'prop_simple_overall' is selected.") }
 
     return <- design |>
       dplyr::mutate(!!rlang::sym(rlang::ensym(col)) := ifelse(is.na(!!rlang::sym(rlang::ensym(col))), none, !!rlang::sym(rlang::ensym(col)))) |>
@@ -398,27 +360,21 @@ make_analysis <- function(
                     analysis = analysis) |>
       dplyr::rename(choices = {{ col }})
 
-      if (!(col_name %in% survey$name)) {
-        return <- return |>
-          dplyr::mutate(choices_label = choices)
-      } else {
-        return <- return |>
-          dplyr::left_join(get_choices(survey, choices, {{ col }}, label = T),
-                           by = c("choices" = "name")) |>
-          dplyr::rename(choices_label = label)
-      }
+    if (get_label) {
 
       return <- return |>
-        dplyr::mutate(choices_label = replace(.data$choices_label, choices == none, ifelse(is.null(none_label), none, none_label)))
+        dplyr::left_join(get_choices(survey, choices, {{ col }}, label = T),
+                         by = c("choices" = "name")) |>
+        dplyr::rename(choices_label = label)
+    } else {
 
-    if (is.null(group)) { return <- return |>
-      dplyr::mutate(group_disagg = NA_character_, group_disagg_label = NA_character_) } else
-      {
-        return <- return |>
-          dplyr::rename(group_disagg = {{ group }}) |>
-          dplyr::left_join(get_choices(survey, choices, {{ group }}, label = T), by = c("group_disagg" = "name")) |>
-          dplyr::rename(group_disagg_label = label)
-      }
+      return <- return |>
+        dplyr::rename(choices_label = choices)
+
+    }
+
+    return <- return |>
+      dplyr::mutate(choices_label = replace(.data$choices_label, choices == none, ifelse(is.null(none_label), none, none_label)))
 
 
   } else if (analysis == "prop_multiple") {
@@ -440,19 +396,20 @@ make_analysis <- function(
         dplyr::mutate(name = col_name,
                       analysis = analysis,
                       choices = .y)) |>
-      dplyr::bind_rows() |>
-      dplyr::left_join(get_choices(survey, choices, {{ col }}, label = T),
-                       by = c("choices" = "name")) |>
-      dplyr::rename(choices_label = label)
+      dplyr::bind_rows()
 
-    if (is.null(group)) { return <- return |>
-      dplyr::mutate(group_disagg = NA_character_, group_disagg_label = NA_character_) } else
-      {
-        return <- return |>
-          dplyr::rename(group_disagg = {{ group }}) |>
-          dplyr::left_join(get_choices(survey, choices, {{ group }}, label = T), by = c("group_disagg" = "name")) |>
-          dplyr::rename(group_disagg_label = label)
-      }
+    if (get_label) {
+
+      return <- return |>
+        dplyr::left_join(get_choices(survey, choices, {{ col }}, label = T),
+                         by = c("choices" = "name")) |>
+        dplyr::rename(choices_label = label)
+    } else {
+
+      return <- return |>
+        dplyr::rename(choices_label = choices)
+
+    }
 
 
   }  else if (analysis == "prop_multiple_overall") {
@@ -473,19 +430,20 @@ make_analysis <- function(
         dplyr::mutate(name = col_name,
                       analysis = analysis,
                       choices =  {{ .y }})) |>
-      dplyr::bind_rows() |>
-      dplyr::left_join(get_choices(survey, choices, {{ col }}, label = T),
-                       by = c("choices" = "name")) |>
-      dplyr::rename(choices_label = label)
+      dplyr::bind_rows()
 
-    if (is.null(group)) { return <- return |>
-      dplyr::mutate(group_disagg = NA_character_, group_disagg_label = NA_character_) } else
-      {
-        return <- return |>
-          dplyr::rename(group_disagg = {{ group }}) |>
-          dplyr::left_join(get_choices(survey, choices, {{ group }}, label = T), by = c("group_disagg" = "name")) |>
-          dplyr::rename(group_disagg_label = label)
-      }
+    if (get_label) {
+
+      return <- return |>
+        dplyr::left_join(get_choices(survey, choices, {{ col }}, label = T),
+                         by = c("choices" = "name")) |>
+        dplyr::rename(choices_label = label)
+    } else {
+
+      return <- return |>
+        dplyr::rename(choices_label = choices)
+
+    }
 
   } else if (analysis == "ratio"){
 
@@ -494,14 +452,6 @@ make_analysis <- function(
     ratio_cols <- stringr::str_split(col_name, ",", simplify = F) |>
       purrr::flatten_chr() |>
       stringr::str_squish()
-
-    if (length(ratio_cols) != 2) {
-      rlang::abort(c(
-        "Erreur pour le calcul du ratio",
-        "*" = "Il ne contient pas deux vecteurs",
-        "i" = paste0("Revoir l'argument col: ", col_name)))}
-
-    if_not_in_stop(design, ratio_cols, "design", "col")
 
     num <- ratio_cols[1]
     denom <- ratio_cols[2]
@@ -513,15 +463,6 @@ make_analysis <- function(
       dplyr::mutate(name = col_name,
                     analysis = analysis)
 
-    if (is.null(group)) { return <- return |>
-      dplyr::mutate(group_disagg = NA_character_, group_disagg_label = NA_character_) } else
-      {
-        return <- return |>
-          dplyr::rename(group_disagg = {{ group }}) |>
-          dplyr::left_join(get_choices(survey, choices, {{ group }}, label = T), by = c("group_disagg" = "name")) |>
-          dplyr::rename(group_disagg_label = label)
-      }
-
 
   } else if (analysis %in% c("interact")) {
 
@@ -530,6 +471,17 @@ make_analysis <- function(
   } else {
     rlang::abort("Did you mean the right type of analysis?")
   }
+
+  #-------- Add disagg group label
+
+  if (is.null(group)) { return <- return |>
+    dplyr::mutate(group_disagg = NA_character_, group_disagg_label = NA_character_) } else
+    {
+      return <- return |>
+        dplyr::rename(group_disagg = {{ group }}) |>
+        dplyr::left_join(get_choices(survey, choices, {{ group }}, label = T), by = c("group_disagg" = "name")) |>
+        dplyr::rename(group_disagg_label = label)
+    }
 
 
   #-------- Add grouping variables and levels
@@ -570,8 +522,10 @@ make_analysis_from_dap <- function(
     survey,
     choices,
     dap,
-    bind = F
+    bind = FALSE
 ){
+
+  check_analysis_dap(dap, design, survey, choices)
 
   mapped <- purrr::pmap(
     dap |>

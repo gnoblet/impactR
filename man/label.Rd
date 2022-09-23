@@ -16,7 +16,7 @@ label(data, survey, choices, id_col)
 \item{id_col}{The id column; usually uuid}
 }
 \value{
-Select-multiple labelled dataframe
+Select multiples and select ones labelled dataframe
 }
 \description{
 Label all select_one and select_multiple questions
