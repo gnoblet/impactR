@@ -23,6 +23,8 @@ Names should be the English version. If necessary, please use \link{log_names_fr
 }
 \seealso{
 Other functions to check logs and check lists: 
+\code{\link{check_analysis_dap}()},
+\code{\link{check_analysis}()},
 \code{\link{check_check_list}()}
 }
 \concept{functions to check logs and check lists}

@@ -373,6 +373,8 @@ label <- function(data, survey, choices, id_col) {
 #' @export
 label_columns <- function(data, survey){
 
+  rlang::check_installed("labelled", reason = "to use `label_columns()`")
+
   if_not_in_stop(survey, c("label", "name"), "data")
 
   survey <- survey |>
@@ -394,12 +396,16 @@ label_columns <- function(data, survey){
 #' @param data Some Kobo data.
 #' @param survey Some survey sheet, with a split 'type' column, e.g. with `split_survey(type)`. It must have columns 'list_name' and 'name'.
 #'
-#' @return
+#' @return A dictionary
 #'
 #' @export
 get_dictionary <- function(data, survey){
 
+  rlang::check_installed("labelled", reason = "to use `get_dictionary()`")
+
   labelled_columns_data <- label_columns(data, survey)
+
+  var_labels <- purrr::set_names(survey$label, survey$name) |>  as.list()
 
   dictionary <- labelled::look_for(labelled_columns_data, var_labels)
 

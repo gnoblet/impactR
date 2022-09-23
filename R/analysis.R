@@ -267,15 +267,20 @@ make_analysis <- function(
     none_label = NULL,
     group = NULL,
     level = 0.9,
-    na_rm = T,
+    na_rm = TRUE,
     vartype = "ci",
-    get_labels = T
+    get_label = TRUE
 ){
 
 
   #-------- Checks
 
   check_analysis(design, survey, choices, analysis, col, group, level)
+
+  col_name <- rlang::enquo(col) |> rlang::as_name()
+  if (missing(group)) {group_name <- NA_character_} else {
+
+    group_name <- rlang::enquo(group) |> rlang::as_name()}
 
   # TO DO:
   # - check the type of the question using survey
@@ -346,9 +351,6 @@ make_analysis <- function(
         dplyr::rename(choices_label = choices)
 
     }
-    }
-
-
   } else if (analysis == "prop_simple_overall") {
 
     return <- design |>
@@ -520,7 +522,7 @@ make_analysis_from_dap <- function(
     survey,
     choices,
     dap,
-    bind = F
+    bind = FALSE
 ){
 
   check_analysis_dap(dap, design, survey, choices)

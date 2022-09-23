@@ -4,7 +4,7 @@
 \alias{make_analysis_from_dap}
 \title{Make analysis from data analysis plan}
 \usage{
-make_analysis_from_dap(design, survey, choices, dap, bind = F)
+make_analysis_from_dap(design, survey, choices, dap, bind = FALSE)
 }
 \arguments{
 \item{design}{A design object}

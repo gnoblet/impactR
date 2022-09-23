@@ -328,7 +328,7 @@ check_analysis <- function(design, survey, choices, analysis, col, group, level)
   # Check if data colnames have "." or
 
   # Check if col is in survey names --------
-  survey_names <- na.omit(survey$name)
+  survey_names <- stats::na.omit(survey$name)
   is_col_in <- col_name %in% survey_names
 
   if(!is_col_in) rlang::abort(glue::glue("{col_name} is not in the Survey sheet names; please check."))
@@ -363,13 +363,12 @@ check_analysis <- function(design, survey, choices, analysis, col, group, level)
 
 
 #' @title Check analysis
+#'
+#' @param dap Some dap
 #' @param design A `srvyr` design
 #' @param survey The survey sheet
 #' @param choices The choices sheet
-#' @param dap Some dap
-#' @param bind Some T or F parameter for binding results
-#'
-#' @param
+
 #'
 #' @family functions to check logs and check lists
 #'

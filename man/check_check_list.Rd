@@ -19,6 +19,8 @@ Names should be the English version. Please use \link{log_names_fr_en} beforehan
 }
 \seealso{
 Other functions to check logs and check lists: 
+\code{\link{check_analysis_dap}()},
+\code{\link{check_analysis}()},
 \code{\link{check_cleaning_log}()}
 }
 \concept{functions to check logs and check lists}
