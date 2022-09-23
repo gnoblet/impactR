@@ -37,6 +37,12 @@
     <loc>https://gnoblet.github.io/impactR/reference/bind_others.html</loc>
   </url>
   <url>
+    <loc>https://gnoblet.github.io/impactR/reference/check_analysis.html</loc>
+  </url>
+  <url>
+    <loc>https://gnoblet.github.io/impactR/reference/check_analysis_dap.html</loc>
+  </url>
+  <url>
     <loc>https://gnoblet.github.io/impactR/reference/check_check_list.html</loc>
   </url>
   <url>
@@ -106,6 +112,9 @@
     <loc>https://gnoblet.github.io/impactR/reference/get_choices.html</loc>
   </url>
   <url>
+    <loc>https://gnoblet.github.io/impactR/reference/get_dictionary.html</loc>
+  </url>
+  <url>
     <loc>https://gnoblet.github.io/impactR/reference/get_other_parent.html</loc>
   </url>
   <url>
@@ -143,6 +152,9 @@
   </url>
   <url>
     <loc>https://gnoblet.github.io/impactR/reference/label_all_select_one.html</loc>
+  </url>
+  <url>
+    <loc>https://gnoblet.github.io/impactR/reference/label_columns.html</loc>
   </url>
   <url>
     <loc>https://gnoblet.github.io/impactR/reference/label_select_multiple.html</loc>
