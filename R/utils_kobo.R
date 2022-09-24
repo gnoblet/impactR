@@ -371,19 +371,24 @@ label <- function(data, survey, choices, id_col) {
 #' @return A dictionary or some labelled column names data
 #'
 #' @export
+
 label_columns <- function(data, survey){
 
   rlang::check_installed("labelled", reason = "to use `label_columns()`")
-
-  if_not_in_stop(survey, c("label", "name"), "data")
 
   survey <- survey |>
     tidyr::drop_na(.data$name) |>
     dplyr::mutate(label = ifelse(is.na(.data$label), .data$name, .data$label))
 
-  added_cols <- colnames(data)
+  added_cols <- subvec_not_in(colnames(main), survey$name)
 
   var_labels <- purrr::set_names(survey$label, survey$name) |>  as.list()
+
+  if(length(added_cols) > 0) {
+    var_labels_added <- purrr::set_names(added_cols, added_cols) |> as.list()
+
+    var_labels <- c(var_labels, var_labels_added)
+  }
 
   data <- data |>
     labelled::set_variable_labels(.labels = var_labels, .strict = FALSE)
@@ -407,9 +412,7 @@ get_dictionary <- function(data, survey){
 
   labelled_columns_data <- label_columns(data, survey)
 
-  var_labels <- purrr::set_names(survey$label, survey$name) |>  as.list()
-
-  dictionary <- labelled::look_for(labelled_columns_data, var_labels)
+  dictionary <- labelled::generate_dictionary(labelled_columns_data)
 
   return(dictionary)
 }
