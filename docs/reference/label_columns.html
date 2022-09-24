@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">impactR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.8.10.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.8.11.9000</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -60,7 +60,7 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">label_columns</span><span class="op">(</span><span class="va">data</span>, <span class="va">survey</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">label_columns</span><span class="op">(</span><span class="va">data</span>, <span class="va">survey</span>, name_as_label <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -71,6 +71,10 @@
 
 <dt>survey</dt>
 <dd><p>Some survey sheet, with a split 'type' column, e.g. with <code>split_survey(type)</code>. It must have columns 'list_name' and 'name'.</p></dd>
+
+
+<dt>name_as_label</dt>
+<dd><p>Default to TRUE. Should the variable name be used as the label if label is missing?</p></dd>
 
 </dl></div>
     <div class="section level2">

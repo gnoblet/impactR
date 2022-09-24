@@ -1,3 +1,10 @@
+# impactR 0.8.11.9000
+
+* Small bug fix: `label_columns()`.
+* New feature: `label_columns()` and `get_dictionary()` gets a new parameter `name_as_label`.
+
+---
+
 # impactR 0.8.10.9000
 
 * New feature: it is now possible to label columns (`label_columns()`) and to get a dictionary of variables from the Kobo survey sheet (`get_dictionary()`).
