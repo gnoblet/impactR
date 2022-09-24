@@ -380,7 +380,7 @@ label_columns <- function(data, survey){
     tidyr::drop_na(.data$name) |>
     dplyr::mutate(label = ifelse(is.na(.data$label), .data$name, .data$label))
 
-  added_cols <- subvec_not_in(colnames(main), survey$name)
+  added_cols <- subvec_not_in(colnames(data), survey$name)
 
   var_labels <- purrr::set_names(survey$label, survey$name) |>  as.list()
 
