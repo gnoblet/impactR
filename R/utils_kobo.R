@@ -179,7 +179,7 @@ label_select_multiple <- function(data, survey, choices, id_col, col, return_df 
   # to ensure quoted or unquoted columns can be passed
   col <- rlang::sym(rlang::ensym(col))
 
-  dict <-   dict <- get_choices(survey, choices, {{ col }}, label = T) |>
+  dict <- get_choices(survey, choices, {{ col }}, label = T) |>
     dplyr::rename(choices_label = .data$label, choices_name = .data$name)
 
   dict <- rlang::set_names(dict$choices_label, dict$choices_name)
@@ -379,7 +379,9 @@ label_columns <- function(data, survey){
 
   survey <- survey |>
     tidyr::drop_na(.data$name) |>
-    tidyr::drop_na(.data$label)
+    dplyr::mutate(label = ifelse(is.na(.data$label), .data$name, .data$label))
+
+  added_cols <- colnames(data)
 
   var_labels <- purrr::set_names(survey$label, survey$name) |>  as.list()
 
