@@ -179,7 +179,7 @@ label_select_multiple <- function(data, survey, choices, id_col, col, return_df 
   # to ensure quoted or unquoted columns can be passed
   col <- rlang::sym(rlang::ensym(col))
 
-  dict <-   dict <- get_choices(survey, choices, {{ col }}, label = T) |>
+  dict <- get_choices(survey, choices, {{ col }}, label = T) |>
     dplyr::rename(choices_label = .data$label, choices_name = .data$name)
 
   dict <- rlang::set_names(dict$choices_label, dict$choices_name)
@@ -367,21 +367,33 @@ label <- function(data, survey, choices, id_col) {
 #'
 #' @param data Some Kobo data.
 #' @param survey Some survey sheet, with a split 'type' column, e.g. with `split_survey(type)`. It must have columns 'list_name' and 'name'.
+#' @param name_as_label Default to TRUE. Should the variable name be used as the label if label is missing?
 #'
 #' @return A dictionary or some labelled column names data
 #'
 #' @export
-label_columns <- function(data, survey){
+
+label_columns <- function(data, survey, name_as_label = TRUE){
 
   rlang::check_installed("labelled", reason = "to use `label_columns()`")
 
-  if_not_in_stop(survey, c("label", "name"), "data")
-
   survey <- survey |>
-    tidyr::drop_na(.data$name) |>
-    tidyr::drop_na(.data$label)
+    tidyr::drop_na(.data$name)
+
+  if (name_as_label) {
+    survey <- survey |>
+      dplyr::mutate(label = ifelse(is.na(.data$label), .data$name, .data$label))
+  }
+
+  added_cols <- subvec_not_in(colnames(data), survey$name)
 
   var_labels <- purrr::set_names(survey$label, survey$name) |>  as.list()
+
+  if(length(added_cols) > 0) {
+    var_labels_added <- purrr::set_names(added_cols, added_cols) |> as.list()
+
+    var_labels <- c(var_labels, var_labels_added)
+  }
 
   data <- data |>
     labelled::set_variable_labels(.labels = var_labels, .strict = FALSE)
@@ -395,19 +407,18 @@ label_columns <- function(data, survey){
 #'
 #' @param data Some Kobo data.
 #' @param survey Some survey sheet, with a split 'type' column, e.g. with `split_survey(type)`. It must have columns 'list_name' and 'name'.
+#' @param name_as_label Default to TRUE. Should the variable name be used as the label if label is missing?
 #'
 #' @return A dictionary
 #'
 #' @export
-get_dictionary <- function(data, survey){
+get_dictionary <- function(data, survey, name_as_label = FALSE){
 
   rlang::check_installed("labelled", reason = "to use `get_dictionary()`")
 
-  labelled_columns_data <- label_columns(data, survey)
+  labelled_columns_data <- label_columns(data, survey, name_as_label)
 
-  var_labels <- purrr::set_names(survey$label, survey$name) |>  as.list()
-
-  dictionary <- labelled::look_for(labelled_columns_data, var_labels)
+  dictionary <- labelled::generate_dictionary(labelled_columns_data)
 
   return(dictionary)
 }
