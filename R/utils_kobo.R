@@ -114,11 +114,28 @@ get_choices <- function(survey, choices, col, conc = T, label = F){
 
   col_name <- rlang::as_name(rlang::enquo(col))
 
-  if_vec_not_in_stop(survey$name, col_name, "survey$name", "col")
+  # if_vec_not_in_stop(survey$name, col_name, "survey$name", "col")
 
   to_return <- survey |>
     dplyr::filter(.data$name == col_name) |>
     dplyr::select(.data$list_name)
+
+
+  if (nrow(to_return) == 0) {
+
+    rlang::warn(glue::glue("Col: '{col_name}' is not in survey$name.", "An empty vector or an empty tibble is returned.", .sep = "\n"))
+
+    if (label) {
+      return(tibble::tibble(
+        name = character(),
+        label = character()
+      ))
+    } else if (!label) {
+      return(character())
+    }
+
+  }
+
 
   # If there are more than one row, throw a warning but continue keeping the 1st row
   if (nrow(to_return) > 1) {
