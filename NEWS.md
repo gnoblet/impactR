@@ -1,3 +1,9 @@
+# impactR 0.9.1.9000
+
+* Bug fix: `check_analysis` is now less restrictive.
+
+---
+
 # impactR 0.9.0.9000
 
 It might be breaking some things.
