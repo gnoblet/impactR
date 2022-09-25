@@ -1,3 +1,9 @@
+# impactR 0.9.2.9000
+
+* Bug fix: `get_choices` now returns an empty character string or tibble if `col` is not in survey$name.
+
+---
+
 # impactR 0.9.1.9000
 
 * Bug fix: `check_analysis` is now less restrictive.
