@@ -298,11 +298,11 @@ check_analysis <- function(design, survey, choices, analysis, col, group = NULL,
     col_name <- rlang::enquo(col) |> rlang::as_name()
     if_not_in_stop(design, col_name, "design", "col")
 
-    # Check if col is in survey names --------
-    survey_names <- stats::na.omit(survey$name)
-    is_col_in <- col_name %in% survey_names
-
-    if(!is_col_in) rlang::abort(glue::glue("{col_name} is not in the Survey sheet names; please check."))
+    # # Check if col is in survey names --------
+    # survey_names <- stats::na.omit(survey$name)
+    # is_col_in <- col_name %in% survey_names
+    #
+    # if(!is_col_in) rlang::abort(glue::glue("{col_name} is not in the Survey sheet names; please check."))
 
 
   }
@@ -347,9 +347,9 @@ check_analysis <- function(design, survey, choices, analysis, col, group = NULL,
     type_group <- design |> srvyr::pull({{ group }})
     if (!is.character(type_group)) abort_bad_argument("group", "be character", not = type_group)
 
-    is_col_in <- group_name %in% survey_names
-
-    if(!is_col_in) rlang::abort(glue::glue("{group_name} is not in the Survey sheet names; please check."))
+    # is_col_in <- group_name %in% survey_names
+    #
+    # if(!is_col_in) rlang::abort(glue::glue("{group_name} is not in the Survey sheet names; please check."))
 
   }
 
