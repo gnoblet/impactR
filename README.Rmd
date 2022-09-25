@@ -35,7 +35,7 @@ Specs:
 
 - mainly, it is aimed at data collection with Kobo
 - it extensively uses the `tidyverse`, and  `srvyr` for survey data analysis
-- since version `0.7.8`, it is considered robust enough and has been tested on 3 different 
+- since version `0.7.8`, it is considered robust enough and has been tested on 3 different research cycles
 - it requires R 4.1+ (mostly for the native pipe `|>`)
 
 ## Installation
@@ -69,7 +69,8 @@ Roadmap is as follows:
 
 ## Side projects
 
-There will be a Shiny app for cleaning and monitoring (in French for now) whose repo will be [collectoR](https://github.com/gnoblet/collectoR). It is experimental and based on older versions of `impactR.`
+- A package to ease visualization (interactive maps, graphs, colors) is under construction [visualizeR](https://github.com/gnoblet/visualizeR)
+- There will be a Shiny app for cleaning and monitoring (in French for now) whose repo will be [collectoR](https://github.com/gnoblet/collectoR). It is experimental and based on older versions of `impactR.`
 
 ## Vignettes
 
@@ -77,6 +78,9 @@ Youpi! some documentation:
 
 - [The main vignette for the main workflow (fr version)](https://gnoblet.github.io/impactR/articles/base_de_travail.html)
 - [The main vignette for the main workflow (en version)](https://gnoblet.github.io/impactR/articles/main_workflow.html)
+- [Vignette for cleaning data (fr version)](https://gnoblet.github.io/impactR/articles/nettoyage_de_donnees.html)
+- [Vignette for cleaning data (en version)](https://gnoblet.github.io/impactR/articles/cleaning_data.html)
+
 
 In R, use:
 ```{r, eval = F}

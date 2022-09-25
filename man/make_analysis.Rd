@@ -31,7 +31,7 @@ make_analysis(
 
 \item{none_label}{Label for recoding NA if "prop_simple_overall" is selected. If NULL, the code "none_prop_simple_overall" is used as a label.}
 
-\item{group}{Variable(s) to group by}
+\item{group}{A grouping variable, quoted}
 
 \item{level}{Confidence level to pass to \verb{svy_*} functions}
 
@@ -61,6 +61,7 @@ This function still is experimental. \ifelse{html}{\href{https://lifecycle.r-lib
 \itemize{
 \item Median: "median" computes the weighted median using \code{svy_median()} under the hood
 \item Mean : "mean" computes the weighted mean using \code{svy_mean()} under the hood
+\item Count numeric : "count_numeric" considers a numeric variable as a character one and then computes a simple proportion out of it.
 \item Simple proportion : there are two different possible calculation. The first one "prop_simple" removes NA values and calculate the weighted proportion thanks to \code{svy_prop()}. The second one "prop_simple_overall" mutate NA values to "none_prop_simple_overall" and then calculates the weighted proportion.
 \item Multiple proportion : there are two different possible calculation. The first one "prop_multiple" removes NA values from each dummy 1/0 choice column and calculate the weighted proportion thanks to \code{svy_prop()}. The second one "prop_multiple_overall" mutate NA values to 0 for each dummy 1/0 choice column and then calculates the weighted proportion.
 \item Ratio: ratio is still under construction for managing NAs. For now it removes them and simply computes the ratio of numeric columns col1 over col2, when \code{col} is "col1,col2".

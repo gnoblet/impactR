@@ -275,7 +275,7 @@ check_check_list <- function(check_list, .tbl){
 #' @param choices The choices sheet
 #' @param analysis Some analysis
 #' @param col A variable from design
-#' @param group A grouping variable from design
+#' @param group A grouping variable, quoted
 #' @param level Some confidence level
 #'
 #' @family functions to check logs and check lists
@@ -283,12 +283,12 @@ check_check_list <- function(check_list, .tbl){
 #' @importFrom rlang .data
 #'
 #' @export
-check_analysis <- function(design, survey, choices, analysis, col, group, level){
+check_analysis <- function(design, survey, choices, analysis, col, group = NULL, level){
 
   des <- design$variables
 
   # Check for allowed analysis --------
-  if (!(analysis %in% c("interact", "ratio", "prop_simple", "prop_simple_overall", "prop_multiple", "prop_multiple_overall", "mean", "median"))) rlang::abort("Not one of the allowed analysis. Did you mean the right type of analysis?")
+  if (!(analysis %in% c("interact", "ratio", "prop_simple", "prop_simple_overall", "prop_multiple", "prop_multiple_overall", "mean", "median", "count_numeric"))) rlang::abort("Not one of the allowed analysis. Did you mean the right type of analysis?")
 
 
 
@@ -298,12 +298,19 @@ check_analysis <- function(design, survey, choices, analysis, col, group, level)
     col_name <- rlang::enquo(col) |> rlang::as_name()
     if_not_in_stop(design, col_name, "design", "col")
 
+    # Check if col is in survey names --------
+    survey_names <- stats::na.omit(survey$name)
+    is_col_in <- col_name %in% survey_names
+
+    if(!is_col_in) rlang::abort(glue::glue("{col_name} is not in the Survey sheet names; please check."))
+
+
   }
 
   # Check for ratio columns in design --------
   if (analysis == "ratio"){
 
-    ratio_cols <- stringr::str_split(col_name, ",", simplify = F) |>
+    ratio_cols <- stringr::str_split(col, ",", simplify = F) |>
       purrr::flatten_chr() |>
       stringr::str_squish()
 
@@ -319,24 +326,20 @@ check_analysis <- function(design, survey, choices, analysis, col, group, level)
   }
 
   # Check if numeric cols for mean and median --------
-  type_col <- des |> srvyr::pull({{ col }})
-  if (analysis %in% c("median", "mean", "count_numeric") & !is.numeric(type_col)) abort_bad_argument("col", "be numeric", not = type_col)
+  if (analysis %in% c("median", "mean", "count_numeric")) {
+    type_col <- des |> srvyr::pull({{ col }})
+    if (!is.numeric(type_col)) abort_bad_argument("col", "be numeric", not = type_col)
+  }
 
   # Check if for level --------
-  if (level < 0.9) rlang::warn(glue::glue("The confidence level used for analysis '{analysis}' for column '{col_name}' is below 90%."))
+  if (level < 0.9) {
+    if (analysis != "ratio") rlang::warn(glue::glue("The confidence level used for analysis '{analysis}' for column '{col_name}' is below 90%."))
+    if (analysis == "ratio") rlang::warn(glue::glue("The confidence level used for analysis '{analysis}' for column '{col}' is below 90%."))
 
-  # Check if data colnames have "." or
-
-  # Check if col is in survey names --------
-  survey_names <- stats::na.omit(survey$name)
-  is_col_in <- col_name %in% survey_names
-
-  if(!is_col_in) rlang::abort(glue::glue("{col_name} is not in the Survey sheet names; please check."))
-
+  }
 
   # Check for group in design --------
-  col_name <- rlang::enquo(col) |> rlang::as_name()
-  if (missing(group)) {group_name <- NA_character_} else {
+  if (is.null(group)) {group_name <- NA_character_} else {
 
     group_name <- rlang::enquo(group) |> rlang::as_name()
     if_not_in_stop(design, group_name, "design", "group")
@@ -351,10 +354,11 @@ check_analysis <- function(design, survey, choices, analysis, col, group, level)
   }
 
   # Check if column and group are the same in design --------
-  if (!missing(group) & (group_name == col_name)) {
-    rlang::abort("`group` must not be the same as `col`")
+  if (analysis != "ratio") {
+    if (!is.null(group) & (group_name == col_name)) {
+      rlang::abort("`group` must not be the same as `col`")
+    }
   }
-
 
   return(TRUE)
 

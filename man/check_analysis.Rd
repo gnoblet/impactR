@@ -4,7 +4,7 @@
 \alias{check_analysis}
 \title{Check analysis}
 \usage{
-check_analysis(design, survey, choices, analysis, col, group, level)
+check_analysis(design, survey, choices, analysis, col, group = NULL, level)
 }
 \arguments{
 \item{design}{A \code{srvyr} design}
@@ -17,7 +17,7 @@ check_analysis(design, survey, choices, analysis, col, group, level)
 
 \item{col}{A variable from design}
 
-\item{group}{A grouping variable from design}
+\item{group}{A grouping variable, quoted}
 
 \item{level}{Some confidence level}
 }

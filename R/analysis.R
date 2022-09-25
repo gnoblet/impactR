@@ -233,7 +233,7 @@ svy_ratio <- function(design, num, denom, group = NULL, na_rm = T, stat_name = "
 #' @param col Column to make analysis from
 #' @param analysis One of "median", "mean", "prop_simple", "prop_simple_overall", "prop_multiple", "prop_multiple_overall", "ratio"
 #' @param none_label Label for recoding NA if "prop_simple_overall" is selected. If NULL, the code "none_prop_simple_overall" is used as a label.
-#' @param group Variable(s) to group by
+#' @param group A grouping variable, quoted
 #' @param level Confidence level to pass to `svy_*` functions
 #' @param na_rm Should NAs be removed prior to calculation ?
 #' @param vartype Parameter from `srvyr` functions. Default to "ci"
@@ -251,6 +251,7 @@ svy_ratio <- function(design, num, denom, group = NULL, na_rm = T, stat_name = "
 #' @section Types of analysis:
 #' * Median: "median" computes the weighted median using `svy_median()` under the hood
 #' * Mean : "mean" computes the weighted mean using `svy_mean()` under the hood
+#' * Count numeric : "count_numeric" considers a numeric variable as a character one and then computes a simple proportion out of it.
 #' * Simple proportion : there are two different possible calculation. The first one "prop_simple" removes NA values and calculate the weighted proportion thanks to `svy_prop()`. The second one "prop_simple_overall" mutate NA values to "none_prop_simple_overall" and then calculates the weighted proportion.
 #' * Multiple proportion : there are two different possible calculation. The first one "prop_multiple" removes NA values from each dummy 1/0 choice column and calculate the weighted proportion thanks to `svy_prop()`. The second one "prop_multiple_overall" mutate NA values to 0 for each dummy 1/0 choice column and then calculates the weighted proportion.
 #' * Ratio: ratio is still under construction for managing NAs. For now it removes them and simply computes the ratio of numeric columns col1 over col2, when `col` is "col1,col2".
@@ -275,16 +276,17 @@ make_analysis <- function(
 
   #-------- Checks
 
-  check_analysis(design, survey, choices, analysis, col, group, level)
+  check_analysis(design, survey, choices, analysis, {{ col }}, {{ group }}, level)
 
   col_name <- rlang::enquo(col) |> rlang::as_name()
-  if (missing(group)) {group_name <- NA_character_} else {
+  if (is.null(group)) {group_name <- NA_character_} else {
 
     group_name <- rlang::enquo(group) |> rlang::as_name()}
 
   # TO DO:
   # - check the type of the question using survey
   # - should we default to some automation if analysis is not provided?
+  # - Improve grouping, unquoted variables, multiple grouping variables, etc.
 
   #-------- Make analysis
 
@@ -340,17 +342,31 @@ make_analysis <- function(
                     analysis = analysis) |>
       dplyr::rename(choices = {{ col }})
 
+
     if (get_label) {
-      return <- return |>
-        dplyr::left_join(get_choices(survey, choices, {{ col }}, label = T),
-                         by = c("choices" = "name")) |>
-        dplyr::rename(choices_label = label)
+
+      got_choices <- get_choices(survey, choices, {{ col }}, label = TRUE)
+
+      if (nrow(got_choices) == 0) {
+
+        return <- return |>
+          dplyr::mutate(choices_label = .data$choices)
+
+      } else {
+
+        return <- return |>
+          dplyr::left_join(get_choices(survey, choices, {{ col }}, label = TRUE),
+                           by = c("choices" = "name")) |>
+          dplyr::rename(choices_label = label)
+      }
+
     } else {
 
       return <- return |>
-        dplyr::rename(choices_label = choices)
+        dplyr::mutate(choices_label = choices)
 
     }
+
   } else if (analysis == "prop_simple_overall") {
 
     return <- design |>
@@ -360,16 +376,28 @@ make_analysis <- function(
                     analysis = analysis) |>
       dplyr::rename(choices = {{ col }})
 
+
     if (get_label) {
 
-      return <- return |>
-        dplyr::left_join(get_choices(survey, choices, {{ col }}, label = T),
-                         by = c("choices" = "name")) |>
-        dplyr::rename(choices_label = label)
+      got_choices <- get_choices(survey, choices, {{ col }}, label = TRUE)
+
+      if (nrow(got_choices) == 0) {
+
+        return <- return |>
+          dplyr::mutate(choices_label = .data$choices)
+
+      } else {
+
+        return <- return |>
+          dplyr::left_join(get_choices(survey, choices, {{ col }}, label = TRUE),
+                           by = c("choices" = "name")) |>
+          dplyr::rename(choices_label = label)
+      }
+
     } else {
 
       return <- return |>
-        dplyr::rename(choices_label = choices)
+        dplyr::mutate(choices_label = choices)
 
     }
 
@@ -384,8 +412,21 @@ make_analysis <- function(
     design <- design |>
       srvyr::drop_na({{ col }})
 
-    choices_conc <- get_choices(survey, choices, {{ col }}, conc = T) |>
+    choices_conc <- get_choices(survey, choices, {{ col }}, conc = TRUE) |>
       subvec_in(design_colnames)
+
+    if (length(choices_conc) == 0) {
+      choices_conc <- design |>
+        srvyr::select(dplyr::starts_with(stringr::str_c(col_name, "_"))) |>
+        colnames()
+
+      if (length(choices_conc) == 0) rlang::abort(c(
+        "Could not get choices with the Kobo sheets and could not guess dummy choices columns to make analysis 'prop_multiple'.",
+        "*" = glue::glue("For col: '{col_name}', either: (1) there is an empty list_name in survey, (2) there is no corresponding list_name in choice, and (3) there is no column of the format 'variable_choice' that exists in design."),
+        "i" = glue::glue("Please check whether col : '{col_name}' is well-coded in the Kobo sheets or if it is a 'select_multiple' question type.")
+      ))
+
+    }
 
     choices_not_conc <- stringr::str_remove(choices_conc, stringr::str_c(col_name, "_"))
 
@@ -400,14 +441,25 @@ make_analysis <- function(
 
     if (get_label) {
 
-      return <- return |>
-        dplyr::left_join(get_choices(survey, choices, {{ col }}, label = T),
-                         by = c("choices" = "name")) |>
-        dplyr::rename(choices_label = label)
+      got_choices <- get_choices(survey, choices, {{ col }}, label = TRUE)
+
+      if (nrow(got_choices) == 0) {
+
+        return <- return |>
+          dplyr::mutate(choices_label = .data$choices)
+
+      } else {
+
+        return <- return |>
+          dplyr::left_join(get_choices(survey, choices, {{ col }}, label = TRUE),
+                           by = c("choices" = "name")) |>
+          dplyr::rename(choices_label = label)
+        }
+
     } else {
 
       return <- return |>
-        dplyr::rename(choices_label = choices)
+        dplyr::mutate(choices_label = choices)
 
     }
 
@@ -416,8 +468,21 @@ make_analysis <- function(
 
     design_colnames <- colnames(design$variables)
 
-    choices_conc <- get_choices(survey, choices, {{ col }}) |>
+    choices_conc <- get_choices(survey, choices, {{ col }}, conc = TRUE) |>
       subvec_in(design_colnames)
+
+    if (length(choices_conc) == 0) {
+      choices_conc <- design |>
+        srvyr::select(dplyr::starts_with(stringr::str_c(col_name, "_"))) |>
+        colnames()
+
+      if (length(choices_conc) == 0) rlang::abort(c(
+        "Could not get choices with the Kobo sheets and could not guess dummy choices columns to make analysis 'prop_multiple_overall'.",
+        "*" = glue::glue("For col: '{col_name}', either: (1) there is an empty list_name in survey, (2) there is no corresponding list_name in choice, and (3) there is no column of the format 'variable_choice' that exists in design."),
+        "i" = glue::glue("Please check whether col : '{col_name}' is well-coded in the Kobo sheets or if it is a 'select_multiple' question type.")
+        ))
+
+    }
 
     choices_not_conc <- stringr::str_remove(choices_conc, stringr::str_c(col_name, "_"))
 
@@ -434,14 +499,25 @@ make_analysis <- function(
 
     if (get_label) {
 
-      return <- return |>
-        dplyr::left_join(get_choices(survey, choices, {{ col }}, label = T),
-                         by = c("choices" = "name")) |>
-        dplyr::rename(choices_label = label)
+      got_choices <- get_choices(survey, choices, {{ col }}, label = TRUE)
+
+      if (nrow(got_choices) == 0) {
+
+        return <- return |>
+          dplyr::mutate(choices_label = .data$choices)
+
+      } else {
+
+        return <- return |>
+          dplyr::left_join(get_choices(survey, choices, {{ col }}, label = TRUE),
+                           by = c("choices" = "name")) |>
+          dplyr::rename(choices_label = label)
+      }
+
     } else {
 
       return <- return |>
-        dplyr::rename(choices_label = choices)
+        dplyr::mutate(choices_label = choices)
 
     }
 
