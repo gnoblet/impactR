@@ -105,24 +105,10 @@ later for <code>svy_*()</code> functions.</p>
 <code class="sourceCode R"><span><span class="co"># Si vous n'avez pas encore installé le package</span></span>
 <span><span class="co"># devtools::install_github("impactR)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/gnoblet/impactR" class="external-link">impactR</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## </span></span>
-<span><span class="co">## Attaching package: 'dplyr'</span></span></code></pre>
-<pre><code><span><span class="co">## The following objects are masked from 'package:stats':</span></span>
-<span><span class="co">## </span></span>
-<span><span class="co">##     filter, lag</span></span></code></pre>
-<pre><code><span><span class="co">## The following objects are masked from 'package:base':</span></span>
-<span><span class="co">## </span></span>
-<span><span class="co">##     intersect, setdiff, setequal, union</span></span></code></pre>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="http://gdfe.co/srvyr/" class="external-link">srvyr</a></span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## </span></span>
-<span><span class="co">## Attaching package: 'srvyr'</span></span></code></pre>
-<pre><code><span><span class="co">## The following object is masked from 'package:stats':</span></span>
-<span><span class="co">## </span></span>
-<span><span class="co">##     filter</span></span></code></pre>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Get data analysis plan</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="http://gdfe.co/srvyr/" class="external-link">srvyr</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Get data analysis plan</span></span>
 <span><span class="fu"><a href="../reference/data.html">data</a></span><span class="op">(</span><span class="va">dap</span><span class="op">)</span></span>
 <span><span class="co"># Get survey</span></span>
 <span><span class="fu"><a href="../reference/data.html">data</a></span><span class="op">(</span><span class="va">survey</span><span class="op">)</span></span>
@@ -146,7 +132,7 @@ water source (if multiple choice), it could be
 “w_water_source_surface_water” or “w_water_source_stand_pipe”.</li>
 </ul>
 <p>Survey and choices sheets must be prepared:</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Prepare survey</span></span>
 <span><span class="va">survey</span> <span class="op">&lt;-</span> <span class="va">survey</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu"><a href="../reference/split_survey.html">split_survey</a></span><span class="op">(</span><span class="va">type</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
@@ -158,7 +144,7 @@ water source (if multiple choice), it could be
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/rename.html" class="external-link">rename</a></span><span class="op">(</span>label <span class="op">=</span> <span class="va">label</span><span class="op">)</span></span></code></pre></div>
 <p>Let’s set your survey design with respect to the sampling
 (required):</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Prepare survey design</span></span>
 <span><span class="co"># For instance, below is a stratified sampling</span></span>
 <span><span class="va">design</span> <span class="op">&lt;-</span> <span class="va">data</span> <span class="op">|&gt;</span> </span>
@@ -173,203 +159,67 @@ water source (if multiple choice), it could be
 <p>Let’s say you don’t have a full DAP sheet, and you just want to make
 individual analyses.</p>
 <p>1- Proportion for a single choice question :</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Single choice question</span></span>
-<span><span class="fu"><a href="../reference/make_analysis.html">make_analysis</a></span><span class="op">(</span><span class="va">design</span>, <span class="va">survey</span>, <span class="va">choices</span>, <span class="va">h_3_acces_latrine</span>, <span class="st">"prop_simple"</span>, level <span class="op">=</span> <span class="fl">0.95</span>, vartype <span class="op">=</span> <span class="st">"ci"</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 2 × 10</span></span></span>
-<span><span class="co">##   choices  stat stat_low stat_upp name     analy…¹ choic…² group…³ group…⁴ group</span></span>
-<span><span class="co">##   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span></span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">1</span> non     0.203   0.064<span style="text-decoration: underline;">3</span>    0.341 h_3_acc… prop_s… Non     <span style="color: #BB0000;">NA</span>      <span style="color: #BB0000;">NA</span>      <span style="color: #BB0000;">NA</span>   </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">2</span> oui     0.797   0.659     0.936 h_3_acc… prop_s… Oui     <span style="color: #BB0000;">NA</span>      <span style="color: #BB0000;">NA</span>      <span style="color: #BB0000;">NA</span>   </span></span>
-<span><span class="co">## <span style="color: #949494;"># … with abbreviated variable names ¹​analysis, ²​choices_label, ³​group_disagg,</span></span></span>
-<span><span class="co">## <span style="color: #949494;">#   ⁴​group_disagg_label</span></span></span></code></pre>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Single choice question, do not get labels of choices</span></span>
-<span><span class="fu"><a href="../reference/make_analysis.html">make_analysis</a></span><span class="op">(</span><span class="va">design</span>, <span class="va">survey</span>, <span class="va">choices</span>, <span class="va">h_3_acces_latrine</span>, <span class="st">"prop_simple"</span>, get_label <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 2 × 10</span></span></span>
-<span><span class="co">##   choices  stat stat_low stat_upp name     analy…¹ choic…² group…³ group…⁴ group</span></span>
-<span><span class="co">##   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span></span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">1</span> non     0.203   0.087<span style="text-decoration: underline;">8</span>    0.318 h_3_acc… prop_s… non     <span style="color: #BB0000;">NA</span>      <span style="color: #BB0000;">NA</span>      <span style="color: #BB0000;">NA</span>   </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">2</span> oui     0.797   0.682     0.912 h_3_acc… prop_s… oui     <span style="color: #BB0000;">NA</span>      <span style="color: #BB0000;">NA</span>      <span style="color: #BB0000;">NA</span>   </span></span>
-<span><span class="co">## <span style="color: #949494;"># … with abbreviated variable names ¹​analysis, ²​choices_label, ³​group_disagg,</span></span></span>
-<span><span class="co">## <span style="color: #949494;">#   ⁴​group_disagg_label</span></span></span></code></pre>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Single choice question, with group being the stratum</span></span>
+<span><span class="fu"><a href="../reference/make_analysis.html">make_analysis</a></span><span class="op">(</span><span class="va">design</span>, <span class="va">survey</span>, <span class="va">choices</span>, <span class="va">h_3_acces_latrine</span>, <span class="st">"prop_simple"</span>, level <span class="op">=</span> <span class="fl">0.95</span>, vartype <span class="op">=</span> <span class="st">"ci"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Single choice question, do not get labels of choices</span></span>
+<span><span class="fu"><a href="../reference/make_analysis.html">make_analysis</a></span><span class="op">(</span><span class="va">design</span>, <span class="va">survey</span>, <span class="va">choices</span>, <span class="va">h_3_acces_latrine</span>, <span class="st">"prop_simple"</span>, get_label <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Single choice question, with group being the stratum</span></span>
 <span><span class="fu"><a href="../reference/make_analysis.html">make_analysis</a></span><span class="op">(</span><span class="va">design</span>, <span class="va">survey</span>, <span class="va">choices</span>, <span class="va">h_3_acces_latrine</span>, <span class="st">"prop_simple"</span>, group <span class="op">=</span> <span class="st">"i_zad"</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 4 × 10</span></span></span>
-<span><span class="co">##   group_dis…¹ choices   stat stat_…² stat_…³ name  analy…⁴ choic…⁵ group…⁶ group</span></span>
-<span><span class="co">##   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span></span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">1</span> gnarala     non     0.071<span style="text-decoration: underline;">4</span> -<span style="color: #BB0000;">0.050</span><span style="color: #BB0000; text-decoration: underline;">1</span>   0.193 h_3_… prop_s… Non     Gnarala i_zad</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">2</span> gnarala     oui     0.929   0.807    1.05  h_3_… prop_s… Oui     Gnarala i_zad</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">3</span> wendou      non     0.375   0.162    0.588 h_3_… prop_s… Non     Wendou  i_zad</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">4</span> wendou      oui     0.625   0.412    0.838 h_3_… prop_s… Oui     Wendou  i_zad</span></span>
-<span><span class="co">## <span style="color: #949494;"># … with abbreviated variable names ¹​group_disagg, ²​stat_low, ³​stat_upp,</span></span></span>
-<span><span class="co">## <span style="color: #949494;">#   ⁴​analysis, ⁵​choices_label, ⁶​group_disagg_label</span></span></span></code></pre>
 <p>2- Proportion overall: calculate the proportion with NAs as a
 category</p>
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Single choice question</span></span>
-<span><span class="fu"><a href="../reference/make_analysis.html">make_analysis</a></span><span class="op">(</span><span class="va">design</span>, <span class="va">survey</span>, <span class="va">choices</span>, <span class="va">i_statut</span>, <span class="st">"prop_simple_overall"</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 3 × 10</span></span></span>
-<span><span class="co">##   choices       stat stat_…¹ stat_…² name  analy…³ choic…⁴ group…⁵ group…⁶ group</span></span>
-<span><span class="co">##   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span></span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">1</span> none_prop_s… 0.176  0.049<span style="text-decoration: underline;">1</span>   0.302 i_st… prop_s… none_p… <span style="color: #BB0000;">NA</span>      <span style="color: #BB0000;">NA</span>      <span style="color: #BB0000;">NA</span>   </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">2</span> pdi          0.405  0.244    0.567 i_st… prop_s… Déplac… <span style="color: #BB0000;">NA</span>      <span style="color: #BB0000;">NA</span>      <span style="color: #BB0000;">NA</span>   </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">3</span> pop_local    0.419  0.259    0.579 i_st… prop_s… Popula… <span style="color: #BB0000;">NA</span>      <span style="color: #BB0000;">NA</span>      <span style="color: #BB0000;">NA</span>   </span></span>
-<span><span class="co">## <span style="color: #949494;"># … with abbreviated variable names ¹​stat_low, ²​stat_upp, ³​analysis,</span></span></span>
-<span><span class="co">## <span style="color: #949494;">#   ⁴​choices_label, ⁵​group_disagg, ⁶​group_disagg_label</span></span></span></code></pre>
-<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Single choice with a label for the NA category</span></span>
+<span><span class="fu"><a href="../reference/make_analysis.html">make_analysis</a></span><span class="op">(</span><span class="va">design</span>, <span class="va">survey</span>, <span class="va">choices</span>, <span class="va">i_statut</span>, <span class="st">"prop_simple_overall"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Single choice with a label for the NA category</span></span>
 <span><span class="fu"><a href="../reference/make_analysis.html">make_analysis</a></span><span class="op">(</span><span class="va">design</span>, <span class="va">survey</span>, <span class="va">choices</span>, <span class="va">i_statut</span>, <span class="st">"prop_simple_overall"</span>, none_label <span class="op">=</span> <span class="st">"Non précisé"</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 3 × 10</span></span></span>
-<span><span class="co">##   choices       stat stat_…¹ stat_…² name  analy…³ choic…⁴ group…⁵ group…⁶ group</span></span>
-<span><span class="co">##   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span></span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">1</span> none_prop_s… 0.176  0.049<span style="text-decoration: underline;">1</span>   0.302 i_st… prop_s… Non pr… <span style="color: #BB0000;">NA</span>      <span style="color: #BB0000;">NA</span>      <span style="color: #BB0000;">NA</span>   </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">2</span> pdi          0.405  0.244    0.567 i_st… prop_s… Déplac… <span style="color: #BB0000;">NA</span>      <span style="color: #BB0000;">NA</span>      <span style="color: #BB0000;">NA</span>   </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">3</span> pop_local    0.419  0.259    0.579 i_st… prop_s… Popula… <span style="color: #BB0000;">NA</span>      <span style="color: #BB0000;">NA</span>      <span style="color: #BB0000;">NA</span>   </span></span>
-<span><span class="co">## <span style="color: #949494;"># … with abbreviated variable names ¹​stat_low, ²​stat_upp, ³​analysis,</span></span></span>
-<span><span class="co">## <span style="color: #949494;">#   ⁴​choices_label, ⁵​group_disagg, ⁶​group_disagg_label</span></span></span></code></pre>
 <p>3- Multiple proportion</p>
-<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Multiple choice question</span></span>
-<span><span class="fu"><a href="../reference/make_analysis.html">make_analysis</a></span><span class="op">(</span><span class="va">design</span>, <span class="va">survey</span>, <span class="va">choices</span>, <span class="va">h_3_type_latrine</span>, <span class="st">"prop_multiple"</span>, level <span class="op">=</span> <span class="fl">0.95</span>, vartype <span class="op">=</span> <span class="st">"ci"</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 6 × 10</span></span></span>
-<span><span class="co">##     stat stat_low stat_upp name    analy…¹ choices choic…² group…³ group…⁴ group</span></span>
-<span><span class="co">##    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span></span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">1</span> 0.145   -<span style="color: #BB0000;">0.023</span><span style="color: #BB0000; text-decoration: underline;">4</span>    0.314 h_3_ty… prop_m… latrin… Latrin… <span style="color: #BB0000;">NA</span>      <span style="color: #BB0000;">NA</span>      <span style="color: #BB0000;">NA</span>   </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">2</span> 0.545    0.326     0.765 h_3_ty… prop_m… latrin… Latrin… <span style="color: #BB0000;">NA</span>      <span style="color: #BB0000;">NA</span>      <span style="color: #BB0000;">NA</span>   </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">3</span> 0.273    0.063<span style="text-decoration: underline;">4</span>    0.482 h_3_ty… prop_m… latrin… Latrin… <span style="color: #BB0000;">NA</span>      <span style="color: #BB0000;">NA</span>      <span style="color: #BB0000;">NA</span>   </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">4</span> 0.218    0.025<span style="text-decoration: underline;">3</span>    0.411 h_3_ty… prop_m… toilet… Toilet… <span style="color: #BB0000;">NA</span>      <span style="color: #BB0000;">NA</span>      <span style="color: #BB0000;">NA</span>   </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">5</span> 0.090<span style="text-decoration: underline;">9</span>  -<span style="color: #BB0000;">0.044</span><span style="color: #BB0000; text-decoration: underline;">2</span>    0.226 h_3_ty… prop_m… autre   Autre   <span style="color: #BB0000;">NA</span>      <span style="color: #BB0000;">NA</span>      <span style="color: #BB0000;">NA</span>   </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">6</span> 0        0         0     h_3_ty… prop_m… nsp     Ne sai… <span style="color: #BB0000;">NA</span>      <span style="color: #BB0000;">NA</span>      <span style="color: #BB0000;">NA</span>   </span></span>
-<span><span class="co">## <span style="color: #949494;"># … with abbreviated variable names ¹​analysis, ²​choices_label, ³​group_disagg,</span></span></span>
-<span><span class="co">## <span style="color: #949494;">#   ⁴​group_disagg_label</span></span></span></code></pre>
-<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Multiple choice question, with no label and with groups</span></span>
+<span><span class="fu"><a href="../reference/make_analysis.html">make_analysis</a></span><span class="op">(</span><span class="va">design</span>, <span class="va">survey</span>, <span class="va">choices</span>, <span class="va">h_3_type_latrine</span>, <span class="st">"prop_multiple"</span>, level <span class="op">=</span> <span class="fl">0.95</span>, vartype <span class="op">=</span> <span class="st">"ci"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Multiple choice question, with no label and with groups</span></span>
 <span><span class="fu"><a href="../reference/make_analysis.html">make_analysis</a></span><span class="op">(</span><span class="va">design</span>, <span class="va">survey</span>, <span class="va">choices</span>, <span class="va">r_besoin_assistance</span>, <span class="st">"prop_multiple"</span>, get_label <span class="op">=</span> <span class="cn">FALSE</span>, group <span class="op">=</span> <span class="st">"i_zad"</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## Warning: There is no corresponding list_name in choices for col: 'r_besoin_assistance'.</span></span>
-<span><span class="co">## An empty vector or an empty tibble is returned.</span></span></code></pre>
-<pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 22 × 10</span></span></span>
-<span><span class="co">##    group_dis…¹  stat stat_…² stat_…³ name  analy…⁴ choices choic…⁵ group…⁶ group</span></span>
-<span><span class="co">##    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span></span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 1</span> gnarala     0      0        0     r_be… prop_m… aucun   aucun   Gnarala i_zad</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 2</span> wendou      0      0        0     r_be… prop_m… aucun   aucun   Wendou  i_zad</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 3</span> gnarala     0.929  0.807    1.05  r_be… prop_m… secal   secal   Gnarala i_zad</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 4</span> wendou      0.938  0.831    1.04  r_be… prop_m… secal   secal   Wendou  i_zad</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 5</span> gnarala     0.214  0.020<span style="text-decoration: underline;">7</span>   0.408 r_be… prop_m… agr     agr     Gnarala i_zad</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 6</span> wendou      0.312  0.109    0.516 r_be… prop_m… agr     agr     Wendou  i_zad</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 7</span> gnarala     0.571  0.338    0.805 r_be… prop_m… sante   sante   Gnarala i_zad</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 8</span> wendou      0.562  0.345    0.780 r_be… prop_m… sante   sante   Wendou  i_zad</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 9</span> gnarala     0.571  0.338    0.805 r_be… prop_m… abri_b… abri_b… Gnarala i_zad</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">10</span> wendou      0.688  0.484    0.891 r_be… prop_m… abri_b… abri_b… Wendou  i_zad</span></span>
-<span><span class="co">## <span style="color: #949494;"># … with 12 more rows, and abbreviated variable names ¹​group_disagg, ²​stat_low,</span></span></span>
-<span><span class="co">## <span style="color: #949494;">#   ³​stat_upp, ⁴​analysis, ⁵​choices_label, ⁶​group_disagg_label</span></span></span></code></pre>
 <p>4- Multiple proportion overall: calculate the proportion for each
 choice out of the entire dataset (replaces NAs by 0s in the dummy
 columns):</p>
-<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Multiple choice question</span></span>
 <span><span class="fu"><a href="../reference/make_analysis.html">make_analysis</a></span><span class="op">(</span><span class="va">design</span>, <span class="va">survey</span>, <span class="va">choices</span>, <span class="va">h_3_type_latrine</span>, <span class="st">"prop_multiple_overall"</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 6 × 10</span></span></span>
-<span><span class="co">##     stat stat_low stat_upp name    analy…¹ choices choic…² group…³ group…⁴ group</span></span>
-<span><span class="co">##    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span></span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">1</span> 0.108   0.003<span style="text-decoration: underline;">73</span>    0.212 h_3_ty… prop_m… latrin… Latrin… <span style="color: #BB0000;">NA</span>      <span style="color: #BB0000;">NA</span>      <span style="color: #BB0000;">NA</span>   </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">2</span> 0.405   0.252      0.559 h_3_ty… prop_m… latrin… Latrin… <span style="color: #BB0000;">NA</span>      <span style="color: #BB0000;">NA</span>      <span style="color: #BB0000;">NA</span>   </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">3</span> 0.203   0.070<span style="text-decoration: underline;">2</span>     0.335 h_3_ty… prop_m… latrin… Latrin… <span style="color: #BB0000;">NA</span>      <span style="color: #BB0000;">NA</span>      <span style="color: #BB0000;">NA</span>   </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">4</span> 0.162   0.041<span style="text-decoration: underline;">2</span>     0.283 h_3_ty… prop_m… toilet… Toilet… <span style="color: #BB0000;">NA</span>      <span style="color: #BB0000;">NA</span>      <span style="color: #BB0000;">NA</span>   </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">5</span> 0.067<span style="text-decoration: underline;">6</span> -<span style="color: #BB0000;">0.015</span><span style="color: #BB0000; text-decoration: underline;">3</span>     0.150 h_3_ty… prop_m… autre   Autre   <span style="color: #BB0000;">NA</span>      <span style="color: #BB0000;">NA</span>      <span style="color: #BB0000;">NA</span>   </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">6</span> 0       0          0     h_3_ty… prop_m… nsp     Ne sai… <span style="color: #BB0000;">NA</span>      <span style="color: #BB0000;">NA</span>      <span style="color: #BB0000;">NA</span>   </span></span>
-<span><span class="co">## <span style="color: #949494;"># … with abbreviated variable names ¹​analysis, ²​choices_label, ³​group_disagg,</span></span></span>
-<span><span class="co">## <span style="color: #949494;">#   ⁴​group_disagg_label</span></span></span></code></pre>
 <p>5- Mean, median and counting numeric as character</p>
-<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Mean of interviewee's age</span></span>
-<span><span class="fu"><a href="../reference/make_analysis.html">make_analysis</a></span><span class="op">(</span><span class="va">design</span>, <span class="va">survey</span>, <span class="va">choices</span>, <span class="va">i_enquete_age</span>, <span class="st">"mean"</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 1 × 8</span></span></span>
-<span><span class="co">##    stat stat_low stat_upp name          analysis group_disagg group_disa…¹ group</span></span>
-<span><span class="co">##   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span></span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">1</span>  52.8     44.7     60.8 i_enquete_age mean     <span style="color: #BB0000;">NA</span>           <span style="color: #BB0000;">NA</span>           <span style="color: #BB0000;">NA</span>   </span></span>
-<span><span class="co">## <span style="color: #949494;"># … with abbreviated variable name ¹​group_disagg_label</span></span></span></code></pre>
-<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Median of interviewee's age</span></span>
-<span><span class="fu"><a href="../reference/make_analysis.html">make_analysis</a></span><span class="op">(</span><span class="va">design</span>, <span class="va">survey</span>, <span class="va">choices</span>, <span class="va">i_enquete_age</span>, <span class="st">"median"</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 1 × 8</span></span></span>
-<span><span class="co">##    stat stat_low stat_upp name          analysis group_disagg group_disa…¹ group</span></span>
-<span><span class="co">##   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span></span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">1</span>    40       35       67 i_enquete_age median   <span style="color: #BB0000;">NA</span>           <span style="color: #BB0000;">NA</span>           <span style="color: #BB0000;">NA</span>   </span></span>
-<span><span class="co">## <span style="color: #949494;"># … with abbreviated variable name ¹​group_disagg_label</span></span></span></code></pre>
-<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Proportion counting a numeric variable as a character variable</span></span>
+<span><span class="fu"><a href="../reference/make_analysis.html">make_analysis</a></span><span class="op">(</span><span class="va">design</span>, <span class="va">survey</span>, <span class="va">choices</span>, <span class="va">i_enquete_age</span>, <span class="st">"mean"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Median of interviewee's age</span></span>
+<span><span class="fu"><a href="../reference/make_analysis.html">make_analysis</a></span><span class="op">(</span><span class="va">design</span>, <span class="va">survey</span>, <span class="va">choices</span>, <span class="va">i_enquete_age</span>, <span class="st">"median"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Proportion counting a numeric variable as a character variable</span></span>
 <span><span class="co"># Could be used for some particular numeric variables. For instance, daily duration of access to electricity.</span></span>
-<span><span class="fu"><a href="../reference/make_analysis.html">make_analysis</a></span><span class="op">(</span><span class="va">design</span>, <span class="va">survey</span>, <span class="va">choices</span>, <span class="va">i_enquete_age</span>, <span class="st">"count_numeric"</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 27 × 10</span></span></span>
-<span><span class="co">##    choices   stat stat_low stat_upp name   analy…¹ choic…² group…³ group…⁴ group</span></span>
-<span><span class="co">##    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span></span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 1</span> 19      0.027<span style="text-decoration: underline;">0</span>  -<span style="color: #BB0000;">0.018</span><span style="color: #BB0000; text-decoration: underline;">9</span>   0.073<span style="text-decoration: underline;">0</span> i_enq… count_… 19      <span style="color: #BB0000;">NA</span>      <span style="color: #BB0000;">NA</span>      <span style="color: #BB0000;">NA</span>   </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 2</span> 21      0.040<span style="text-decoration: underline;">5</span>  -<span style="color: #BB0000;">0.028</span><span style="color: #BB0000; text-decoration: underline;">4</span>   0.110  i_enq… count_… 21      <span style="color: #BB0000;">NA</span>      <span style="color: #BB0000;">NA</span>      <span style="color: #BB0000;">NA</span>   </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 3</span> 22      0.027<span style="text-decoration: underline;">0</span>  -<span style="color: #BB0000;">0.018</span><span style="color: #BB0000; text-decoration: underline;">9</span>   0.073<span style="text-decoration: underline;">0</span> i_enq… count_… 22      <span style="color: #BB0000;">NA</span>      <span style="color: #BB0000;">NA</span>      <span style="color: #BB0000;">NA</span>   </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 4</span> 24      0.027<span style="text-decoration: underline;">0</span>  -<span style="color: #BB0000;">0.018</span><span style="color: #BB0000; text-decoration: underline;">9</span>   0.073<span style="text-decoration: underline;">0</span> i_enq… count_… 24      <span style="color: #BB0000;">NA</span>      <span style="color: #BB0000;">NA</span>      <span style="color: #BB0000;">NA</span>   </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 5</span> 26      0.040<span style="text-decoration: underline;">5</span>  -<span style="color: #BB0000;">0.028</span><span style="color: #BB0000; text-decoration: underline;">4</span>   0.110  i_enq… count_… 26      <span style="color: #BB0000;">NA</span>      <span style="color: #BB0000;">NA</span>      <span style="color: #BB0000;">NA</span>   </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 6</span> 27      0.040<span style="text-decoration: underline;">5</span>  -<span style="color: #BB0000;">0.028</span><span style="color: #BB0000; text-decoration: underline;">4</span>   0.110  i_enq… count_… 27      <span style="color: #BB0000;">NA</span>      <span style="color: #BB0000;">NA</span>      <span style="color: #BB0000;">NA</span>   </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 7</span> 31      0.027<span style="text-decoration: underline;">0</span>  -<span style="color: #BB0000;">0.018</span><span style="color: #BB0000; text-decoration: underline;">9</span>   0.073<span style="text-decoration: underline;">0</span> i_enq… count_… 31      <span style="color: #BB0000;">NA</span>      <span style="color: #BB0000;">NA</span>      <span style="color: #BB0000;">NA</span>   </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 8</span> 32      0.027<span style="text-decoration: underline;">0</span>  -<span style="color: #BB0000;">0.018</span><span style="color: #BB0000; text-decoration: underline;">9</span>   0.073<span style="text-decoration: underline;">0</span> i_enq… count_… 32      <span style="color: #BB0000;">NA</span>      <span style="color: #BB0000;">NA</span>      <span style="color: #BB0000;">NA</span>   </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 9</span> 33      0.040<span style="text-decoration: underline;">5</span>  -<span style="color: #BB0000;">0.028</span><span style="color: #BB0000; text-decoration: underline;">4</span>   0.110  i_enq… count_… 33      <span style="color: #BB0000;">NA</span>      <span style="color: #BB0000;">NA</span>      <span style="color: #BB0000;">NA</span>   </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">10</span> 35      0.067<span style="text-decoration: underline;">6</span>  -<span style="color: #BB0000;">0.015</span><span style="color: #BB0000; text-decoration: underline;">3</span>   0.150  i_enq… count_… 35      <span style="color: #BB0000;">NA</span>      <span style="color: #BB0000;">NA</span>      <span style="color: #BB0000;">NA</span>   </span></span>
-<span><span class="co">## <span style="color: #949494;"># … with 17 more rows, and abbreviated variable names ¹​analysis,</span></span></span>
-<span><span class="co">## <span style="color: #949494;">#   ²​choices_label, ³​group_disagg, ⁴​group_disagg_label</span></span></span></code></pre>
-<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Also grouping still works</span></span>
+<span><span class="fu"><a href="../reference/make_analysis.html">make_analysis</a></span><span class="op">(</span><span class="va">design</span>, <span class="va">survey</span>, <span class="va">choices</span>, <span class="va">i_enquete_age</span>, <span class="st">"count_numeric"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Also grouping still works</span></span>
 <span><span class="fu"><a href="../reference/make_analysis.html">make_analysis</a></span><span class="op">(</span><span class="va">design</span>, <span class="va">survey</span>, <span class="va">choices</span>, <span class="va">i_enquete_age</span>, <span class="st">"median"</span>, group <span class="op">=</span> <span class="st">"i_zad"</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 2 × 8</span></span></span>
-<span><span class="co">##   group_disagg  stat stat_low stat_upp name          analysis group_disa…¹ group</span></span>
-<span><span class="co">##   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span></span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">1</span> gnarala         40       33       72 i_enquete_age median   Gnarala      i_zad</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">2</span> wendou          37       32       83 i_enquete_age median   Wendou       i_zad</span></span>
-<span><span class="co">## <span style="color: #949494;"># … with abbreviated variable name ¹​group_disagg_label</span></span></span></code></pre>
 <p>6 - Last but not least, ratios (it automatically does not consider
 NAs).</p>
 <p>For this, it is only necessary to write a character string with the
 two variable names separated by a comma.</p>
-<div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Ratio of whatever, just for the example</span></span>
 <span><span class="fu"><a href="../reference/make_analysis.html">make_analysis</a></span><span class="op">(</span><span class="va">design</span>, <span class="va">survey</span>, <span class="va">choices</span>, <span class="st">"i_enum_id, i_enquete_age"</span>, <span class="st">"ratio"</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 1 × 8</span></span></span>
-<span><span class="co">##    stat stat_low stat_upp name                     analy…¹ group…² group…³ group</span></span>
-<span><span class="co">##   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span></span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">1</span> 0.125   0.098<span style="text-decoration: underline;">2</span>    0.152 i_enum_id, i_enquete_age ratio   <span style="color: #BB0000;">NA</span>      <span style="color: #BB0000;">NA</span>      <span style="color: #BB0000;">NA</span>   </span></span>
-<span><span class="co">## <span style="color: #949494;"># … with abbreviated variable names ¹​analysis, ²​group_disagg,</span></span></span>
-<span><span class="co">## <span style="color: #949494;">#   ³​group_disagg_label</span></span></span></code></pre>
 </div>
 <div class="section level2">
 <h2 id="analysis-from-a-dap">Analysis from a dap<a class="anchor" aria-label="anchor" href="#analysis-from-a-dap"></a>
 </h2>
-<div class="sourceCode" id="cb38"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># This gives a list</span></span>
-<span><span class="co"># make_analysis_from_dap(design, survey, choices, dap)</span></span>
+<span><span class="fu"><a href="../reference/make_analysis_from_dap.html">make_analysis_from_dap</a></span><span class="op">(</span><span class="va">design</span>, <span class="va">survey</span>, <span class="va">choices</span>, <span class="va">dap</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># This binds all analysis from the DAP into one data frame</span></span>
 <span><span class="fu"><a href="../reference/make_analysis_from_dap.html">make_analysis_from_dap</a></span><span class="op">(</span><span class="va">design</span>, <span class="va">survey</span>, <span class="va">choices</span>, <span class="va">dap</span>, bind <span class="op">=</span> <span class="cn">T</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## Warning: There are different confidence levels in this DAP.</span></span></code></pre>
-<pre><code><span><span class="co">## Warning: The confidence level used for analysis 'prop_simple_overall' for column</span></span>
-<span><span class="co">## 'c_n_chef_menage_genre' is below 90%.</span></span></code></pre>
-<pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 32 × 23</span></span></span>
-<span><span class="co">##    id_an…¹   stat stat_low stat_…² name  analy…³ choices choic…⁴ group…⁵ group…⁶</span></span>
-<span><span class="co">##    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 1</span> analys… 0.108   0.003<span style="text-decoration: underline;">73</span>   0.212 h_3_… prop_m… latrin… Latrin… <span style="color: #BB0000;">NA</span>      <span style="color: #BB0000;">NA</span>     </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 2</span> analys… 0.405   0.252     0.559 h_3_… prop_m… latrin… Latrin… <span style="color: #BB0000;">NA</span>      <span style="color: #BB0000;">NA</span>     </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 3</span> analys… 0.203   0.070<span style="text-decoration: underline;">2</span>    0.335 h_3_… prop_m… latrin… Latrin… <span style="color: #BB0000;">NA</span>      <span style="color: #BB0000;">NA</span>     </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 4</span> analys… 0.162   0.041<span style="text-decoration: underline;">2</span>    0.283 h_3_… prop_m… toilet… Toilet… <span style="color: #BB0000;">NA</span>      <span style="color: #BB0000;">NA</span>     </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 5</span> analys… 0.067<span style="text-decoration: underline;">6</span> -<span style="color: #BB0000;">0.015</span><span style="color: #BB0000; text-decoration: underline;">3</span>    0.150 h_3_… prop_m… autre   Autre   <span style="color: #BB0000;">NA</span>      <span style="color: #BB0000;">NA</span>     </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 6</span> analys… 0       0         0     h_3_… prop_m… nsp     Ne sai… <span style="color: #BB0000;">NA</span>      <span style="color: #BB0000;">NA</span>     </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 7</span> analys… 0.145   0.005<span style="text-decoration: underline;">87</span>   0.285 h_3_… prop_m… latrin… Latrin… <span style="color: #BB0000;">NA</span>      <span style="color: #BB0000;">NA</span>     </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 8</span> analys… 0.545   0.364     0.727 h_3_… prop_m… latrin… Latrin… <span style="color: #BB0000;">NA</span>      <span style="color: #BB0000;">NA</span>     </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 9</span> analys… 0.273   0.099<span style="text-decoration: underline;">7</span>    0.446 h_3_… prop_m… latrin… Latrin… <span style="color: #BB0000;">NA</span>      <span style="color: #BB0000;">NA</span>     </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">10</span> analys… 0.218   0.058<span style="text-decoration: underline;">7</span>    0.378 h_3_… prop_m… toilet… Toilet… <span style="color: #BB0000;">NA</span>      <span style="color: #BB0000;">NA</span>     </span></span>
-<span><span class="co">## <span style="color: #949494;"># … with 22 more rows, 13 more variables: group &lt;chr&gt;, rq &lt;chr&gt;, sub_rq &lt;chr&gt;,</span></span></span>
-<span><span class="co">## <span style="color: #949494;">#   indicator &lt;chr&gt;, recall &lt;chr&gt;, question_name &lt;chr&gt;, subset &lt;chr&gt;,</span></span></span>
-<span><span class="co">## <span style="color: #949494;">#   analysis_name &lt;chr&gt;, none_label &lt;chr&gt;, group_name &lt;chr&gt;, level &lt;dbl&gt;,</span></span></span>
-<span><span class="co">## <span style="color: #949494;">#   na_rm &lt;lgl&gt;, vartype &lt;chr&gt;, and abbreviated variable names ¹​id_analysis,</span></span></span>
-<span><span class="co">## <span style="color: #949494;">#   ²​stat_upp, ³​analysis, ⁴​choices_label, ⁵​group_disagg, ⁶​group_disagg_label</span></span></span></code></pre>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside>
