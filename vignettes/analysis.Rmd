@@ -1,0 +1,146 @@
+---
+title: "Data analysis"
+output: 
+  rmarkdown::html_vignette:
+    number_sections: true
+
+vignette: >
+  %\VignetteIndexEntry{Data analysis}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Why ?
+
+This vignette presents `make_analysis()` and `make_analysis_from_dap()`. More documentation will be added later for `svy_*()` functions.
+
+# Prepare data, survey, choices, survey design
+
+```{r initiate}
+# Si vous n'avez pas encore installé le package
+# devtools::install_github("impactR)
+library(impactR)
+library(dplyr)
+library(srvyr)
+
+# Get data analysis plan
+data(dap)
+# Get survey
+data(survey)
+# Get choices
+data(choices)
+# Get data
+data(data)
+```
+
+The Data analysis plan must have the following specs (not exhaustive):
+
+- All columns from the included dataset must be present.
+- Column `id_analysis` must contain unique identifiers for using `make_analysis()` with `get_label = TRUE` or `make_analysis_from_dap()`.
+- Data must have been imported with `ìmport_xlsx()` or `import_csv()` or some other way. Yet column names for multiple choices must follow this pattern "variable_choice1", with an underscore between the variable name from the survey sheet and the choices from the choices sheet. For instance, for the main drinking water source (if multiple choice), it could be "w_water_source_surface_water" or "w_water_source_stand_pipe".
+
+Survey and choices sheets must be prepared:
+```{r initiate-kobo}
+# Prepare survey
+survey <- survey |> 
+  split_survey(type) |> 
+  #---- If there are multiple languages, rename one of the two to be used to "label"
+  dplyr::rename(label = label)
+  
+choices <- choices |> 
+  #---- If there are multiple languages, rename one of the two to be used to "label"
+  dplyr::rename(label = label)
+
+```
+
+Let's set your survey design with respect to the sampling (required):
+```{r initiate-design}
+# Prepare survey design
+# For instance, below is a stratified sampling
+design <- data |> 
+  as_survey_design(
+    strata = i_zad,
+    weights = weights
+  )
+
+```
+
+# Analysis for one variable of for a ratio
+
+Let's say you don't have a full DAP sheet, and you just want to make individual analyses.
+
+1- Proportion for a single choice question :
+```{r prop-simple}
+# Single choice question
+make_analysis(design, survey, choices, h_3_acces_latrine, "prop_simple", level = 0.95, vartype = "ci")
+
+# Single choice question, do not get labels of choices
+make_analysis(design, survey, choices, h_3_acces_latrine, "prop_simple", get_label = FALSE)
+
+# Single choice question, with group being the stratum
+make_analysis(design, survey, choices, h_3_acces_latrine, "prop_simple", group = "i_zad")
+```
+2- Proportion overall: calculate the proportion with NAs as a category
+```{r prop-simple-overall}
+# Single choice question
+make_analysis(design, survey, choices, i_statut, "prop_simple_overall")
+
+# Single choice with a label for the NA category
+make_analysis(design, survey, choices, i_statut, "prop_simple_overall", none_label = "Non précisé")
+```
+
+3- Multiple proportion
+```{r prop-multiple}
+# Multiple choice question
+make_analysis(design, survey, choices, h_3_type_latrine, "prop_multiple", level = 0.95, vartype = "ci")
+
+# Multiple choice question, with no label and with groups
+make_analysis(design, survey, choices, r_besoin_assistance, "prop_multiple", get_label = FALSE, group = "i_zad")
+```
+
+4- Multiple proportion overall: calculate the proportion for each choice out of the entire dataset (replaces NAs by 0s in the dummy columns):
+```{r prop-multiple-overall}
+# Multiple choice question
+make_analysis(design, survey, choices, h_3_type_latrine, "prop_multiple_overall")
+
+```
+
+5- Mean, median and counting numeric as character
+```{r numeric}
+# Mean of interviewee's age
+make_analysis(design, survey, choices, i_enquete_age, "mean")
+
+# Median of interviewee's age
+make_analysis(design, survey, choices, i_enquete_age, "median")
+
+# Proportion counting a numeric variable as a character variable
+# Could be used for some particular numeric variables. For instance, daily duration of access to electricity.
+make_analysis(design, survey, choices, i_enquete_age, "count_numeric")
+
+# Also grouping still works
+make_analysis(design, survey, choices, i_enquete_age, "median", group = "i_zad")
+
+```
+
+6 - Last but not least, ratios (it automatically does not consider NAs).
+
+For this, it is only necessary to write a character string with the two variable names separated by a comma.
+```{r ratio}
+# Ratio of whatever, just for the example
+make_analysis(design, survey, choices, "i_enum_id, i_enquete_age", "ratio")
+```
+
+# Analysis from a dap
+
+```{r dap}
+# This gives a list
+# make_analysis_from_dap(design, survey, choices, dap)
+
+# This binds all analysis from the DAP into one data frame
+make_analysis_from_dap(design, survey, choices, dap, bind = T)
+
+```

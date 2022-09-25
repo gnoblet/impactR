@@ -41,20 +41,31 @@ abort_bad_argument <- function(arg1, must, not = NULL, arg2 = NULL, same = NULL)
 #'
 #' @return A stop statement
 if_not_in_stop <- function(.tbl, cols, df, arg = NULL){
+
+  missing_cols <- subvec_not_in(cols, colnames(.tbl))
+
   if (is.null(arg)) {
-    msg <- glue::glue("The following column/s is/are missing in `{df}`:")
+    if (length(missing_cols) >= 2) {
+      msg <- glue::glue("The following columns are missing in `{df}`:")
+    } else {
+      msg <- glue::glue("The following column is missing in `{df}`:")
+    }
   }
   else {
-    msg <- glue::glue("The following column/s from `{arg}` is/are missing in `{df}`:")
+    if (length(missing_cols) >= 2) {
+      msg <- glue::glue("The following columns from `{arg}` are missing in `{df}`:")
+    } else {
+      msg <- glue::glue("The following column from `{arg}` is missing in `{df}`:")
+    }
   }
-  if (!all(cols %in% colnames(.tbl))) {
+  if (length(missing_cols) >= 1) {
     rlang::abort(
       c("Missing columns",
         "*" =
         paste(
           msg,
           paste(
-            subvec_not_in(cols, colnames(.tbl)),
+            missing_cols,
             collapse = ", ")
         )
       )

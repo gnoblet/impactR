@@ -33,7 +33,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">impactR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.8.11.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.9.0.9000</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -48,6 +48,7 @@
 <li class="active nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
+    <a class="dropdown-item" href="../articles/analysis.html">Data analysis</a>
     <a class="dropdown-item" href="../articles/base_de_travail.html">Base de travail avec impactR</a>
     <a class="dropdown-item" href="../articles/cleaning_data.html">Cleaning data</a>
     <a class="dropdown-item" href="../articles/main_workflow.html">Some workflow</a>
@@ -110,24 +111,26 @@ through the use of <code>impactR</code>. Let’s load the package.</p>
 <span><span class="va">data</span></span></code></pre></div>
 <pre><code><span><span class="co">## Warning in as.POSIXlt.POSIXct(x, tz): unable to identify current timezone 'H':</span></span>
 <span><span class="co">## please set environment variable 'TZ'</span></span></code></pre>
-<pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 8 × 50</span></span></span>
-<span><span class="co">##   uuid  start               end                 today               deviceid    </span></span>
-<span><span class="co">##   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dttm&gt;</span>              <span style="color: #949494; font-style: italic;">&lt;dttm&gt;</span>              <span style="color: #949494; font-style: italic;">&lt;dttm&gt;</span>              <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">1</span> x1    2021-10-18 <span style="color: #949494;">09:08:24</span> 2021-10-18 <span style="color: #949494;">10:01:35</span> 2021-10-18 <span style="color: #949494;">00:00:00</span> collect:tgN…</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">2</span> x2    2021-10-20 <span style="color: #949494;">09:14:47</span> 2021-10-20 <span style="color: #949494;">10:05:22</span> 2021-10-20 <span style="color: #949494;">00:00:00</span> 35557110048…</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">3</span> x3    2021-10-20 <span style="color: #949494;">10:11:14</span> 2021-10-20 <span style="color: #949494;">11:00:07</span> 2021-10-20 <span style="color: #949494;">00:00:00</span> 35557110048…</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">4</span> x4    2021-10-20 <span style="color: #949494;">11:12:05</span> 2021-10-20 <span style="color: #949494;">12:02:57</span> 2021-10-20 <span style="color: #949494;">00:00:00</span> 35557110048…</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">5</span> x5    2021-10-20 <span style="color: #949494;">14:14:36</span> 2021-10-20 <span style="color: #949494;">15:02:31</span> 2021-10-20 <span style="color: #949494;">00:00:00</span> 35557110048…</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">6</span> x6    2021-10-20 <span style="color: #949494;">15:09:11</span> 2021-10-20 <span style="color: #949494;">16:04:35</span> 2021-10-20 <span style="color: #949494;">00:00:00</span> 35557110048…</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">7</span> x7    2021-10-20 <span style="color: #949494;">09:44:15</span> 2021-10-20 <span style="color: #949494;">10:26:34</span> 2021-10-20 <span style="color: #949494;">00:00:00</span> 35557110050…</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">8</span> x8    2021-10-20 <span style="color: #949494;">10:31:55</span> 2021-10-20 <span style="color: #949494;">11:12:48</span> 2021-10-20 <span style="color: #949494;">00:00:00</span> 35557110050…</span></span>
-<span><span class="co">## <span style="color: #949494;"># … with 45 more variables: i_enum_id &lt;dbl&gt;, i_enum_genre &lt;chr&gt;,</span></span></span>
-<span><span class="co">## <span style="color: #949494;">#   i_admin2 &lt;chr&gt;, i_ville &lt;chr&gt;, i_secteur &lt;chr&gt;, i_info_secteur &lt;chr&gt;,</span></span></span>
-<span><span class="co">## <span style="color: #949494;">#   i_zad &lt;chr&gt;, i_zad_1 &lt;chr&gt;, i_consensus &lt;chr&gt;, i_consensus_note &lt;chr&gt;,</span></span></span>
-<span><span class="co">## <span style="color: #949494;">#   i_enquete_age &lt;dbl&gt;, i_enquete_genre &lt;chr&gt;, i_statut &lt;chr&gt;,</span></span></span>
-<span><span class="co">## <span style="color: #949494;">#   i_note_statut &lt;lgl&gt;, i_statut_1 &lt;chr&gt;, c_note &lt;lgl&gt;, c_chef_menage &lt;chr&gt;,</span></span></span>
-<span><span class="co">## <span style="color: #949494;">#   c_n_chef_menage_genre &lt;chr&gt;, c_n_chef_menage_age &lt;dbl&gt;,</span></span></span>
-<span><span class="co">## <span style="color: #949494;">#   c_chef_menage_age &lt;dbl&gt;, c_chef_menage_genre &lt;chr&gt;, …</span></span></span></code></pre>
+<pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 30 × 52</span></span></span>
+<span><span class="co">##    uuid  cluster   weights start               end                </span></span>
+<span><span class="co">##    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dttm&gt;</span>              <span style="color: #949494; font-style: italic;">&lt;dttm&gt;</span>             </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 1</span> x1    wendou_1      0.8 2021-10-18 <span style="color: #949494;">09:08:24</span> 2021-10-18 <span style="color: #949494;">10:01:35</span></span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 2</span> x2    wendou_1      0.8 2021-10-20 <span style="color: #949494;">09:14:47</span> 2021-10-20 <span style="color: #949494;">10:05:23</span></span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 3</span> x3    wendou_2      0.8 2021-10-20 <span style="color: #949494;">10:11:14</span> 2021-10-20 <span style="color: #949494;">11:00:07</span></span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 4</span> x4    wendou_2      0.8 2021-10-18 <span style="color: #949494;">09:08:24</span> 2021-10-20 <span style="color: #949494;">12:02:57</span></span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 5</span> x5    wendou_1      0.8 2021-10-20 <span style="color: #949494;">10:11:14</span> 2021-10-20 <span style="color: #949494;">15:02:31</span></span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 6</span> x6    wendou_2      0.8 2021-10-20 <span style="color: #949494;">14:14:36</span> 2021-10-20 <span style="color: #949494;">16:04:35</span></span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 7</span> x7    wendou_1      0.8 2021-10-20 <span style="color: #949494;">15:09:11</span> 2021-10-20 <span style="color: #949494;">10:26:34</span></span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 8</span> x8    wendou_1      0.8 2021-10-20 <span style="color: #949494;">09:44:15</span> 2021-10-20 <span style="color: #949494;">11:12:48</span></span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 9</span> x9    gnarala_1     1.2 2021-10-20 <span style="color: #949494;">11:12:05</span> 2021-10-21 <span style="color: #949494;">11:12:48</span></span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">10</span> x10   gnarala_2     1.2 2021-10-20 <span style="color: #949494;">14:14:36</span> 2021-10-22 <span style="color: #949494;">11:12:48</span></span></span>
+<span><span class="co">## <span style="color: #949494;"># … with 20 more rows, and 47 more variables: today &lt;dttm&gt;, deviceid &lt;chr&gt;,</span></span></span>
+<span><span class="co">## <span style="color: #949494;">#   i_enum_id &lt;dbl&gt;, i_enum_genre &lt;chr&gt;, i_admin2 &lt;chr&gt;, i_ville &lt;chr&gt;,</span></span></span>
+<span><span class="co">## <span style="color: #949494;">#   i_secteur &lt;chr&gt;, i_info_secteur &lt;chr&gt;, i_zad &lt;chr&gt;, i_zad_1 &lt;chr&gt;,</span></span></span>
+<span><span class="co">## <span style="color: #949494;">#   i_consensus &lt;chr&gt;, i_consensus_note &lt;chr&gt;, i_enquete_age &lt;dbl&gt;,</span></span></span>
+<span><span class="co">## <span style="color: #949494;">#   i_enquete_genre &lt;chr&gt;, i_statut &lt;chr&gt;, i_note_statut &lt;lgl&gt;,</span></span></span>
+<span><span class="co">## <span style="color: #949494;">#   i_statut_1 &lt;chr&gt;, c_note &lt;lgl&gt;, c_chef_menage &lt;chr&gt;,</span></span></span>
+<span><span class="co">## <span style="color: #949494;">#   c_n_chef_menage_genre &lt;chr&gt;, c_n_chef_menage_age &lt;dbl&gt;, …</span></span></span></code></pre>
 <p>Most of <code>impactR</code>’s functions are written with the
 assumption that the provided data may be coerced to a tibble, since it
 extensively use the tidyverse.</p>
@@ -171,13 +174,11 @@ to obtain two types of outliers: the deviation from the mean using the
 <span><span class="co"># Create the full log of outliers of all numeri columns</span></span>
 <span><span class="va">log_outliers</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/make_log_outlier.html">make_log_outlier</a></span><span class="op">(</span><span class="va">data</span>, <span class="va">survey</span>, id_col <span class="op">=</span> <span class="va">uuid</span>, <span class="va">today</span>, <span class="va">i_enum_id</span>, <span class="va">i_zad</span><span class="op">)</span></span>
 <span><span class="va">log_outliers</span></span></code></pre></div>
-<pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 4 × 16</span></span></span>
+<pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 2 × 16</span></span></span>
 <span><span class="co">##   id_check today               i_enu…¹ i_zad uuid  quest…² quest…³ why   feedb…⁴</span></span>
 <span><span class="co">##   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dttm&gt;</span>                <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">1</span> outlier  2021-10-20 <span style="color: #949494;">00:00:00</span>       3 wend… x2    i_enqu… Quel e… Outl… Fill in</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">2</span> outlier  2021-10-18 <span style="color: #949494;">00:00:00</span>       8 wend… x1    c_n_ch… Quel e… Outl… Fill in</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">3</span> outlier  2021-10-20 <span style="color: #949494;">00:00:00</span>       3 wend… x2    c_n_ch… Quel e… Outl… Fill in</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">4</span> outlier  2021-10-18 <span style="color: #949494;">00:00:00</span>       8 wend… x1    c_chef… Age ex… Outl… Fill in</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">1</span> outlier  2021-10-18 <span style="color: #949494;">00:00:00</span>       8 wend… x1    c_n_ch… Quel e… Outl… Fill in</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">2</span> outlier  2021-10-20 <span style="color: #949494;">00:00:00</span>       3 wend… x2    c_n_ch… Quel e… Outl… Fill in</span></span>
 <span><span class="co">## <span style="color: #949494;"># … with 7 more variables: action &lt;chr&gt;, old_value &lt;dbl&gt;, new_value &lt;chr&gt;,</span></span></span>
 <span><span class="co">## <span style="color: #949494;">#   type &lt;chr&gt;, other_parent_question &lt;chr&gt;, other_new_value &lt;chr&gt;,</span></span></span>
 <span><span class="co">## <span style="color: #949494;">#   checkdate &lt;chr&gt;, and abbreviated variable names ¹​i_enum_id, ²​question_name,</span></span></span>
@@ -197,20 +198,24 @@ the example that follows, it is “autre_”.</p>
 <span></span>
 <span><span class="co"># Get other parent answers</span></span>
 <span><span class="fu"><a href="../reference/other_parent_cols.html">other_parent_cols</a></span><span class="op">(</span><span class="va">data</span>, <span class="va">other_cols</span>, <span class="st">"autre_"</span>, id_col <span class="op">=</span> <span class="va">uuid</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 2 × 3</span></span></span>
+<pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 4 × 3</span></span></span>
 <span><span class="co">##   uuid  other_parent_question other_old_value            </span></span>
 <span><span class="co">##   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                 <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                      </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">1</span> x5    h_3_type_latrine      latrine_prive_partage autre</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">2</span> x7    r_besoin_assistance   abri_bna secal autre</span></span></code></pre>
+<span><span class="co">## <span style="color: #BCBCBC;">1</span> x15   r_besoin_assistance   abri_bna secal autre       </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">2</span> x22   h_3_type_latrine      latrine_prive autre        </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">3</span> x5    h_3_type_latrine      latrine_prive_partage autre</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">4</span> x7    r_besoin_assistance   abri_bna secal autre</span></span></code></pre>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Fabriquer le journal de nettoyage des "autres"</span></span>
 <span><span class="va">log_others</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/make_log_other.html">make_log_other</a></span><span class="op">(</span><span class="va">data</span>, <span class="va">survey</span>, <span class="st">"autre_"</span>, <span class="va">uuid</span>, <span class="va">i_enum_id</span>, <span class="va">i_zad</span><span class="op">)</span> </span>
 <span><span class="va">log_others</span></span></code></pre></div>
-<pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 2 × 16</span></span></span>
-<span><span class="co">##   id_check i_enum_id i_zad  uuid  questio…¹ quest…² why   feedb…³ action old_v…⁴</span></span>
-<span><span class="co">##   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">1</span> autre_           3 wendou x5    autre_h_… Lesque… Othe… Fill in check  Aussi …</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">2</span> autre_          12 wendou x7    autre_r_… De que… Othe… Fill in check  Un mét…</span></span>
+<pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 4 × 16</span></span></span>
+<span><span class="co">##   id_check i_enum_id i_zad   uuid  questi…¹ quest…² why   feedb…³ action old_v…⁴</span></span>
+<span><span class="co">##   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">1</span> autre_           3 wendou  x5    autre_h… Lesque… Othe… Fill in check  Aussi …</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">2</span> autre_          12 wendou  x7    autre_r… De que… Othe… Fill in check  Un mét…</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">3</span> autre_           3 gnarala x15   autre_r… De que… Othe… Fill in check  Electr…</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">4</span> autre_           5 gnarala x22   autre_h… Lesque… Othe… Fill in check  Trou o…</span></span>
 <span><span class="co">## <span style="color: #949494;"># … with 6 more variables: new_value &lt;chr&gt;, type &lt;chr&gt;,</span></span></span>
 <span><span class="co">## <span style="color: #949494;">#   other_parent_question &lt;chr&gt;, other_old_value &lt;chr&gt;, other_new_value &lt;chr&gt;,</span></span></span>
 <span><span class="co">## <span style="color: #949494;">#   checkdate &lt;chr&gt;, and abbreviated variable names ¹​question_name,</span></span></span>
@@ -260,7 +265,8 @@ the time difference between two surveys per interviewer:</p>
 <span>  <span class="co"># NOT RUN!</span></span>
 <span>  <span class="co"># survey_difftime(start, end, new_colname = "survey_difftime", i_enum_id)</span></span>
 <span><span class="va">data</span><span class="op">$</span><span class="va">survey_duration</span></span></code></pre></div>
-<pre><code><span><span class="co">## [1] 53 51 49 51 48 55 42 41</span></span></code></pre>
+<pre><code><span><span class="co">##  [1]   53   51   49 3055  291  110 -283   89 1441 2698 1204 2969 1481 5884 1558</span></span>
+<span><span class="co">## [16] 2942 4444 2942 1258 2644 1529 2881 1258 2644 1529 2921 1529 5884 1502 2698</span></span></code></pre>
 <p>We can check the logical check spreadsheet again:</p>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/check_check_list.html">check_check_list</a></span><span class="op">(</span><span class="va">check_list</span>, <span class="va">data</span><span class="op">)</span></span></code></pre></div>
@@ -271,24 +277,24 @@ proceed with the production of the cleaning log.</p>
 <code class="sourceCode R"><span><span class="va">log_check_list</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/make_log_from_check_list.html">make_log_from_check_list</a></span><span class="op">(</span><span class="va">data</span>, <span class="va">survey</span>, <span class="va">check_list</span>, <span class="va">uuid</span>, <span class="va">today</span>, <span class="va">i_enum_id</span>, <span class="va">i_zad</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">log_check_list</span></span></code></pre></div>
-<pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 11 × 17</span></span></span>
+<pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 57 × 17</span></span></span>
 <span><span class="co">##    id_ch…¹ today               i_enu…² i_zad uuid  quest…³ quest…⁴ why   feedb…⁵</span></span>
 <span><span class="co">##    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dttm&gt;</span>                <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 1</span> id1     2021-10-20 <span style="color: #949494;">00:00:00</span>      12 wend… x7    i_cons… <span style="color: #949494;">"</span>Bonjo… Pas … Verifi…</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 2</span> id1     2021-10-20 <span style="color: #949494;">00:00:00</span>      12 wend… x8    i_cons… <span style="color: #949494;">"</span>Bonjo… Pas … Verifi…</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 3</span> id3     2021-10-18 <span style="color: #949494;">00:00:00</span>       8 wend… x1    survey… <span style="color: #949494;">""</span>      Duré… Verifi…</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 4</span> id3     2021-10-20 <span style="color: #949494;">00:00:00</span>       3 wend… x2    survey… <span style="color: #949494;">""</span>      Duré… Verifi…</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 5</span> id3     2021-10-20 <span style="color: #949494;">00:00:00</span>       3 wend… x3    survey… <span style="color: #949494;">""</span>      Duré… Verifi…</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 6</span> id3     2021-10-20 <span style="color: #949494;">00:00:00</span>       3 wend… x4    survey… <span style="color: #949494;">""</span>      Duré… Verifi…</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 7</span> id3     2021-10-20 <span style="color: #949494;">00:00:00</span>       3 wend… x5    survey… <span style="color: #949494;">""</span>      Duré… Verifi…</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 8</span> id3     2021-10-20 <span style="color: #949494;">00:00:00</span>       3 wend… x6    survey… <span style="color: #949494;">""</span>      Duré… Verifi…</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 9</span> id3     2021-10-20 <span style="color: #949494;">00:00:00</span>      12 wend… x7    survey… <span style="color: #949494;">""</span>      Duré… Verifi…</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">10</span> id3     2021-10-20 <span style="color: #949494;">00:00:00</span>      12 wend… x8    survey… <span style="color: #949494;">""</span>      Duré… Verifi…</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">11</span> id5     2021-10-20 <span style="color: #949494;">00:00:00</span>       3 wend… x2    c_chef… <span style="color: #949494;">"</span>Age e… Le o… Verifi…</span></span>
-<span><span class="co">## <span style="color: #949494;"># … with 8 more variables: action &lt;chr&gt;, old_value &lt;chr&gt;, new_value &lt;lgl&gt;,</span></span></span>
-<span><span class="co">## <span style="color: #949494;">#   type &lt;chr&gt;, other_parent_question &lt;chr&gt;, other_old_value &lt;chr&gt;,</span></span></span>
-<span><span class="co">## <span style="color: #949494;">#   other_new_value &lt;chr&gt;, checkdate &lt;chr&gt;, and abbreviated variable names</span></span></span>
-<span><span class="co">## <span style="color: #949494;">#   ¹​id_check, ²​i_enum_id, ³​question_name, ⁴​question_label, ⁵​feedback</span></span></span></code></pre>
+<span><span class="co">## <span style="color: #BCBCBC;"> 1</span> id2     2021-10-20 <span style="color: #949494;">00:00:00</span>      12 wend… x7    survey… <span style="color: #949494;">""</span>      Duré… Verifi…</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 2</span> id3     2021-10-18 <span style="color: #949494;">00:00:00</span>       8 wend… x1    survey… <span style="color: #949494;">""</span>      Duré… Verifi…</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 3</span> id3     2021-10-20 <span style="color: #949494;">00:00:00</span>       3 wend… x2    survey… <span style="color: #949494;">""</span>      Duré… Verifi…</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 4</span> id3     2021-10-20 <span style="color: #949494;">00:00:00</span>       3 wend… x3    survey… <span style="color: #949494;">""</span>      Duré… Verifi…</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 5</span> id3     2021-10-20 <span style="color: #949494;">00:00:00</span>       3 wend… x4    survey… <span style="color: #949494;">""</span>      Duré… Verifi…</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 6</span> id3     2021-10-20 <span style="color: #949494;">00:00:00</span>       3 wend… x5    survey… <span style="color: #949494;">""</span>      Duré… Verifi…</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 7</span> id3     2021-10-20 <span style="color: #949494;">00:00:00</span>       3 wend… x6    survey… <span style="color: #949494;">""</span>      Duré… Verifi…</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 8</span> id3     2021-10-20 <span style="color: #949494;">00:00:00</span>      12 wend… x8    survey… <span style="color: #949494;">""</span>      Duré… Verifi…</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 9</span> id3     2021-10-20 <span style="color: #949494;">00:00:00</span>       1 gnar… x9    survey… <span style="color: #949494;">""</span>      Duré… Verifi…</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">10</span> id3     2021-10-20 <span style="color: #949494;">00:00:00</span>       5 gnar… x10   survey… <span style="color: #949494;">""</span>      Duré… Verifi…</span></span>
+<span><span class="co">## <span style="color: #949494;"># … with 47 more rows, 8 more variables: action &lt;chr&gt;, old_value &lt;chr&gt;,</span></span></span>
+<span><span class="co">## <span style="color: #949494;">#   new_value &lt;lgl&gt;, type &lt;chr&gt;, other_parent_question &lt;chr&gt;,</span></span></span>
+<span><span class="co">## <span style="color: #949494;">#   other_old_value &lt;chr&gt;, other_new_value &lt;chr&gt;, checkdate &lt;chr&gt;, and</span></span></span>
+<span><span class="co">## <span style="color: #949494;">#   abbreviated variable names ¹​id_check, ²​i_enum_id, ³​question_name,</span></span></span>
+<span><span class="co">## <span style="color: #949494;">#   ⁴​question_label, ⁵​feedback</span></span></span></code></pre>
 </div>
 <div class="section level2">
 <h2 id="full-cleaning-log-and-export">Full cleaning log and export<a class="anchor" aria-label="anchor" href="#full-cleaning-log-and-export"></a>
@@ -306,30 +312,23 @@ log.</p>
 <div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">log</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/make_all_logs.html">make_all_logs</a></span><span class="op">(</span><span class="va">data</span>, <span class="va">survey</span>, <span class="va">check_list</span>, <span class="st">"autre_"</span>, <span class="va">uuid</span>, <span class="va">today</span>, <span class="va">i_enum_id</span>, <span class="va">i_zad</span><span class="op">)</span></span>
 <span><span class="va">log</span></span></code></pre></div>
-<pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 17 × 17</span></span></span>
+<pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 63 × 17</span></span></span>
 <span><span class="co">##    id_check today      i_enum…¹ i_zad uuid  quest…² quest…³ why   feedb…⁴ action</span></span>
 <span><span class="co">##    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 1</span> id1      2021-10-20       12 wend… x7    i_cons… Bonjou… Pas … Verifi… remove</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 2</span> id1      2021-10-20       12 wend… x8    i_cons… Bonjou… Pas … Verifi… remove</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 3</span> id3      2021-10-18        8 wend… x1    survey… <span style="color: #BB0000;">NA</span>      Duré… Verifi… check </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 4</span> id3      2021-10-20        3 wend… x2    survey… <span style="color: #BB0000;">NA</span>      Duré… Verifi… check </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 5</span> id3      2021-10-20        3 wend… x3    survey… <span style="color: #BB0000;">NA</span>      Duré… Verifi… check </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 6</span> id3      2021-10-20        3 wend… x4    survey… <span style="color: #BB0000;">NA</span>      Duré… Verifi… check </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 7</span> id3      2021-10-20        3 wend… x5    survey… <span style="color: #BB0000;">NA</span>      Duré… Verifi… check </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 8</span> id3      2021-10-20        3 wend… x6    survey… <span style="color: #BB0000;">NA</span>      Duré… Verifi… check </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 9</span> id3      2021-10-20       12 wend… x7    survey… <span style="color: #BB0000;">NA</span>      Duré… Verifi… check </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">10</span> id3      2021-10-20       12 wend… x8    survey… <span style="color: #BB0000;">NA</span>      Duré… Verifi… check </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">11</span> id5      2021-10-20        3 wend… x2    c_chef… Age ex… Le o… Verifi… check </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">12</span> autre_   2021-10-20        3 wend… x5    autre_… Lesque… Othe… Fill in check </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">13</span> autre_   2021-10-20       12 wend… x7    autre_… De que… Othe… Fill in check </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">14</span> outlier  2021-10-20        3 wend… x2    i_enqu… Quel e… Outl… Fill in check </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">15</span> outlier  2021-10-18        8 wend… x1    c_n_ch… Quel e… Outl… Fill in check </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">16</span> outlier  2021-10-20        3 wend… x2    c_n_ch… Quel e… Outl… Fill in check </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">17</span> outlier  2021-10-18        8 wend… x1    c_chef… Age ex… Outl… Fill in check </span></span>
-<span><span class="co">## <span style="color: #949494;"># … with 7 more variables: old_value &lt;chr&gt;, new_value &lt;chr&gt;, type &lt;chr&gt;,</span></span></span>
-<span><span class="co">## <span style="color: #949494;">#   other_parent_question &lt;chr&gt;, other_old_value &lt;chr&gt;, other_new_value &lt;lgl&gt;,</span></span></span>
-<span><span class="co">## <span style="color: #949494;">#   checkdate &lt;chr&gt;, and abbreviated variable names ¹​i_enum_id, ²​question_name,</span></span></span>
-<span><span class="co">## <span style="color: #949494;">#   ³​question_label, ⁴​feedback</span></span></span></code></pre>
+<span><span class="co">## <span style="color: #BCBCBC;"> 1</span> id2      2021-10-20       12 wend… x7    survey… <span style="color: #BB0000;">NA</span>      Duré… Verifi… urgen…</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 2</span> id3      2021-10-18        8 wend… x1    survey… <span style="color: #BB0000;">NA</span>      Duré… Verifi… check </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 3</span> id3      2021-10-20        3 wend… x2    survey… <span style="color: #BB0000;">NA</span>      Duré… Verifi… check </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 4</span> id3      2021-10-20        3 wend… x3    survey… <span style="color: #BB0000;">NA</span>      Duré… Verifi… check </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 5</span> id3      2021-10-20        3 wend… x4    survey… <span style="color: #BB0000;">NA</span>      Duré… Verifi… check </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 6</span> id3      2021-10-20        3 wend… x5    survey… <span style="color: #BB0000;">NA</span>      Duré… Verifi… check </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 7</span> id3      2021-10-20        3 wend… x6    survey… <span style="color: #BB0000;">NA</span>      Duré… Verifi… check </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 8</span> id3      2021-10-20       12 wend… x8    survey… <span style="color: #BB0000;">NA</span>      Duré… Verifi… check </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 9</span> id3      2021-10-20        1 gnar… x9    survey… <span style="color: #BB0000;">NA</span>      Duré… Verifi… check </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">10</span> id3      2021-10-20        5 gnar… x10   survey… <span style="color: #BB0000;">NA</span>      Duré… Verifi… check </span></span>
+<span><span class="co">## <span style="color: #949494;"># … with 53 more rows, 7 more variables: old_value &lt;chr&gt;, new_value &lt;chr&gt;,</span></span></span>
+<span><span class="co">## <span style="color: #949494;">#   type &lt;chr&gt;, other_parent_question &lt;chr&gt;, other_old_value &lt;chr&gt;,</span></span></span>
+<span><span class="co">## <span style="color: #949494;">#   other_new_value &lt;lgl&gt;, checkdate &lt;chr&gt;, and abbreviated variable names</span></span></span>
+<span><span class="co">## <span style="color: #949494;">#   ¹​i_enum_id, ²​question_name, ³​question_label, ⁴​feedback</span></span></span></code></pre>
 <p>Finally, there are several ways to export. Here we give the example
 with the package <code>writexl</code>:</p>
 <div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">

@@ -118,7 +118,48 @@ get_choices <- function(survey, choices, col, conc = T, label = F){
 
   to_return <- survey |>
     dplyr::filter(.data$name == col_name) |>
-    dplyr::select(.data$list_name) |>
+    dplyr::select(.data$list_name)
+
+  # If there are more than one row, throw a warning but continue keeping the 1st row
+  if (nrow(to_return) > 1) {
+
+    rlang::warn(glue::glue(sep = "\n", "There are more than one line in the survey sheet for col '{col_name]'.", "The head was sliced to go on, but please check."))
+
+    to_return <- to_return |>
+      dplyr::slice_head(n = 1)
+  }
+
+  if (is.na(dplyr::pull(to_return, .data$list_name))) {
+
+    rlang::warn(glue::glue("There is no list_name listed in survey for col: '{col_name}'.", "An empty vector or an empty tibble is returned, please check.", .sep = "\n"))
+
+    if (label) {
+      return(tibble::tibble(
+        name = character(),
+        label = character()
+      ))
+    } else if (!label) {
+      return(character())
+    }
+
+  }
+
+  if (length(subvec_in(dplyr::pull(to_return, .data$list_name), choices$list_name)) == 0) {
+
+    rlang::warn(glue::glue("There is no corresponding list_name in choices for col: '{col_name}'.", "An empty vector or an empty tibble is returned.", .sep = "\n"))
+
+     if (label) {
+      return(tibble::tibble(
+        name = character(),
+        label = character()
+      ))
+    } else if (!label) {
+      return(character())
+    }
+
+  }
+
+  to_return <- to_return |>
     dplyr::left_join(choices, by = "list_name")
 
   if (!label) {
