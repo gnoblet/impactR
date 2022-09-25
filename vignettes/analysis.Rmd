@@ -20,7 +20,7 @@ This vignette presents `make_analysis()` and `make_analysis_from_dap()`. More do
 
 # Prepare data, survey, choices, survey design
 
-```{r initiate}
+```{r initiate, eval = FALSE}
 # Si vous n'avez pas encore installé le package
 # devtools::install_github("impactR)
 library(impactR)
@@ -44,7 +44,7 @@ The Data analysis plan must have the following specs (not exhaustive):
 - Data must have been imported with `ìmport_xlsx()` or `import_csv()` or some other way. Yet column names for multiple choices must follow this pattern "variable_choice1", with an underscore between the variable name from the survey sheet and the choices from the choices sheet. For instance, for the main drinking water source (if multiple choice), it could be "w_water_source_surface_water" or "w_water_source_stand_pipe".
 
 Survey and choices sheets must be prepared:
-```{r initiate-kobo}
+```{r initiate-kobo, eval = FALSE}
 # Prepare survey
 survey <- survey |> 
   split_survey(type) |> 
@@ -58,7 +58,7 @@ choices <- choices |>
 ```
 
 Let's set your survey design with respect to the sampling (required):
-```{r initiate-design}
+```{r initiate-design, eval = FALSE}
 # Prepare survey design
 # For instance, below is a stratified sampling
 design <- data |> 
@@ -74,7 +74,7 @@ design <- data |>
 Let's say you don't have a full DAP sheet, and you just want to make individual analyses.
 
 1- Proportion for a single choice question :
-```{r prop-simple}
+```{r prop-simple, eval = FALSE}
 # Single choice question
 make_analysis(design, survey, choices, h_3_acces_latrine, "prop_simple", level = 0.95, vartype = "ci")
 
@@ -85,7 +85,7 @@ make_analysis(design, survey, choices, h_3_acces_latrine, "prop_simple", get_lab
 make_analysis(design, survey, choices, h_3_acces_latrine, "prop_simple", group = "i_zad")
 ```
 2- Proportion overall: calculate the proportion with NAs as a category
-```{r prop-simple-overall}
+```{r prop-simple-overall, eval = FALSE}
 # Single choice question
 make_analysis(design, survey, choices, i_statut, "prop_simple_overall")
 
@@ -94,7 +94,7 @@ make_analysis(design, survey, choices, i_statut, "prop_simple_overall", none_lab
 ```
 
 3- Multiple proportion
-```{r prop-multiple}
+```{r prop-multiple, eval = FALSE}
 # Multiple choice question
 make_analysis(design, survey, choices, h_3_type_latrine, "prop_multiple", level = 0.95, vartype = "ci")
 
@@ -103,14 +103,14 @@ make_analysis(design, survey, choices, r_besoin_assistance, "prop_multiple", get
 ```
 
 4- Multiple proportion overall: calculate the proportion for each choice out of the entire dataset (replaces NAs by 0s in the dummy columns):
-```{r prop-multiple-overall}
+```{r prop-multiple-overall, eval = FALSE}
 # Multiple choice question
 make_analysis(design, survey, choices, h_3_type_latrine, "prop_multiple_overall")
 
 ```
 
 5- Mean, median and counting numeric as character
-```{r numeric}
+```{r numeric, eval = FALSE}
 # Mean of interviewee's age
 make_analysis(design, survey, choices, i_enquete_age, "mean")
 
@@ -129,16 +129,16 @@ make_analysis(design, survey, choices, i_enquete_age, "median", group = "i_zad")
 6 - Last but not least, ratios (it automatically does not consider NAs).
 
 For this, it is only necessary to write a character string with the two variable names separated by a comma.
-```{r ratio}
+```{r ratio, eval = FALSE}
 # Ratio of whatever, just for the example
 make_analysis(design, survey, choices, "i_enum_id, i_enquete_age", "ratio")
 ```
 
 # Analysis from a dap
 
-```{r dap}
+```{r dap, eval = FALSE}
 # This gives a list
-# make_analysis_from_dap(design, survey, choices, dap)
+make_analysis_from_dap(design, survey, choices, dap)
 
 # This binds all analysis from the DAP into one data frame
 make_analysis_from_dap(design, survey, choices, dap, bind = T)
