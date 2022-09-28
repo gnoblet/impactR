@@ -1,3 +1,9 @@
+# impactR 0.9.3.9000
+
+* Bug fix: `svy_interact()` used `across` outside of a dplyr-verb, corrected.
+
+---
+
 # impactR 0.9.2.9000
 
 * Bug fix: `get_choices` now returns an empty character string or tibble if `col` is not in survey$name.

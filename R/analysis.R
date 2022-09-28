@@ -173,7 +173,7 @@ svy_interact <- function(design, interact_cols, group = NULL, unnest_interaction
 
   if (rlang::is_true(na_rm)) {
     design <- design |>
-      srvyr::drop_na(srvyr::across({{ col }}))
+      srvyr::drop_na({{ interact_cols }})
   }
 
   to_return <- design |>
