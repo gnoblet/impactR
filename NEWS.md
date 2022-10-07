@@ -1,3 +1,9 @@
+# impactR 0.9.4.9000
+
+* Bug fix: `fclcp()` correction for Phase 5, wrong condition before.
+
+---
+
 # impactR 0.9.3.9000
 
 * Bug fix: `svy_interact()` used `across` outside of a dplyr-verb, corrected.
