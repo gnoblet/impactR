@@ -389,7 +389,7 @@ fclcp <- function(.tbl, fcp, lcs_cat){
       .data$fcp == 4 & .data$lcs_cat == "Stress" ~ 4,
       .data$fcp == 4 & .data$lcs_cat == "Crisis" ~ 4,
       .data$fcp == 4 & .data$lcs_cat == "Emergency" ~ 5,
-      .data$fcp == 5 & .data$lcs_cat == "Emergency" ~ 5,
+      .data$fcp == 5 ~ 5,
       TRUE ~ NA_real_
     ))
 
