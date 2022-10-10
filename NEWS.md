@@ -1,3 +1,9 @@
+# impactR 0.9.6.9000
+
+* Bug fix: `label_select_multiple()` now get NAs instead of "NA"s.
+
+---
+
 # impactR 0.9.5.9000
 
 * Bug fix: `get_choices()` correction of a glue error.
