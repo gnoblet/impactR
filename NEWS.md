@@ -1,3 +1,9 @@
+# impactR 0.9.5.9000
+
+* Bug fix: `get_choices()` correction of a glue error.
+
+---
+
 # impactR 0.9.4.9000
 
 * Bug fix: `fclcp()` correction for Phase 5, wrong condition before.

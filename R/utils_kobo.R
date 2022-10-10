@@ -140,7 +140,7 @@ get_choices <- function(survey, choices, col, conc = T, label = F){
   # If there are more than one row, throw a warning but continue keeping the 1st row
   if (nrow(to_return) > 1) {
 
-    rlang::warn(glue::glue(sep = "\n", "There are more than one line in the survey sheet for col '{col_name]'.", "The head was sliced to go on, but please check."))
+    rlang::warn(glue::glue(sep = "\n", "There are more than one line in the survey sheet for col '{col_name}'.", "The head was sliced to go on, but please check."))
 
     to_return <- to_return |>
       dplyr::slice_head(n = 1)
