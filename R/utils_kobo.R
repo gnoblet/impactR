@@ -263,7 +263,7 @@ label_select_multiple <- function(data, survey, choices, id_col, col, return_df 
         dplyr::mutate("{{ col }}" := paste0({{ col }}, collapse = " "))  |>
         dplyr::distinct() |>
         dplyr::ungroup() |>
-        impactR::recode_values("NA", NA, {{ col }})
+        recode_values("NA", NA, {{ col }})
      }
   }
 
