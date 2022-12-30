@@ -1,7 +1,7 @@
 Package: impactR
 Type: Package
 Title: Ease IMPACT's data and database officers woRk
-Version: 0.9.6.9000
+Version: 0.9.7.9000
 Authors@R: c(
         person(
             'Noblet', 'Guillaume',
@@ -19,7 +19,7 @@ Description: `impactR` started as a simple project: mainly a reminder of
 Depends: R (>= 4.1.0)
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.2.1
+RoxygenNote: 7.2.3
 Imports:
     purrr,
     dplyr,

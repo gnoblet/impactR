@@ -1,3 +1,9 @@
+# impactR 0.9.7.9000
+
+* Bug fix: discrepancy in `fcplp()` for Phase 5. (#90)
+
+---
+
 # impactR 0.9.6.9000
 
 * Bug fix: `label_select_multiple()` now get NAs instead of "NA"s.
