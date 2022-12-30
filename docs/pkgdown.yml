@@ -1,5 +1,5 @@
-pandoc: 2.17.1.1
-pkgdown: 2.0.6
+pandoc: 2.19.2
+pkgdown: 2.0.7
 pkgdown_sha: ~
 articles:
   analysis: analysis.html
@@ -7,7 +7,7 @@ articles:
   cleaning_data: cleaning_data.html
   main_workflow: main_workflow.html
   nettoyage_de_donnees: nettoyage_de_donnees.html
-last_built: 2022-10-10T18:51Z
+last_built: 2022-12-30T22:32Z
 urls:
   reference: https://gnoblet.github.io/impactR/reference
   article: https://gnoblet.github.io/impactR/articles
