@@ -59,7 +59,9 @@ svy_prop <- function(design, col, group = NULL, na_rm = T, stat_name = "prop", .
 
   to_return <- design |>
     srvyr::group_by(dplyr::across({{ group }}), dplyr::across({{ col }})) |>
-    srvyr::summarize("{stat_name}" := srvyr::survey_prop(...)) |>
+    srvyr::summarize(
+      "{stat_name}" := srvyr::survey_prop(...),
+      "n" := srvyr::unweighted(srvyr::n())) |>
     srvyr::ungroup()
 
   return(to_return)
@@ -87,7 +89,9 @@ svy_mean <- function(design, col, group = NULL, na_rm = T, stat_name = "mean", .
 
   to_return <- design |>
     srvyr::group_by(dplyr::across({{ group }})) |>
-    srvyr::summarize("{stat_name}" := srvyr::survey_mean({{ col }},...)) |>
+    srvyr::summarize(
+      "{stat_name}" := srvyr::survey_mean({{ col }},...),,
+      "n" := srvyr::unweighted(srvyr::n())) |>
     srvyr::ungroup()
 
   return(to_return)
@@ -116,7 +120,9 @@ svy_median <- function(design, col, group = NULL, na_rm = T, stat_name = "median
 
   to_return <- design |>
     srvyr::group_by(dplyr::across({{ group }})) |>
-    srvyr::summarize("{stat_name}" := srvyr::survey_median({{ col }}, ...)) |>
+    srvyr::summarize(
+      "{stat_name}" := srvyr::survey_median({{ col }}, ...),
+      "n" := srvyr::unweighted(srvyr::n())) |>
     srvyr::ungroup()
 
   return(to_return)
@@ -146,7 +152,9 @@ svy_count_numeric <- function(design, col, group = NULL, na_rm = T, stat_name = 
   to_return <- design |>
     srvyr::mutate("{{ col }}" := as.character({{ col }})) |>
     srvyr::group_by(dplyr::across({{ group }}), dplyr::across({{ col }})) |>
-    srvyr::summarize("{stat_name}" := srvyr::survey_prop(...)) |>
+    srvyr::summarize(
+      "{stat_name}" := srvyr::survey_prop(...),
+      "n" := srvyr::unweighted(srvyr::n())) |>
     srvyr::ungroup()
 
   return(to_return)
@@ -179,7 +187,9 @@ svy_interact <- function(design, interact_cols, group = NULL, unnest_interaction
   to_return <- design |>
     srvyr::group_by(srvyr::across({{ group }}),
                     srvyr::interact(interaction = srvyr::across({{ interact_cols }}))) |>
-    srvyr::summarize("{stat_name}" := srvyr::survey_mean(...)) |>
+    srvyr::summarize(
+      "{stat_name}" := srvyr::survey_mean(...),
+      "n" := srvyr::unweighted(srvyr::n())) |>
     dplyr::arrange(dplyr::desc(.data$prop)) |>
     srvyr::ungroup()
 
@@ -215,7 +225,9 @@ svy_ratio <- function(design, num, denom, group = NULL, na_rm = T, stat_name = "
 
   to_return <- design |>
     srvyr::group_by(dplyr::across({{ group }})) |>
-    srvyr::summarize("{stat_name}" := srvyr::survey_ratio({{ num }}, {{ denom }},...)) |>
+    srvyr::summarize(
+      "{stat_name}" := srvyr::survey_ratio({{ num }}, {{ denom }},...),
+      "n" := srvyr::unweighted(srvyr::n())) |>
     srvyr::ungroup()
 
   return(to_return)
