@@ -1,3 +1,9 @@
+# impactR 0.9.8.9000
+
+* New feature: addition of unweighted counts and stat for all `svy_*()`.
+
+---
+
 # impactR 0.9.7.9000
 
 * Bug fix: discrepancy in `fcplp()` for Phase 5. (#90)
