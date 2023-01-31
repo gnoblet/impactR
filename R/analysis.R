@@ -61,11 +61,13 @@ svy_prop <- function(design, col, group = NULL, na_rm = T, stat_name = "prop", .
     srvyr::group_by(dplyr::across({{ group }}), dplyr::across({{ col }})) |>
     srvyr::summarize(
       "{stat_name}" := srvyr::survey_prop(...),
-      "n" := srvyr::unweighted(srvyr::n())) |>
+      "n_unw" := srvyr::unweighted(srvyr::n())) |>
+    srvyr::mutate("{stat_name}_unw" := prop.table(.data$n_unw)) |>
     srvyr::ungroup()
 
   return(to_return)
 }
+
 
 
 #' @title Survey mean
@@ -90,8 +92,9 @@ svy_mean <- function(design, col, group = NULL, na_rm = T, stat_name = "mean", .
   to_return <- design |>
     srvyr::group_by(dplyr::across({{ group }})) |>
     srvyr::summarize(
-      "{stat_name}" := srvyr::survey_mean({{ col }},...),,
-      "n" := srvyr::unweighted(srvyr::n())) |>
+      "{stat_name}" := srvyr::survey_mean({{ col }},...),
+      "{stat_name}_unw" := srvyr::unweighted(mean({{ col }})),
+      "n_unw" := srvyr::unweighted(srvyr::n())) |>
     srvyr::ungroup()
 
   return(to_return)
@@ -122,7 +125,8 @@ svy_median <- function(design, col, group = NULL, na_rm = T, stat_name = "median
     srvyr::group_by(dplyr::across({{ group }})) |>
     srvyr::summarize(
       "{stat_name}" := srvyr::survey_median({{ col }}, ...),
-      "n" := srvyr::unweighted(srvyr::n())) |>
+      "{stat_name}_unw" := srvyr::unweighted(stats::median({{ col }})),
+      "n_unw" := srvyr::unweighted(srvyr::n()))|>
     srvyr::ungroup()
 
   return(to_return)
@@ -189,12 +193,13 @@ svy_interact <- function(design, interact_cols, group = NULL, unnest_interaction
                     srvyr::interact(interaction = srvyr::across({{ interact_cols }}))) |>
     srvyr::summarize(
       "{stat_name}" := srvyr::survey_mean(...),
-      "n" := srvyr::unweighted(srvyr::n())) |>
+      "n_unw" := srvyr::unweighted(srvyr::n())) |>
     dplyr::arrange(dplyr::desc(.data$prop)) |>
+    srvyr::mutate("{stat_name}_unw" := prop.table(.data$n_unw)) |>
     srvyr::ungroup()
 
   if (rlang::is_true(unnest_interaction)){
-    to_return <- to_return |> tidyr::unnest(.data$interaction)
+    to_return <- to_return |> tidyr::unnest("interaction")
   }
 
   return(to_return)
@@ -227,6 +232,7 @@ svy_ratio <- function(design, num, denom, group = NULL, na_rm = T, stat_name = "
     srvyr::group_by(dplyr::across({{ group }})) |>
     srvyr::summarize(
       "{stat_name}" := srvyr::survey_ratio({{ num }}, {{ denom }},...),
+      "{stat_name}_unw" := srvyr::unweighted(sum({{ num }}) / sum({{ denom }})),
       "n" := srvyr::unweighted(srvyr::n())) |>
     srvyr::ungroup()
 
@@ -617,7 +623,7 @@ make_analysis_from_dap <- function(
 
   mapped <- purrr::pmap(
     dap |>
-      dplyr::select(.data$question_name, .data$analysis, .data$none_label, .data$group, .data$level, .data$na_rm, .data$vartype),
+      dplyr::select("question_name", "analysis", "none_label", "group", "level", "na_rm", "vartype"),
     function(question_name, analysis, none_label, group, level, na_rm, vartype){
 
       if (na_rm == "TRUE") {na_rm_lgl <- TRUE} else { na_rm_lgl <- FALSE}
