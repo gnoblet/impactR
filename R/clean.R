@@ -131,7 +131,7 @@ modify_from_log <- function(.tbl, log, id_col, type, other){
     dplyr::filter(.data$action == "modify" & .data$id_check != other & .data$type == type)
   if (nrow(to_modify) > 0) {
     to_modify <- to_modify |>
-      dplyr::select(.data$id_check, {{ id_col }}, .data$question_name, .data$new_value) |>
+      dplyr::select("id_check", {{ id_col }}, "question_name", "new_value") |>
       dplyr::group_split(.data$question_name) |>
       purrr::map(~ .x |>
                    tidyr::pivot_wider(!!rlang::enquo(id_col),
@@ -171,7 +171,7 @@ recode_other_from_log <- function(.tbl, log, id_col, other){
 
   if (nrow(to_recode) > 0) {
     to_recode <- to_recode |>
-      dplyr::select(.data$id_check, {{ id_col }}, .data$question_name, .data$new_value) |>
+      dplyr::select("id_check", {{ id_col }}, "question_name", "new_value") |>
       dplyr::group_split(.data$question_name) |>
       purrr::map(~ .x |>
                    dplyr::mutate(new_value = as.character(.data$new_value))) |>
@@ -211,7 +211,7 @@ recode_other_parent_from_log <- function(.tbl, log, id_col, other){
 
   if (nrow(to_recode) > 0) {
     to_recode <- to_recode |>
-      dplyr::select(.data$id_check, {{ id_col }}, .data$question_name, .data$other_parent_question, .data$other_new_value) |>
+      dplyr::select("id_check", {{ id_col }}, "question_name", "other_parent_question", "other_new_value") |>
       dplyr::group_split(.data$question_name) |>
       purrr::map(~ .x |>
                    tidyr::pivot_wider({{ id_col }},
