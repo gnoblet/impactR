@@ -33,7 +33,8 @@ Imports:
     tibble,
     lubridate,
     stats,
-    glue
+    glue,
+    lifecycle
 Suggests:
     rmarkdown,
     knitr,
