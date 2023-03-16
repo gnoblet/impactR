@@ -1,3 +1,11 @@
+# impactR 0.9.8.9000
+
+* New feature: addition of unweighted counts and stat for all `svy_*()`.
+* Added: Checks for emptiness and uniqueness of column 'id_analysis' for `make_analysis_from_dap()` when `bind = TRUE`.
+* Deprecated: all food security indicators functions are deprecated and will be removed in the next iteration. They have been moved to package `humind` (https://github.com/gnoblet/humind).
+
+---
+
 # impactR 0.9.7.9000
 
 * Bug fix: discrepancy in `fcplp()` for Phase 5. (#90)

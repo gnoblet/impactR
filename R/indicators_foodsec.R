@@ -18,6 +18,13 @@
 #' @export
 fcs <- function(.tbl, fcs_cereal, fcs_legumes, fcs_dairy, fcs_meat, fcs_veg, fcs_fruit, fcs_oil, fcs_sugar, cat = "normal"){
 
+  lifecycle::deprecate_warn(
+    "0.9.8.9000",
+    "fcs()",
+    "humind::fcs()",
+    details = "This function has been moved to package https://github.com/gnoblet/humind and will be removed in impactR's next iteration."
+  )
+
   if (!(cat %in% c("normal", "alternate"))) {rlang::abort("`cat` must be one of: 'normal' or 'alternate'.")}
 
   .tbl <- .tbl |>
@@ -76,6 +83,13 @@ fcs <- function(.tbl, fcs_cereal, fcs_legumes, fcs_dairy, fcs_meat, fcs_veg, fcs
 #'
 #' @export
 hhs <- function(.tbl, hhs_lev1_nofoodhh, hhs_lev2_nofoodhh, hhs_lev1_sleephungry, hhs_lev2_sleephungry, hhs_lev1_alldaynight, hhs_lev2_alldaynight, level1_codes, level2_codes){
+
+  lifecycle::deprecate_warn(
+    "0.9.8.9000",
+    "hhs()",
+    "humind::hhs()",
+    details = "This function has been moved to package https://github.com/gnoblet/humind and will be removed in impactR's next iteration."
+  )
 
   hhs_recoding <- function(q_yes_no, q_freq, level1_codes, level2_codes){
     dplyr::case_when(
@@ -138,6 +152,13 @@ hhs <- function(.tbl, hhs_lev1_nofoodhh, hhs_lev2_nofoodhh, hhs_lev1_sleephungry
 #' @export
 rcsi <- function(.tbl, rcsi_lesspreferred, rcsi_borrowfood, rcsi_limitportion, rcsi_restrict, rcsi_reducemeals){
 
+  lifecycle::deprecate_warn(
+    "0.9.8.9000",
+    "rcsi()",
+    "humind::rcsi()",
+    details = "This function has been moved to package https://github.com/gnoblet/humind and will be removed in impactR's next iteration."
+  )
+
   .tbl <- .tbl |>
     dplyr::mutate(
       rcsi_lesspreferred = {{ rcsi_lesspreferred }},
@@ -193,6 +214,11 @@ rcsi <- function(.tbl, rcsi_lesspreferred, rcsi_borrowfood, rcsi_limitportion, r
 #' @export
 lcsi <- function(.tbl, lcs_stress_1, lcs_stress_2, lcs_stress_3, lcs_stress_4, lcs_crisis_1, lcs_crisis_2, lcs_crisis_3, lcs_emergency_1, lcs_emergency_2, lcs_emergency_3, level_codes) {
 
+  lifecycle::deprecate_warn(
+    "0.9.8.9000",
+    "lcsi()",
+    "humind::lcsi()",
+    details = "This function has been moved to package https://github.com/gnoblet/humind and will be removed in impactR's next iteration.")
 
   lcs_recoding <- function(var, level_codes){
     dplyr::case_when(
@@ -253,6 +279,12 @@ lcsi <- function(.tbl, lcs_stress_1, lcs_stress_2, lcs_stress_3, lcs_stress_4, l
 #'
 #' @export
 fcm <- function(.tbl, fcs_cat, hhs_cat, rcsi_cat){
+
+  lifecycle::deprecate_warn(
+    "0.9.8.9000",
+    "fcm()",
+    "humind::fcm_cell()",
+    details = "This function has been moved to package https://github.com/gnoblet/humind and will be removed in impactR's next iteration.")
 
   .tbl <- .tbl |>
     dplyr::mutate(
@@ -324,7 +356,15 @@ fcm <- function(.tbl, fcs_cat, hhs_cat, rcsi_cat){
 #' @return Two columns: the food consumption phase number (fcp) and the category (fcp_cat)
 #'
 #' @export
+#'
+#'
 fcp <- function(.tbl, fcm_cell){
+
+  lifecycle::deprecate_warn(
+    "0.9.8.9000",
+    "fcp()",
+    "humind::fcp()",
+    details = "This function has been moved to package https://github.com/gnoblet/humind and will be removed in impactR's next iteration.")
 
   .tbl <- .tbl |>
     dplyr::mutate(
@@ -364,6 +404,12 @@ fcp <- function(.tbl, fcm_cell){
 #'
 #' @export
 fclcp <- function(.tbl, fcp, lcs_cat){
+
+  lifecycle::deprecate_warn(
+    "0.9.8.9000",
+    "fclcp()",
+    "humind::fclcp()",
+    details = "This function has been moved to package https://github.com/gnoblet/humind and will be removed in impactR's next iteration.")
 
   .tbl <- .tbl |>
     dplyr::mutate(
@@ -484,6 +530,12 @@ foodsec <- function(.tbl,
                     lcs_emergency_2,
                     lcs_emergency_3,
                     lcs_level_codes){
+
+  lifecycle::deprecate_warn(
+    "0.9.8.9000",
+    "foodsec()",
+    "humind::foodsec()",
+    details = "This function has been moved to package https://github.com/gnoblet/humind and will be removed in impactR's next iteration.")
 
   .tbl <- fcs(.tbl, {{ fcs_cereal }}, {{ fcs_legumes }}, {{ fcs_dairy }}, {{ fcs_meat }}, {{ fcs_veg }}, {{ fcs_fruit }}, {{ fcs_oil }}, {{ fcs_sugar }}, cat = fcs_cat)
 
