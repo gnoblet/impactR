@@ -640,6 +640,11 @@ make_analysis_from_dap <- function(
     purrr::set_names(dap$id_analysis)
 
   if (bind) {
+
+    if(sum(is.na(dap[["id_analysis"]])) > 0) rlang::abort("There are missing values in column 'id_analysis'. In order to bind results, all values in 'id_analysis' must exist and be unique.")
+
+    if(length(dap[["id_analysis"]]) > length(unique(dap[["id_analysis"]]))) rlang::abort("There are duplicated values in column 'id_analysis'. In order to bind results, all values in 'id_analysis' must exist and be unique.")
+
     mapped <- mapped |>
       purrr::map(\(x) x |> dplyr::mutate(dplyr::across(dplyr::starts_with("choices"), as.character))) |>
       dplyr::bind_rows(.id = "id_analysis") |>
