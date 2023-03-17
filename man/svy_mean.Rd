@@ -4,7 +4,7 @@
 \alias{svy_mean}
 \title{Survey mean}
 \usage{
-svy_mean(design, col, group = NULL, na_rm = T, stat_name = "mean", ...)
+svy_mean(design, col, group = NULL, na_rm = TRUE, stat_name = "mean", ...)
 }
 \arguments{
 \item{design}{A srvyr::design object}

@@ -4,7 +4,7 @@
 \alias{svy_prop}
 \title{Survey proportion}
 \usage{
-svy_prop(design, col, group = NULL, na_rm = T, stat_name = "prop", ...)
+svy_prop(design, col, group = NULL, na_rm = TRUE, stat_name = "prop", ...)
 }
 \arguments{
 \item{design}{A srvyr::design object}

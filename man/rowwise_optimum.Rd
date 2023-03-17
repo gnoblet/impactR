@@ -10,7 +10,7 @@ rowwise_optimum(
   optimum = "max",
   max_name = "pmax",
   min_name = "pmin",
-  na_rm = T,
+  na_rm = TRUE,
   keep = "all"
 )
 }

@@ -8,7 +8,7 @@ svy_count_numeric(
   design,
   col,
   group = NULL,
-  na_rm = T,
+  na_rm = TRUE,
   stat_name = "count_numeric",
   ...
 )

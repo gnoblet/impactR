@@ -13,7 +13,7 @@
 #' @return A tibble with pmax, pmin or both (and all columns or none, depending on "keep")
 #'
 #' @export
-rowwise_optimum <- function(.tbl, ...,  optimum = "max", max_name = "pmax", min_name = "pmin", na_rm = T, keep = "all") {
+rowwise_optimum <- function(.tbl, ...,  optimum = "max", max_name = "pmax", min_name = "pmin", na_rm = TRUE, keep = "all") {
 
   cols <- rlang::enquos(...)
   quoted_cols <- purrr::map_chr(cols, rlang::as_name)
@@ -50,7 +50,7 @@ rowwise_optimum <- function(.tbl, ...,  optimum = "max", max_name = "pmax", min_
 #' @return A survey-summarized-proportion tibble
 #'
 #' @export
-svy_prop <- function(design, col, group = NULL, na_rm = T, stat_name = "prop", ...){
+svy_prop <- function(design, col, group = NULL, na_rm = TRUE, stat_name = "prop", ...){
 
   if (rlang::is_true(na_rm)) {
     design <- design |>
@@ -61,9 +61,14 @@ svy_prop <- function(design, col, group = NULL, na_rm = T, stat_name = "prop", .
     srvyr::group_by(dplyr::across({{ group }}), dplyr::across({{ col }})) |>
     srvyr::summarize(
       "{stat_name}" := srvyr::survey_prop(...),
-      "n_unw" := srvyr::unweighted(srvyr::n())) |>
-    srvyr::mutate("{stat_name}_unw" := prop.table(.data$n_unw)) |>
-    srvyr::ungroup()
+      "n_unw" := srvyr::unweighted(srvyr::n())
+      ) |>
+    dplyr::mutate("{stat_name}_unw" := prop.table(.data$n_unw)) |>
+    dplyr::group_by(dplyr::across({{ group }})) |>
+    dplyr::mutate(
+      "n_tot" := sum(!!rlang::sym("n_unw"), na.rm = FALSE)
+    ) |>
+    dplyr::ungroup()
 
   return(to_return)
 }
@@ -82,7 +87,7 @@ svy_prop <- function(design, col, group = NULL, na_rm = T, stat_name = "prop", .
 #' @return A survey-summarized-proportion tibble
 #'
 #' @export
-svy_mean <- function(design, col, group = NULL, na_rm = T, stat_name = "mean", ...){
+svy_mean <- function(design, col, group = NULL, na_rm = TRUE, stat_name = "mean", ...){
 
   if (rlang::is_true(na_rm)) {
     design <- design |>
@@ -95,7 +100,9 @@ svy_mean <- function(design, col, group = NULL, na_rm = T, stat_name = "mean", .
       "{stat_name}" := srvyr::survey_mean({{ col }},...),
       "{stat_name}_unw" := srvyr::unweighted(mean({{ col }})),
       "n_unw" := srvyr::unweighted(srvyr::n())) |>
-    srvyr::ungroup()
+    dplyr::mutate(
+     "n_tot" := !!rlang::sym("n_unw")
+    )
 
   return(to_return)
 }
@@ -114,7 +121,7 @@ svy_mean <- function(design, col, group = NULL, na_rm = T, stat_name = "mean", .
 #' @return A survey-summarized-proportion tibble
 #'
 #' @export
-svy_median <- function(design, col, group = NULL, na_rm = T, stat_name = "median", ...){
+svy_median <- function(design, col, group = NULL, na_rm = TRUE, stat_name = "median", ...){
 
   if (rlang::is_true(na_rm)) {
     design <- design |>
@@ -127,7 +134,9 @@ svy_median <- function(design, col, group = NULL, na_rm = T, stat_name = "median
       "{stat_name}" := srvyr::survey_median({{ col }}, ...),
       "{stat_name}_unw" := srvyr::unweighted(stats::median({{ col }})),
       "n_unw" := srvyr::unweighted(srvyr::n()))|>
-    srvyr::ungroup()
+    dplyr::mutate(
+     "n_tot" := !!rlang::sym("n_unw")
+    )
 
   return(to_return)
 }
@@ -146,7 +155,7 @@ svy_median <- function(design, col, group = NULL, na_rm = T, stat_name = "median
 #' @return A survey-summarized-proportion tibble
 #'
 #' @export
-svy_count_numeric <- function(design, col, group = NULL, na_rm = T, stat_name = "count_numeric", ...){
+svy_count_numeric <- function(design, col, group = NULL, na_rm = TRUE, stat_name = "count_numeric", ...){
 
   if (rlang::is_true(na_rm)) {
     design <- design |>
@@ -158,8 +167,13 @@ svy_count_numeric <- function(design, col, group = NULL, na_rm = T, stat_name = 
     srvyr::group_by(dplyr::across({{ group }}), dplyr::across({{ col }})) |>
     srvyr::summarize(
       "{stat_name}" := srvyr::survey_prop(...),
-      "n" := srvyr::unweighted(srvyr::n())) |>
-    srvyr::ungroup()
+      "n_unw" := srvyr::unweighted(srvyr::n())) |>
+    dplyr::mutate("{stat_name}_unw" := prop.table(.data$n_unw)) |>
+    dplyr::group_by(dplyr::across({{ group }})) |>
+    dplyr::mutate(
+    "n_tot" := sum(!!rlang::sym("n_unw"), na.rm = FALSE)
+    ) |>
+    dplyr::ungroup()
 
   return(to_return)
 }
@@ -170,18 +184,19 @@ svy_count_numeric <- function(design, col, group = NULL, na_rm = T, stat_name = 
 
 #' @title Survey interaction means
 #'
-#' @param design A srvyr::design object
-#' @param interact_cols A vector of columns to get interactions from
-#' @param group A vector of columns to group by. Default to NULL
-#' @param unnest_interaction Should interaction be unnested? Default to TRUE
-#' @param na_rm Should NAs from `interact_cols` be removed? Default to TRUE
-#' @param stat_name What should the statistic's column be named? Default to "prop"
-#' @param ... Parameters to pass to srvyr::survey_mean()
+#' @param design A srvyr::design object.
+#' @param interact_cols A vector of columns to get interactions from.
+#' @param group A vector of columns to group by. Default to NULL.
+#' @param arrange Should the proportion be arranged? Default to TRUE.
+#' @param unnest_interaction Should interaction be unnested? Default to TRUE.
+#' @param na_rm Should NAs from `interact_cols` be removed? Default to TRUE.
+#' @param stat_name What should the statistic's column be named? Default to "prop".
+#' @param ... Parameters to pass to srvyr::survey_mean().
 #'
 #' @return A survey-summarized-interaction tibble
 #'
 #' @export
-svy_interact <- function(design, interact_cols, group = NULL, unnest_interaction = T, na_rm = T, stat_name = "prop", ...){
+svy_interact <- function(design, interact_cols, group = NULL, arrange = TRUE, unnest_interaction = TRUE, na_rm = TRUE, stat_name = "prop", ...){
 
   if (rlang::is_true(na_rm)) {
     design <- design |>
@@ -193,12 +208,21 @@ svy_interact <- function(design, interact_cols, group = NULL, unnest_interaction
                     srvyr::interact(interaction = srvyr::across({{ interact_cols }}))) |>
     srvyr::summarize(
       "{stat_name}" := srvyr::survey_mean(...),
-      "n_unw" := srvyr::unweighted(srvyr::n())) |>
-    dplyr::arrange(dplyr::desc(.data$prop)) |>
-    srvyr::mutate("{stat_name}_unw" := prop.table(.data$n_unw)) |>
-    srvyr::ungroup()
+      "n_unw" := srvyr::unweighted(srvyr::n()))
 
-  if (rlang::is_true(unnest_interaction)){
+  if (arrange) {
+    to_return <- dplyr::arrange(to_return, dplyr::desc(.data$prop))
+  }
+
+  to_return <- to_return |>
+    dplyr::mutate("{stat_name}_unw" := prop.table(.data$n_unw)) |>
+    dplyr::group_by(dplyr::across({{ group }})) |>
+    dplyr::mutate(
+    "n_tot" := sum(!!rlang::sym("n_unw"), na.rm = FALSE)
+    ) |>
+    dplyr::ungroup()
+
+  if (unnest_interaction) {
     to_return <- to_return |> tidyr::unnest("interaction")
   }
 
@@ -220,7 +244,7 @@ svy_interact <- function(design, interact_cols, group = NULL, unnest_interaction
 #' @return A survey-summarized-interaction tibble
 #'
 #' @export
-svy_ratio <- function(design, num, denom, group = NULL, na_rm = T, stat_name = "ratio", ...){
+svy_ratio <- function(design, num, denom, group = NULL, na_rm = TRUE, stat_name = "ratio", ...){
 
   if (rlang::is_true(na_rm)) {
     design <- design |>
@@ -233,8 +257,10 @@ svy_ratio <- function(design, num, denom, group = NULL, na_rm = T, stat_name = "
     srvyr::summarize(
       "{stat_name}" := srvyr::survey_ratio({{ num }}, {{ denom }},...),
       "{stat_name}_unw" := srvyr::unweighted(sum({{ num }}) / sum({{ denom }})),
-      "n" := srvyr::unweighted(srvyr::n())) |>
-    srvyr::ungroup()
+      "n_unw" := srvyr::unweighted(srvyr::n())) |>
+    dplyr::mutate(
+     "n_tot" := !!rlang::sym("n_unw")
+    )
 
   return(to_return)
 }
@@ -451,10 +477,20 @@ make_analysis <- function(
     return <- purrr::map2(
       choices_conc,
       choices_not_conc,
-      ~ svy_mean(design, !!rlang::sym(rlang::ensym(.x)), {{ group }}, na_rm = na_rm, stat_name = stat_name, level = level, vartype = vartype) |>
+      \(x,y) {
+        
+        # Check if values are in set c(0, 1, NA)
+        are_values_in_set(
+          design[["variables"]], 
+          !!rlang::as_name(rlang::ensym(x)), c(0, 1, NA))
+
+        count <- svy_count_numeric(design, !!rlang::sym(rlang::ensym(x)), {{ group }}, na_rm = na_rm, stat_name = stat_name, level = level, vartype = vartype) |>
+        dplyr::filter(!!rlang::sym(rlang::ensym(x)) == 1) |>
+        deselect(!!rlang::sym(rlang::ensym(x))) |>
         dplyr::mutate(name = col_name,
                       analysis = analysis,
-                      choices = .y)) |>
+                      choices = y)
+      }) |>
       dplyr::bind_rows()
 
     if (get_label) {
@@ -507,12 +543,23 @@ make_analysis <- function(
     return <- purrr::map2(
       choices_conc,
       choices_not_conc,
-      ~ design |>
-        srvyr::mutate(srvyr::across({{ .x }}, \(col) { ifelse(is.na(col), 0, col) })) |>
-        svy_mean(!!rlang::sym(rlang::ensym(.x)), {{ group }}, na_rm = na_rm, stat_name = stat_name, level = level, vartype = vartype) |>
+
+      \(x,y) {
+
+        design <- srvyr::mutate(design, srvyr::across({{ x }}, \(col) { ifelse(is.na(col), 0, col) }))
+        
+        # Check if values are in set c(0, 1)
+        are_values_in_set(
+          design[["variables"]], 
+          !!rlang::as_name(rlang::ensym(x)), c(0, 1))
+
+        count <- svy_count_numeric(design, !!rlang::sym(rlang::ensym(x)), {{ group }}, na_rm = na_rm, stat_name = stat_name, level = level, vartype = vartype) |>
+        dplyr::filter(!!rlang::sym(rlang::ensym(x)) == 1) |>
+        deselect(!!rlang::sym(rlang::ensym(x))) |>
         dplyr::mutate(name = col_name,
                       analysis = analysis,
-                      choices =  {{ .y }})) |>
+                      choices = y)
+      }) |>
       dplyr::bind_rows()
 
     if (get_label) {
