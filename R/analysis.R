@@ -100,7 +100,9 @@ svy_mean <- function(design, col, group = NULL, na_rm = T, stat_name = "mean", .
       "{stat_name}" := srvyr::survey_mean({{ col }},...),
       "{stat_name}_unw" := srvyr::unweighted(mean({{ col }})),
       "n_unw" := srvyr::unweighted(srvyr::n())) |>
-    srvyr::ungroup()
+    dplyr::mutate(
+    "n_tot" := !!rlang::sym("n_unw")
+    )
 
   return(to_return)
 }
@@ -132,7 +134,9 @@ svy_median <- function(design, col, group = NULL, na_rm = T, stat_name = "median
       "{stat_name}" := srvyr::survey_median({{ col }}, ...),
       "{stat_name}_unw" := srvyr::unweighted(stats::median({{ col }})),
       "n_unw" := srvyr::unweighted(srvyr::n()))|>
-    srvyr::ungroup()
+        dplyr::mutate(
+    "n_tot" := !!rlang::sym("n_unw")
+    )
 
   return(to_return)
 }
