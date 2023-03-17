@@ -477,10 +477,20 @@ make_analysis <- function(
     return <- purrr::map2(
       choices_conc,
       choices_not_conc,
-      ~ svy_mean(design, !!rlang::sym(rlang::ensym(.x)), {{ group }}, na_rm = na_rm, stat_name = stat_name, level = level, vartype = vartype) |>
+      \(x,y) {
+        
+        # Check if values are in set c(0, 1, NA)
+        are_values_in_set(
+          design[["variables"]], 
+          !!rlang::as_name(rlang::ensym(x)), c(0, 1, NA))
+
+        count <- svy_count_numeric(design, !!rlang::sym(rlang::ensym(x)), {{ group }}, na_rm = na_rm, stat_name = stat_name, level = level, vartype = vartype) |>
+        dplyr::filter(!!rlang::sym(rlang::ensym(x)) == 1) |>
+        deselect(!!rlang::sym(rlang::ensym(x))) |>
         dplyr::mutate(name = col_name,
                       analysis = analysis,
-                      choices = .y)) |>
+                      choices = y)
+      }) |>
       dplyr::bind_rows()
 
     if (get_label) {
@@ -533,12 +543,23 @@ make_analysis <- function(
     return <- purrr::map2(
       choices_conc,
       choices_not_conc,
-      ~ design |>
-        srvyr::mutate(srvyr::across({{ .x }}, \(col) { ifelse(is.na(col), 0, col) })) |>
-        svy_mean(!!rlang::sym(rlang::ensym(.x)), {{ group }}, na_rm = na_rm, stat_name = stat_name, level = level, vartype = vartype) |>
+
+      \(x,y) {
+
+        design <- srvyr::mutate(design, srvyr::across({{ x }}, \(col) { ifelse(is.na(col), 0, col) }))
+        
+        # Check if values are in set c(0, 1)
+        are_values_in_set(
+          design[["variables"]], 
+          !!rlang::as_name(rlang::ensym(x)), c(0, 1))
+
+        count <- svy_count_numeric(design, !!rlang::sym(rlang::ensym(x)), {{ group }}, na_rm = na_rm, stat_name = stat_name, level = level, vartype = vartype) |>
+        dplyr::filter(!!rlang::sym(rlang::ensym(x)) == 1) |>
+        deselect(!!rlang::sym(rlang::ensym(x))) |>
         dplyr::mutate(name = col_name,
                       analysis = analysis,
-                      choices =  {{ .y }})) |>
+                      choices = y)
+      }) |>
       dplyr::bind_rows()
 
     if (get_label) {
