@@ -109,36 +109,36 @@ if_vec_not_in_stop <- function(vec, cols, vec_name, arg = NULL){
 #' @title Stop statement values are not in set
 #'
 #' @param df A data frame
-#' @param cols A vector of column names (quoted)
+#' @param cols A column
 #' @param set A vector of values
 #'
 #' @return A stop statement
-are_values_in_set <- function(df, cols, set){
+are_values_in_set <- function(df, col, set){
+
+
 
   #------ Check for missing columns
-  if_not_in_stop(df, cols, "df")
+  col_name <- rlang::as_name(rlang::ensym(col))
+  if_not_in_stop(df, col_name, "df")
 
   #------ Values not in set
-  values <- purrr::map_lgl(
-    dplyr::select(
-      df,
-      dplyr::all_of(cols)
-    ),
-    \(x) {
-      sum(!(stats::na.omit(x) %in% set), na.rm = TRUE) >= 1
-    }
-  )
 
-  cols <- cols[values]
+  # Remove NA
+  #values <- df[[col_name]][!is.na(df[[col_name]])]
 
-  if (any(values)) {
+  # Values not in set
+  in_set <- !(df[[col_name]] %in% set)
+
+  # Count if 
+  count_if <- sum(in_set, na.rm = TRUE) >= 1
+
+  if (count_if) {
     rlang::abort(c(
       glue::glue("All columns must be in the following set: ", glue::glue_collapse(set, sep = ", ")),
       "i" = glue::glue(
-        "The following columns have values out of the set Please check.\n",
-        glue::glue_collapse(cols, sep = "\n")
+        "Column {col_name} have values out of the set. Please check.")
       )
-    ))
+    )
   }
 
   return(TRUE)
