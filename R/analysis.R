@@ -167,8 +167,13 @@ svy_count_numeric <- function(design, col, group = NULL, na_rm = T, stat_name = 
     srvyr::group_by(dplyr::across({{ group }}), dplyr::across({{ col }})) |>
     srvyr::summarize(
       "{stat_name}" := srvyr::survey_prop(...),
-      "n" := srvyr::unweighted(srvyr::n())) |>
-    srvyr::ungroup()
+      "n_unw" := srvyr::unweighted(srvyr::n())) |>
+    dplyr::mutate("{stat_name}_unw" := prop.table(.data$n_unw)) |>
+    dplyr::group_by(dplyr::across({{ group }})) |>
+    dplyr::mutate(
+    "n_tot" := sum(!!rlang::sym("n_unw"), na.rm = FALSE)
+    ) |>
+    dplyr::ungroup()
 
   return(to_return)
 }
@@ -204,8 +209,12 @@ svy_interact <- function(design, interact_cols, group = NULL, unnest_interaction
       "{stat_name}" := srvyr::survey_mean(...),
       "n_unw" := srvyr::unweighted(srvyr::n())) |>
     dplyr::arrange(dplyr::desc(.data$prop)) |>
-    srvyr::mutate("{stat_name}_unw" := prop.table(.data$n_unw)) |>
-    srvyr::ungroup()
+    dplyr::mutate("{stat_name}_unw" := prop.table(.data$n_unw)) |>
+    dplyr::group_by(dplyr::across({{ group }})) |>
+    dplyr::mutate(
+    "n_tot" := sum(!!rlang::sym("n_unw"), na.rm = FALSE)
+    ) |>
+    dplyr::ungroup()
 
   if (rlang::is_true(unnest_interaction)){
     to_return <- to_return |> tidyr::unnest("interaction")
