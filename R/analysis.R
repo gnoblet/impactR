@@ -184,13 +184,14 @@ svy_count_numeric <- function(design, col, group = NULL, na_rm = TRUE, stat_name
 
 #' @title Survey interaction means
 #'
-#' @param design A srvyr::design object
-#' @param interact_cols A vector of columns to get interactions from
-#' @param group A vector of columns to group by. Default to NULL
-#' @param unnest_interaction Should interaction be unnested? Default to TRUE
-#' @param na_rm Should NAs from `interact_cols` be removed? Default to TRUE
-#' @param stat_name What should the statistic's column be named? Default to "prop"
-#' @param ... Parameters to pass to srvyr::survey_mean()
+#' @param design A srvyr::design object.
+#' @param interact_cols A vector of columns to get interactions from.
+#' @param group A vector of columns to group by. Default to NULL.
+#' @param arrange Should the proportion be arranged? Default to TRUE.
+#' @param unnest_interaction Should interaction be unnested? Default to TRUE.
+#' @param na_rm Should NAs from `interact_cols` be removed? Default to TRUE.
+#' @param stat_name What should the statistic's column be named? Default to "prop".
+#' @param ... Parameters to pass to srvyr::survey_mean().
 #'
 #' @return A survey-summarized-interaction tibble
 #'
@@ -210,7 +211,7 @@ svy_interact <- function(design, interact_cols, group = NULL, arrange = TRUE, un
       "n_unw" := srvyr::unweighted(srvyr::n()))
 
   if (arrange) {
-    to_return <- dplyr::arrange(to_return, dplyr::desc(.data$prop)) 
+    to_return <- dplyr::arrange(to_return, dplyr::desc(.data$prop))
   }
 
   to_return <- to_return |>
