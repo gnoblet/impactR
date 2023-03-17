@@ -104,3 +104,42 @@ if_vec_not_in_stop <- function(vec, cols, vec_name, arg = NULL){
     )
   }
 }
+
+
+#' @title Stop statement values are not in set
+#'
+#' @param df A data frame
+#' @param cols A column
+#' @param set A vector of values
+#'
+#' @return A stop statement
+are_values_in_set <- function(df, col, set){
+
+
+
+  #------ Check for missing columns
+  col_name <- rlang::as_name(rlang::ensym(col))
+  if_not_in_stop(df, col_name, "df")
+
+  #------ Values not in set
+
+  # Remove NA
+  #values <- df[[col_name]][!is.na(df[[col_name]])]
+
+  # Values not in set
+  in_set <- !(df[[col_name]] %in% set)
+
+  # Count if 
+  count_if <- sum(in_set, na.rm = TRUE) >= 1
+
+  if (count_if) {
+    rlang::abort(c(
+      glue::glue("All columns must be in the following set: ", glue::glue_collapse(set, sep = ", ")),
+      "i" = glue::glue(
+        "Column {col_name} have values out of the set. Please check.")
+      )
+    )
+  }
+
+  return(TRUE)
+}
