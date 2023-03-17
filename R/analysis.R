@@ -61,9 +61,14 @@ svy_prop <- function(design, col, group = NULL, na_rm = T, stat_name = "prop", .
     srvyr::group_by(dplyr::across({{ group }}), dplyr::across({{ col }})) |>
     srvyr::summarize(
       "{stat_name}" := srvyr::survey_prop(...),
-      "n_unw" := srvyr::unweighted(srvyr::n())) |>
-    srvyr::mutate("{stat_name}_unw" := prop.table(.data$n_unw)) |>
-    srvyr::ungroup()
+      "n_unw" := srvyr::unweighted(srvyr::n())
+      ) |>
+    dplyr::mutate("{stat_name}_unw" := prop.table(.data$n_unw)) |>
+    dplyr::group_by(dplyr::across({{ group }})) |>
+    dplyr::mutate(
+    "n_tot" := sum(!!rlang::sym("n_unw"), na.rm = FALSE)
+    ) |>
+    dplyr::ungroup()
 
   return(to_return)
 }
@@ -95,7 +100,9 @@ svy_mean <- function(design, col, group = NULL, na_rm = T, stat_name = "mean", .
       "{stat_name}" := srvyr::survey_mean({{ col }},...),
       "{stat_name}_unw" := srvyr::unweighted(mean({{ col }})),
       "n_unw" := srvyr::unweighted(srvyr::n())) |>
-    srvyr::ungroup()
+    dplyr::mutate(
+    "n_tot" := !!rlang::sym("n_unw")
+    )
 
   return(to_return)
 }
@@ -127,7 +134,9 @@ svy_median <- function(design, col, group = NULL, na_rm = T, stat_name = "median
       "{stat_name}" := srvyr::survey_median({{ col }}, ...),
       "{stat_name}_unw" := srvyr::unweighted(stats::median({{ col }})),
       "n_unw" := srvyr::unweighted(srvyr::n()))|>
-    srvyr::ungroup()
+        dplyr::mutate(
+    "n_tot" := !!rlang::sym("n_unw")
+    )
 
   return(to_return)
 }
@@ -158,8 +167,13 @@ svy_count_numeric <- function(design, col, group = NULL, na_rm = T, stat_name = 
     srvyr::group_by(dplyr::across({{ group }}), dplyr::across({{ col }})) |>
     srvyr::summarize(
       "{stat_name}" := srvyr::survey_prop(...),
-      "n" := srvyr::unweighted(srvyr::n())) |>
-    srvyr::ungroup()
+      "n_unw" := srvyr::unweighted(srvyr::n())) |>
+    dplyr::mutate("{stat_name}_unw" := prop.table(.data$n_unw)) |>
+    dplyr::group_by(dplyr::across({{ group }})) |>
+    dplyr::mutate(
+    "n_tot" := sum(!!rlang::sym("n_unw"), na.rm = FALSE)
+    ) |>
+    dplyr::ungroup()
 
   return(to_return)
 }
@@ -195,8 +209,12 @@ svy_interact <- function(design, interact_cols, group = NULL, unnest_interaction
       "{stat_name}" := srvyr::survey_mean(...),
       "n_unw" := srvyr::unweighted(srvyr::n())) |>
     dplyr::arrange(dplyr::desc(.data$prop)) |>
-    srvyr::mutate("{stat_name}_unw" := prop.table(.data$n_unw)) |>
-    srvyr::ungroup()
+    dplyr::mutate("{stat_name}_unw" := prop.table(.data$n_unw)) |>
+    dplyr::group_by(dplyr::across({{ group }})) |>
+    dplyr::mutate(
+    "n_tot" := sum(!!rlang::sym("n_unw"), na.rm = FALSE)
+    ) |>
+    dplyr::ungroup()
 
   if (rlang::is_true(unnest_interaction)){
     to_return <- to_return |> tidyr::unnest("interaction")
