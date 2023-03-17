@@ -8,8 +8,9 @@ svy_interact(
   design,
   interact_cols,
   group = NULL,
-  unnest_interaction = T,
-  na_rm = T,
+  arrange = TRUE,
+  unnest_interaction = TRUE,
+  na_rm = TRUE,
   stat_name = "prop",
   ...
 )

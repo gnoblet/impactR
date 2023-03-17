@@ -9,7 +9,7 @@ svy_ratio(
   num,
   denom,
   group = NULL,
-  na_rm = T,
+  na_rm = TRUE,
   stat_name = "ratio",
   ...
 )

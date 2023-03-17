@@ -4,7 +4,7 @@
 \alias{svy_median}
 \title{Survey median}
 \usage{
-svy_median(design, col, group = NULL, na_rm = T, stat_name = "median", ...)
+svy_median(design, col, group = NULL, na_rm = TRUE, stat_name = "median", ...)
 }
 \arguments{
 \item{design}{A srvyr::design object}
