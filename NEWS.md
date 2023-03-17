@@ -1,3 +1,11 @@
+# impactR 0.9.9.9000
+
+* Added: `svy_interact()` gains the `arrange` argument, to arrange by proportion highest value first. (#102)
+* Bug fix: `make_analysis()` now uses `svy_count_numeric()` as a backend for "prop_multiple" and "prop_multiple_overall". (#101)
+* New feature: the `svy_*()` family now output the total unweighted count by group. (#100)
+
+---
+
 # impactR 0.9.8.9000
 
 * New feature: addition of unweighted counts and stat for all `svy_*()`.
