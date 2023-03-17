@@ -61,9 +61,14 @@ svy_prop <- function(design, col, group = NULL, na_rm = T, stat_name = "prop", .
     srvyr::group_by(dplyr::across({{ group }}), dplyr::across({{ col }})) |>
     srvyr::summarize(
       "{stat_name}" := srvyr::survey_prop(...),
-      "n_unw" := srvyr::unweighted(srvyr::n())) |>
-    srvyr::mutate("{stat_name}_unw" := prop.table(.data$n_unw)) |>
-    srvyr::ungroup()
+      "n_unw" := srvyr::unweighted(srvyr::n())
+      ) |>
+    dplyr::mutate("{stat_name}_unw" := prop.table(.data$n_unw)) |>
+    dplyr::group_by(dplyr::across({{ group }})) |>
+    dplyr::mutate(
+    "n_tot" := sum(!!rlang::sym("n_unw"), na.rm = FALSE)
+    ) |>
+    dplyr::ungroup()
 
   return(to_return)
 }
